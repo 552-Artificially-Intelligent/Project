@@ -7,3 +7,5 @@ RegisterFile.sv.bak
 *.qdb
 work/_vmake
 *.mti
+tests/singlecycle-memory/transcript
+tests/transcript
