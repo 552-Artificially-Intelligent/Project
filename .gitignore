@@ -2,3 +2,7 @@
 project.mpf
 work/_info
 RegisterFile.sv.bak
+*.qtl
+*.qpg
+*.qdb
+work/_vmake
