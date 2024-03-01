@@ -6,3 +6,4 @@ RegisterFile.sv.bak
 *.qpg
 *.qdb
 work/_vmake
+*.mti
