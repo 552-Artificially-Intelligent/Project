@@ -9,3 +9,4 @@ work/_vmake
 *.mti
 tests/singlecycle-memory/transcript
 tests/transcript
+*.bak
