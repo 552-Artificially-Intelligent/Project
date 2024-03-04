@@ -1,4 +1,4 @@
-module CPU(clk, rst_n, hlt, pc);
+module cpu(clk, rst_n, hlt, pc);
 input clk, rst_n, hlt;
 output [15:0] pc;
 
