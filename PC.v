@@ -5,7 +5,7 @@ module PC(
     output [15:0] PC
 );
 
-Register reg(
+Register reg0(
     .D(next),
     .WriteReg(en),
     .clk(clk),
