@@ -98,7 +98,7 @@ ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag));
 // Data Memory second memory.sv instationation
 assign data_in = instruction[15:13] == 3'b101 ? (instruction[12] ? (instruction[7:0] << 8) : (instruction[7:0])) : SrcData1;
 assign addr = result;
-memory1c data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
+memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
                      .enable(rst_n), .wr(MemWrite), .clk(clk), .rst(1'b0));
 
 
