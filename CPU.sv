@@ -17,7 +17,41 @@ wire en, wr;
 memory1c (.data_out(data_out), .data_in(data_in), .addr(addr), 
 			.enable(en), .wr(wr), .clk(clk), .rst(rst_n));
 
-PC pc0(.clk(clk), .en(en), .next(next), .PC(PC));
+
+// TODO: PC and BRANCH stuff
+// Have a mux that chooses between current PC or branch PC
+wire next, programCount;
+// Input rst_n into enable since it is active low async reset
+PC pc0(.clk(clk), .en(rst_n), .next(next), .PC(programCount));
+
+
+
+// TODO Control
+
+
+
+
+
+// TODO ALU
+
+
+
+
+
+
+// TODO Register
+
+
+
+
+
+// TODO Data Memory second memory.sv instationation
+
+
+
+
+
+
 
 
 
