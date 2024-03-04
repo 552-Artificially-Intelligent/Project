@@ -9,8 +9,9 @@ wire [2:0] flagOuputs;
 // dff (q, d, wen, clk, rst)
 dff dff0 [2:0](.q(flagOuputs), .d(flags), .wen(1'b1), .clk(clk), .rst(rst_n));
 
+// NVZ
 assign N_flag = flagOuputs[2];
-assign Z_flag = flagOuputs[1];
-assign V_flag = flagOuputs[0];
+assign V_flag = flagOuputs[1];
+assign Z_flag = flagOuputs[0];
 
 endmodule
