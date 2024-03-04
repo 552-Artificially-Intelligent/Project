@@ -4,7 +4,7 @@
 // 	// Ignore the MSB of opcode since all ALU instructions are 0 MSB
 // 	input [2:0] opcode,
 // 	output [15:0] result,
-// 	// Maybe add a flag for a zero/ nrz flags
+// 	// Maybe add a flag for a zero/ nvz flags
 // );
 
 module ALU(A, B, opcode, result, nvz_flags);
