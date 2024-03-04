@@ -7,7 +7,7 @@
 // 	// Maybe add a flag for a zero/ nrz flags
 // );
 
-module ALU(A, B, opcode, result, [2:0] nrz_flags);
+module ALU(A, B, opcode, result, nrz_flags);
 input [15:0] A;
 input [15:0] B;
 input [2:0] opcode;
