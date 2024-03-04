@@ -77,7 +77,7 @@ assign DstData = MemtoReg ? data_out : result;
 // for ALU
 ///////////////////////////////////////////////////////////////////////
 // Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
-RegisterFile(.clk(clk), .rst(rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
+RegisterFile rf_0(.clk(clk), .rst(rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
              .DstReg(DstReg), .WriteReg(WriteReg), .DstData(DstData), 
              .SrcData1(SrcData1), .SrcData2(SrcData2));
 
