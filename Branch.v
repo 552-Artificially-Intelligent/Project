@@ -2,10 +2,10 @@ module Branch(
     input branch_inst,
     input [2:0] cond,
     input [2:0] NVZflag,
-    output Branch
+    output do_branch
 );
 
-assign Branch = branch_inst & (
+assign do_branch = branch_inst & (
     (~|cond & ~NVZflag[0]) |
     (cond == 3'b001 & NVZflag[0]) |
     (cond == 3'b010 & ~NVZflag[2] & ~NVZflag[0]) |
