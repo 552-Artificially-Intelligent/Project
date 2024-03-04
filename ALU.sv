@@ -7,11 +7,12 @@
 // 	// Maybe add a flag for a zero/ nrz flags
 // );
 
-module ALU(A, B, opcode, result);
+module ALU(A, B, opcode, result, [2:0] nrz_flags);
 input [15:0] A;
 input [15:0] B;
 input [2:0] opcode;
 output [15:0] result;
+output [2:0] nrz_flags;
 
 // Lest of wires for the result of each module
 wire [15:0] ADDSUB_result, XOR_result, PADDSB_result, RED_result,
@@ -19,7 +20,9 @@ wire [15:0] ADDSUB_result, XOR_result, PADDSB_result, RED_result,
 
 // ADD/SUB
 // Sub or add is dictated by the opcode[0]
-SATADDSUB_16bit iSAS16_0(.A(A), .B(B), .sub(opcode[0]), .Sum(ADDSUB_result));
+wire posOvfl, negOvfl, ifZero;
+SATADDSUB_16bit iSAS16_0(.A(A), .B(B), .sub(opcode[0]), .Sum(ADDSUB_result), 
+						.posOvfl(posOvfl), .negOvfl(negOvfl), .ifZero(ifZero));
 
 // XOR
 assign XOR_result = A ^ B;
@@ -48,6 +51,23 @@ assign result = (~opcode[2] & ~opcode[1]) ? ADDSUB_result :	// opcode = 00X
 				(~opcode[1]) ? SRA_result : // opcode = X0X
 				(~opcode[0]) ? ROR_result : // opcode = XX0
 				PADDSB_result; // last of the opcode possibilities
+
+// Assumes overflow set if it would've overflowed, because under current design, its
+// impossible to overflow with saturated arithmetic
+/*
+The Z flag is set if and only if the output of the operation is zero. 
+The V flag is set by the ADD and SUB instructions if and only if the operation results
+in an overflow. Overflow must be set based on treating the arithmetic values as 16-bit 
+signed integers.  
+The N flag is set if and only if the result of the ADD or SUB instruction is negative.
+*/
+assign nrz_flags = (~opcode[2] & ~opcode[1]) ? {ADDSUB_result[15], ifZero, (posOvfl | negOvfl)} :	// opcode = 00X
+					(~opcode[2] & ~opcode[0]) ? {1'b0, (XOR_result == 16'h0000), 1'b0} : // opcode = 0X0
+					(~opcode[2]) ? {1'b0, (RED_result == 16'h0000), 1'b0} : // opcode = 0XX
+					(~opcode[1] & ~opcode[0]) ?  {1'b0, (SLL_result == 16'h0000), 1'b0} : // opcode = X00
+					(~opcode[1]) ? {1'b0, (SRA_result == 16'h0000), 1'b0} : // opcode = X0X
+					(~opcode[0]) ? {1'b0, (ROR_result == 16'h0000), 1'b0} : // opcode = XX0
+					{1'b0, (PADDSB_result == 16'h0000), 1'b0}; // last of the opcode possibilities
 
 
 endmodule

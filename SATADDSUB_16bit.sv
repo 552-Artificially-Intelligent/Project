@@ -4,10 +4,11 @@
 // 	input sub,			// Subtract or add
 // 	output [15:0] Sum,	// 4 bit Sum
 // );
-module SATADDSUB_16bit(A, B, sub, Sum);
+module SATADDSUB_16bit(A, B, sub, Sum, posOvfl, negOvfl, ifZero);
 input [15:0] A, B;
 input sub;
 output [15:0] Sum;
+output posOvfl, negOvfl, ifZero;
 
 
 // Prepare inputs if we subtract
@@ -24,12 +25,13 @@ CLA_4bit CLA4_1(.A(A[7:4]), .B(inputB[7:4]), .Cin(Cout0), .Sum(tempSum[7:4]), .C
 CLA_4bit CLA4_2(.A(A[11:8]), .B(inputB[11:8]), .Cin(Cout1), .Sum(tempSum[11:8]), .Cout(Cout2));
 CLA_4bit CLA4_3(.A(A[15:12]), .B(inputB[15:12]), .Cin(Cout2), .Sum(tempSum[15:12]), .Cout(Cout3));
 
-wire posOvfl, negOvfl;
 assign posOvfl = (~A[15] & ~B[15] & tempSum[15]);
 assign negOvfl = (A[15] & B[15] & ~tempSum[15]);
 
 // Figure out if we overflowed, and if so, saturate
 assign Sum = posOvfl ? 16'h7FFF :
 			negOvfl ? 16'h8000 : tempSum;
+
+assign ifZero = (Sum == 16'h0000);
 
 endmodule
