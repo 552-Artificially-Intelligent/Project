@@ -7,6 +7,8 @@ output N_flag, Z_flag, V_flag;
 
 wire [2:0] flagOuputs;
 // dff (q, d, wen, clk, rst)
+// TODO: Check if it should preserve old value across other non ALU instruction
+// or check if it should stay 0 while other non ALU instructions
 dff dff0 [2:0](.q(flagOuputs), .d(flags), .wen(1'b1), .clk(clk), .rst(rst_n));
 
 // NVZ

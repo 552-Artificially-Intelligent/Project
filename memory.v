@@ -53,9 +53,9 @@ module memory1c (data_out, data_in, addr, enable, wr, clk, rst);
          //load loadfile_all.img
          if (!loaded) begin
             // $readmemh("loadfile_all.img", mem);
-            $readmemh("test1ut.text", mem);
-            // $readmemh("loadfile_all.img", mem);
-            // $readmemh("loadfile_all.img", mem);
+            $readmemh("test1Out.img", mem);
+            // $readmemh("test2Out.img", mem);
+            // $readmemh("test3Out.img", mem);
             loaded = 1;
          end
           
