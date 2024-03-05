@@ -75,9 +75,12 @@ Control control0(.opcode(instruction[15:12]), .ALUOp(ALUop),
 // Register File
 assign WriteReg = RegWrite;
 assign DstReg = instruction[11:8];
-assign SrcReg1 = instruction[7:4];
+assign SrcReg1 = instruction[15:13] == 3'b101 ? instruction[11:8] : instruction[7:4];
 assign SrcReg2 = instruction[3:0];
-assign DstData = MemtoReg ? data_out : result;
+assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ? 
+				({instruction[7:0], SrcData1[7:0]}) : 
+				({SrcData1[15:8], instruction[7:0]})) :
+  				MemtoReg ? data_out : result;
 ///////////////////////////////////////////////////////////////////////
 // TODO: Currently only chooses SrcReg2 as the last 4 bits of the instruction
 // for ALU
@@ -102,7 +105,9 @@ ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag));
 
 
 // Data Memory second memory.sv instationation
-assign data_in = instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) : SrcData1;
+// LHB 1011, LLB 1010
+assign data_in = SrcData1;
+// instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) :
 assign addr = result;
 memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
                      .enable(rst_n), .wr(MemWrite), .clk(clk), .rst(1'b0));
