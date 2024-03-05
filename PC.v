@@ -30,6 +30,6 @@ Register reg1(
     .Bitline2(blank2)
 );
 
-assign PC = ~rst_n ? 16'h0000 : internalPC2;
+assign PC = ~rst_n ? 16'h0000 : (&internalPC ? 16'hFFFF : internalPC2);
 // clk, rst, D, WriteReg, ReadEnable1, ReadEnable2, Bitline1
 endmodule
