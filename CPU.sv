@@ -79,8 +79,8 @@ assign DstReg = instruction[11:8];
 assign SrcReg1 = instruction[15:13] == 3'b101 ? instruction[11:8] : instruction[7:4];
 assign SrcReg2 = instruction[3:0];
 assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ? 
-				({instruction[7:0], SrcData1[7:0]}) : 
-				({SrcData1[15:8], instruction[7:0]})) :
+				({instruction[7:0], result[7:0]}) : 
+				({result[15:8], instruction[7:0]})) :
   				MemtoReg ? data_out : result;
 ///////////////////////////////////////////////////////////////////////
 // TODO: Currently only chooses SrcReg2 as the last 4 bits of the instruction
@@ -97,7 +97,8 @@ RegisterFile rf_0(.clk(clk), .rst(rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2),
 // SLL, SRA, ROR:
 // Opcode rd, rs, imm
 assign A = SrcData1;
-assign B = ALUsrc ? {{12{instruction[3]}}, instruction[3:0]} : SrcData2;
+assign B = ALUsrc ? ((instruction[15:13] == 3'b101) ? 16'h0000 : 
+		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
 ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag));
 
 
@@ -111,7 +112,7 @@ assign data_in = SrcData1;
 // instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) :
 assign addr = result;
 memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
-                     .enable(rst_n), .wr(MemWrite), .clk(clk), .rst(1'b0));
+                     .enable(1'b1), .wr(MemWrite), .clk(clk), .rst(1'b0));
 
 
 

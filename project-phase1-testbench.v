@@ -59,6 +59,7 @@ module cpu_tb();
       clk = 1;
       #201 rst_n = 1; // delay until slightly after two clock periods
       $display("201:Instruction: %16x, %16x, %1b \n", DUT.instruction, DUT.programCount, DUT.hlt);
+      #10000 $stop();
     end
 
     always #50 begin   // delay 1/2 clock period each time thru loop
