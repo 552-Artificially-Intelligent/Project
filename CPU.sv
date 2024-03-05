@@ -53,7 +53,7 @@ Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_br
 wire unused1, unused2;
 CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1));
   
-assign branchAdd =  {{6{instruction[8]}}, instruction[8:0] << 1};
+assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
   
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
@@ -87,7 +87,7 @@ assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ?
 // for ALU
 ///////////////////////////////////////////////////////////////////////
 // Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
-RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
+RegisterFile rf_0(.clk(clk), .rst(rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
              .DstReg(DstReg), .WriteReg(WriteReg), .DstData(DstData), 
              .SrcData1(SrcData1), .SrcData2(SrcData2));
 
@@ -112,7 +112,7 @@ assign data_in = SrcData1;
 // instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) :
 assign addr = result;
 memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
-                     .enable(1'b1), .wr(MemWrite), .clk(clk), .rst(rst_n));
+                     .enable(1'b1), .wr(MemWrite), .clk(clk), .rst(~rst_n));
 
 
 

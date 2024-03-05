@@ -102,3 +102,294 @@ run -all
 # Compile of Shifter.sv was successful.
 # Compile canceled.
 # 25 out of 26 compiles, 1 failed with 1 error.
+# Compile of ALU.sv was successful.
+# Compile of ALU_tb.sv was successful.
+# Compile of Branch.v was successful.
+# Compile of CLA_4bit.sv was successful.
+# Compile of CLA_4bit_tb.sv was successful.
+# Compile of CLA_8bit.sv was successful.
+# Compile of CLA_8bit_tb.sv was successful.
+# Compile of CLA_16bit.v was successful.
+# Compile of Control.v was successful.
+# Compile of CPU.sv was successful.
+# Compile of D-Flip-Flop.v was successful.
+# Compile of FLAG_Reg.sv was successful.
+# Compile of memory.v was successful.
+# Compile of PADDSB.sv was successful.
+# Compile of PC.v was successful.
+# Compile of project-phase1-testbench.v was successful.
+# Compile of RED.sv was successful.
+# Compile of RED_tb.sv was successful.
+# Compile of Register.v was successful.
+# Compile of RegisterFile.v was successful.
+# Compile of RegisterFile_TB.sv was successful.
+# Compile of ROR.sv was successful.
+# Compile of SATADDSUB_16bit.sv was successful.
+# Compile of SATADDSUB_16bit_tb.sv was successful.
+# Compile of Shifter.sv was successful.
+# Compile of Shifter_tb.sv was successful.
+# 26 compiles, 0 failed with no errors.
+vsim -voptargs=+acc work.cpu_tb
+# End time: 17:16:42 on Mar 05,2024, Elapsed time: 0:09:27
+# Errors: 0, Warnings: 9
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 17:16:42 on Mar 05,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+add wave -position insertpoint sim:/cpu_tb/DUT/*
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
+#           Attempting to use alternate WLF file "./wlftig00mm".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftig00mm
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 201:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
+# Compile of project-phase1-testbench.v was successful.
+vsim -voptargs=+acc work.cpu_tb
+# End time: 17:18:38 on Mar 05,2024, Elapsed time: 0:01:56
+# Errors: 0, Warnings: 4
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 17:18:38 on Mar 05,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+add wave -position insertpoint sim:/cpu_tb/DUT/*
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
+#           Attempting to use alternate WLF file "./wlftdjsm30".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftdjsm30
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 249:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
+# Compile of project-phase1-testbench.v was successful.
+vsim -voptargs=+acc work.cpu_tb
+# End time: 17:21:06 on Mar 05,2024, Elapsed time: 0:02:28
+# Errors: 0, Warnings: 4
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 17:21:06 on Mar 05,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+add wave -position insertpoint sim:/cpu_tb/DUT/*
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
+#           Attempting to use alternate WLF file "./wlftkgnfqz".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftkgnfqz
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
+# Compile of ALU.sv was successful.
+# Compile of ALU_tb.sv was successful.
+# Compile of Branch.v was successful.
+# Compile of CLA_4bit.sv was successful.
+# Compile of CLA_4bit_tb.sv was successful.
+# Compile of CLA_8bit.sv was successful.
+# Compile of CLA_8bit_tb.sv was successful.
+# Compile of CLA_16bit.v was successful.
+# Compile of Control.v was successful.
+# Compile of CPU.sv was successful.
+# Compile of D-Flip-Flop.v was successful.
+# Compile of FLAG_Reg.sv was successful.
+# Compile of memory.v was successful.
+# Compile of PADDSB.sv was successful.
+# Compile of PC.v was successful.
+# Compile of project-phase1-testbench.v was successful.
+# Compile of RED.sv was successful.
+# Compile of RED_tb.sv was successful.
+# Compile of Register.v was successful.
+# Compile of RegisterFile.v was successful.
+# Compile of RegisterFile_TB.sv was successful.
+# Compile of ROR.sv was successful.
+# Compile of SATADDSUB_16bit.sv was successful.
+# Compile of SATADDSUB_16bit_tb.sv was successful.
+# Compile of Shifter.sv was successful.
+# Compile of Shifter_tb.sv was successful.
+# 26 compiles, 0 failed with no errors.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+# Break key hit
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break key hit
+# Break at I:/ECE552/Project/CPU.sv line 113
+# Causality operation skipped due to absence of debug database file
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
+# Compile of CPU.sv was successful.
+# Compile of RegisterFile.v was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
