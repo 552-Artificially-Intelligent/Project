@@ -16,7 +16,7 @@ Register reg0(
     .rst(~rst_n),
     .Bitline1(internalPC1),
     .ReadEnable2(1'b0),
-    .Bitline2(blank)
+    .Bitline2(blank1)
 );
 
 Register reg1(
