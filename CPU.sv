@@ -58,7 +58,7 @@ CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unu
 
 assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
 // Input rst_n into enable since it is active low async reset
-  PC pc0(.clk(clk), .en(rst_n), .next(nextPC), .PC(programCount), .rst_n(rst_n));
+PC pc0(.clk(clk), .en(rst_n), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
 
 
@@ -102,7 +102,7 @@ ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag));
 
 
 // Data Memory second memory.sv instationation
-assign data_in = instruction[15:13] == 3'b101 ? (instruction[12] ? (instruction[7:0] << 8) : (instruction[7:0])) : SrcData1;
+assign data_in = instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) : SrcData1;
 assign addr = result;
 memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
                      .enable(rst_n), .wr(MemWrite), .clk(clk), .rst(1'b0));
@@ -117,9 +117,10 @@ FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[0]),
 
 
 
-assign pc = ~rst_n ? 16'h0000 : programCount;
+assign programCount = ~rst_n ? 16'h0000 : programCount;
+assign pc = programCount;
   
-  
+
   
 
 endmodule

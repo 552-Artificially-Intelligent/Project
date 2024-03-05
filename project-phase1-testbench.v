@@ -26,7 +26,7 @@ module cpu_tb();
 
      
 
-   cpu DUT(.clk(clk), .rst_n(rst_n), .pc_out(PC), .hlt(Halt)); /* Instantiate your processor */
+   cpu DUT(.clk(clk), .rst_n(rst_n), .pc(PC), .hlt(Halt)); /* Instantiate your processor */
    
 
 
@@ -81,6 +81,7 @@ module cpu_tb();
 
   /* Stats */
    always @ (posedge clk) begin
+      $display("Instruction: %16x \n", DUT.instruction);
       if (rst_n) begin
          if (Halt || RegWrite || MemWrite) begin
             inst_count = inst_count + 1;
