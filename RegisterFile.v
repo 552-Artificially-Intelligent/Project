@@ -20,7 +20,14 @@ ReadDecoder_4_16 readDecoder2(.RegId(SrcReg2), .Wordline(ReadLine2));
 WriteDecoder_4_16 writeDecoder2(.RegId(DstReg), .WriteReg(WriteReg), .Wordline(WriteLine));
 
 //3. INITIALIZE REGISTERS
-Register regArray[15:0] (.clk(clk), .rst(rst), .D(DstData), .WriteReg(WriteLine), .ReadEnable1(ReadLine1), .ReadEnable2(ReadLine2), .Bitline1(SrcData1), .Bitline2(SrcData2));
+wire [15:0] imm1, imm2;
+Register regArray[15:0] (.clk(clk), .rst(rst), .D(DstData), .WriteReg(WriteLine), 
+						.ReadEnable1(ReadLine1), .ReadEnable2(ReadLine2), .Bitline1(imm1), 
+						.Bitline2(imm2));
+
+assign SrcData1 = ~|SrcReg1 ? 16'h0000 : imm1;
+assign SrcData2 = ~|SrcReg2 ? 16'h0000 : imm2;
+
 endmodule
 
 
