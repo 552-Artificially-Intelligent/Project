@@ -50,7 +50,7 @@ assign cond = instruction[11:9];
 Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
   
 wire unused1, unused2;
-CLA_16bit cla_inc(.A(programCount), .B(16'h0004), .Cin(1'b0), .Sum(pcInc), .Cout(unused1));
+CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1));
   
 assign branchAdd =  {{6{instruction[8]}}, instruction[8:0] << 1};
   

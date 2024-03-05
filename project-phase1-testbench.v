@@ -81,7 +81,7 @@ module cpu_tb();
 
   /* Stats */
    always @ (posedge clk) begin
-      $display("Instruction: %16x \n", DUT.instruction);
+      $display("Instruction: %16x, %16x \n", DUT.instruction, DUT.programCount);
       if (rst_n) begin
          if (Halt || RegWrite || MemWrite) begin
             inst_count = inst_count + 1;
