@@ -11,8 +11,8 @@ module dff (q, d, wen, clk, rst);
 
     assign q = state;
 
-    always @(posedge clk, posedge rst) begin
-      state = ~rst ? 0 : (wen ? d : state);
+    always @(posedge clk) begin
+      state = rst ? 0 : (wen ? d : state);
     end
 
 endmodule
