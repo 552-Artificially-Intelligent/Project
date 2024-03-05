@@ -9,10 +9,10 @@ module dff (q, d, wen, clk, rst);
 
     reg            state;
 
-    assign q = state;
+    assign q = rst ? 0 : state;
 
     always @(posedge clk) begin
-      state = rst ? 0 : (wen ? d : state);
+      state = (wen ? d : state);
     end
 
 endmodule

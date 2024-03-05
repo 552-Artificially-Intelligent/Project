@@ -38,7 +38,7 @@ module memory1c (data_out, data_in, addr, enable, wr, clk, rst);
    input          wr;
    input          clk;
    input          rst;
-   wire [15:0]    data_out;
+   // wire [15:0]    data_out;
    
    reg [15:0]      mem [0:2**ADDR_WIDTH-1];
    reg            loaded;
@@ -80,7 +80,7 @@ module memory1d (data_out, data_in, addr, enable, wr, clk, rst);
    input          wr;
    input          clk;
    input          rst;
-   wire [15:0]    data_out;
+   // wire [15:0]    data_out;
    
    reg [15:0]      mem [0:2**ADDR_WIDTH-1];
    reg            loaded;

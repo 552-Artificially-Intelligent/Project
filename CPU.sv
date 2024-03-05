@@ -57,7 +57,7 @@ assign branchAdd =  {{6{instruction[8]}}, instruction[8:0] << 1};
   
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
-assign nextPC = ~Hlt & rst_n ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
+assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
 // Input rst_n into enable since it is active low async reset
 PC pc0(.clk(clk), .en(~Hlt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
@@ -112,7 +112,7 @@ assign data_in = SrcData1;
 // instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) :
 assign addr = result;
 memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
-                     .enable(1'b1), .wr(MemWrite), .clk(clk), .rst(1'b0));
+                     .enable(1'b1), .wr(MemWrite), .clk(clk), .rst(rst_n));
 
 
 
