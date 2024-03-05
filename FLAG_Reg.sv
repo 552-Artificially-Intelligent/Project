@@ -12,8 +12,8 @@ wire [2:0] flagOuputs;
 dff dff0 [2:0](.q(flagOuputs), .d(flags), .wen(en), .clk(clk), .rst(rst_n));
 
 // NVZ
-assign N_flag = flagOuputs[2];
-assign V_flag = flagOuputs[1];
-assign Z_flag = flagOuputs[0];
+assign N_flag = ~rst_n ? 1'b0 : flagOuputs[2];
+assign V_flag = ~rst_n ? 1'b0 : flagOuputs[1];
+assign Z_flag = ~rst_n ? 1'b0 : flagOuputs[0];
 
 endmodule
