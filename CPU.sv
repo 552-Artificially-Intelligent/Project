@@ -32,6 +32,9 @@ wire [15:0] data_out, data_in, addr;
 // ALU wires
 wire [15:0] A, B, result;
 
+// Flag wires
+wire [2:0] NVZ_out;
+
   
 memory1c inst_memory(.data_out(instruction), .addr(programCount), .rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
   
@@ -41,7 +44,7 @@ memory1c inst_memory(.data_out(instruction), .addr(programCount), .rst(1'b1), .e
 
 assign cond = instruction[11:9];
   
-Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZflag), .do_branch(do_branch));
+Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
   
   
 CLA_16bit cla_inc(.A(programCount), .B(16'h0004), .Cin(16'h0000), .Sum(pcInc));
@@ -103,7 +106,9 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 
 
 
-
+// Flag Register
+FLAG_reg(.clk(clk), .rst_n(rst_n), .en(~instruction[0]), 
+	.flags(NVZflag), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
 
 
 
