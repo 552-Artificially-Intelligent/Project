@@ -13,7 +13,7 @@ Register reg0(
     .WriteReg(en),
     .clk(clk),
     .ReadEnable1(1'b1),
-    .rst(rst_n),
+    .rst(~rst_n),
     .Bitline1(internalPC),
     .ReadEnable2(1'b0),
     .Bitline2(blank)

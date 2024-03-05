@@ -87,7 +87,7 @@ assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ?
 // for ALU
 ///////////////////////////////////////////////////////////////////////
 // Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
-RegisterFile rf_0(.clk(clk), .rst(rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
+RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
              .DstReg(DstReg), .WriteReg(WriteReg), .DstData(DstData), 
              .SrcData1(SrcData1), .SrcData2(SrcData2));
 

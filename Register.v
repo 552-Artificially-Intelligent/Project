@@ -9,10 +9,10 @@ module dff (q, d, wen, clk, rst);
 
     reg            state;
 
-    assign q = rst ? 0 : state;
+    assign q = state;
 
-    always @(posedge clk) begin
-      state = (wen ? d : state);
+    always @(posedge clk, posedge rst) begin
+      state = ~rst ? 0 : (wen ? d : state);
     end
 
 endmodule
@@ -32,8 +32,8 @@ wire dffOut;
 dff floppy(.q(dffOut), .d(D), .wen(WriteEnable), .clk(clk), .rst(rst));
 
 //Tristate buffers
-assign Bitline1 = ReadEnable1 ? dffOut : 1'bz;
-assign Bitline2 = ReadEnable2 ? dffOut : 1'bz;
+assign Bitline1 = ReadEnable1 ? (WriteEnable ? D : dffOut) : 1'bz;
+assign Bitline2 = ReadEnable2 ? (WriteEnable ? D : dffOut) : 1'bz;
 
 endmodule
 
