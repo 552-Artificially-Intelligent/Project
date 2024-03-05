@@ -56,9 +56,9 @@ assign branchAdd =  {{6{instruction[8]}}, instruction[8:0] << 1};
   
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
-assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
+assign nextPC = ~Hlt & rst_n ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
 // Input rst_n into enable since it is active low async reset
-PC pc0(.clk(clk), .en(rst_n), .next(nextPC), .PC(programCount), .rst_n(rst_n));
+PC pc0(.clk(clk), .en(~Hlt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
 
 
@@ -122,7 +122,7 @@ FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[0]),
 
 
 
-assign programCount = ~rst_n ? 16'h0000 : programCount;
+// assign programCount = ~rst_n ? 16'h0000 : programCount;
 assign pc = programCount;
   
 
