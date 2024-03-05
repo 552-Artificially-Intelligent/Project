@@ -26,7 +26,9 @@ wire [2:0] ALUop;
 wire ALUsrc, MemtoReg, RegWrite, MemRead, MemWrite, branch_inst, branch_src, RegDst, PCs, Hlt;
   
 // Register wires
-wire [3:0] SrcReg1, SrcReg2, DstReg, WriteReg, DstData, SrcData1, SrcData2;
+wire [3:0] SrcReg1, SrcReg2, DstReg;
+wire [15:0] DstData, SrcData1, SrcData2;
+wire WriteReg;
 wire [15:0] data_out, data_in, addr;
   
 // ALU wires
@@ -35,8 +37,9 @@ wire [15:0] A, B, result;
 // Flag wires
 wire [2:0] NVZ_out;
 
-  
-memory1c inst_memory(.data_out(instruction), .addr(programCount), .rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
+// data_out, data_in, addr, enable, wr, clk, rst
+memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
+					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
   
 // TODO: PC and BRANCH stuff
 // Have a mux that chooses between current PC or branch PC
@@ -46,12 +49,12 @@ assign cond = instruction[11:9];
   
 Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
   
-  
-CLA_16bit cla_inc(.A(programCount), .B(16'h0004), .Cin(16'h0000), .Sum(pcInc));
+wire unused1, unused2;
+CLA_16bit cla_inc(.A(programCount), .B(16'h0004), .Cin(1'b0), .Sum(pcInc), .Cout(unused1));
   
 assign branchAdd =  {{6{instruction[8]}}, instruction[8:0] << 1};
   
-CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(16'b0000), .Sum(pcBranch));
+CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
 assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
 // Input rst_n into enable since it is active low async reset
@@ -107,7 +110,7 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 
 
 // Flag Register
-FLAG_reg(.clk(clk), .rst_n(rst_n), .en(~instruction[0]), 
+FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[0]), 
 	.flags(NVZflag), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
 
 
