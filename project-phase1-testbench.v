@@ -56,8 +56,8 @@ module cpu_tb();
       $dumpvars;
       cycle_count = 0;
       rst_n = 0; /* Intial reset state */
-      clk = 1;
-      #201 rst_n = 1; // delay until slightly after two clock periods
+      clk = 0;
+      #205 rst_n = 1; // delay until slightly after two clock periods
       $display("201:Instruction: %16x, %16x, %1b \n", DUT.instruction, DUT.programCount, DUT.hlt);
       // #10000 $stop();
     end
