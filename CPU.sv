@@ -1,5 +1,6 @@
 module cpu(clk, rst_n, hlt, pc);
-input clk, rst_n, hlt;
+input clk, rst_n;
+output hlt;
 output [15:0] pc;
 
 ////////////////////////////////////////////////////
@@ -124,6 +125,7 @@ FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[0]),
 
 // assign programCount = ~rst_n ? 16'h0000 : programCount;
 assign pc = programCount;
+assign hlt = Hlt;
   
 
   
