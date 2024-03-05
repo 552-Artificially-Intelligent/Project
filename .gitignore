@@ -10,3 +10,7 @@ work/_vmake
 tests/singlecycle-memory/transcript
 tests/transcript
 *.bak
+/work
+*.mpf
+*.mti
+transcript
