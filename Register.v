@@ -17,6 +17,17 @@ module dff (q, d, wen, clk, rst);
 
 endmodule
 
+module BitReg(clk, rst, wen, D, Q);
+input clk, rst, wen, D;
+output Q;
+
+wire interQ;
+
+dff flop0(.q(interQ), .clk(~clk), .d(D), .wen(wen), .rst(rst));
+dff flop1(.d(interQ), .clk(~clk), .q(Q), .wen(wen), .rst(rst));
+
+endmodule
+
 module BitCell(clk, rst, D, WriteEnable, ReadEnable1, ReadEnable2, Bitline1, Bitline2);
 input clk;		//Goes in D
 input rst;		//Goes in D

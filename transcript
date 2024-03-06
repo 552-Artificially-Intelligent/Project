@@ -999,3 +999,1086 @@ run -all
 # Inst: 698a, PC: 0012
 # Break key hit
 # Break at I:/ECE552/Project/RED.sv line 43
+# Compile of Register.v was successful.
+# Compile of FLAG_Reg.sv was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitReg(fast)
+# Loading work.dff(fast__3)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+# Loading work.Register(fast__2)
+# Loading work.BitCell(fast__2)
+# Loading work.dff(fast__2)
+# ** Warning: (vsim-3015) [PCDPC] - Port size (1) does not match connection size (3) for port 'Q'. The port definition is at: I:/ECE552/Project/Register.v(20).
+#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/flg_reg0/regn File: I:/ECE552/Project/FLAG_Reg.sv Line: 12
+# ** Warning: (vsim-3015) [PCDPC] - Port size (1) does not match connection size (3) for port 'Q'. The port definition is at: I:/ECE552/Project/Register.v(20).
+#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/flg_reg0/regv File: I:/ECE552/Project/FLAG_Reg.sv Line: 14
+# ** Warning: (vsim-3015) [PCDPC] - Port size (1) does not match connection size (3) for port 'Q'. The port definition is at: I:/ECE552/Project/Register.v(20).
+#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/flg_reg0/regz File: I:/ECE552/Project/FLAG_Reg.sv Line: 16
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Inst: xxxx, PC: 0000
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Inst: a151, PC: 0000
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 299:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Instruction: 000000000000b151, 0000000000000002 
+# 
+# Inst: b151, PC: 0002
+# Instruction: 000000000000a2b0, 0000000000000004 
+# 
+# Inst: a2b0, PC: 0004
+# Instruction: 000000000000b2a0, 0000000000000006 
+# 
+# Inst: b2a0, PC: 0006
+# Instruction: 0000000000000321, 0000000000000008 
+# 
+# Inst: 0321, PC: 0008
+# Instruction: 0000000000001412, 000000000000000a 
+# 
+# Inst: 1412, PC: 000a
+# Instruction: 0000000000002634, 000000000000000c 
+# 
+# Inst: 2634, PC: 000c
+# Instruction: 0000000000004756, 000000000000000e 
+# 
+# Inst: 4756, PC: 000e
+# Instruction: 0000000000005862, 0000000000000010 
+# 
+# Inst: 5862, PC: 0010
+# Instruction: 000000000000698a, 0000000000000012 
+# 
+# Inst: 698a, PC: 0012
+# Break key hit
+# Break in Module FLAG_reg in file I:/ECE552/Project/FLAG_Reg.sv
+vsim -voptargs=+acc work.cpu_tb
+# End time: 19:46:17 on Mar 05,2024, Elapsed time: 0:22:55
+# Errors: 0, Warnings: 4
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 19:46:17 on Mar 05,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitReg(fast)
+# Loading work.dff(fast__3)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+# Loading work.Register(fast__2)
+# Loading work.BitCell(fast__2)
+# Loading work.dff(fast__2)
+# ** Warning: (vsim-3015) [PCDPC] - Port size (1) does not match connection size (3) for port 'Q'. The port definition is at: I:/ECE552/Project/Register.v(20).
+#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/flg_reg0/regn File: I:/ECE552/Project/FLAG_Reg.sv Line: 12
+# ** Warning: (vsim-3015) [PCDPC] - Port size (1) does not match connection size (3) for port 'Q'. The port definition is at: I:/ECE552/Project/Register.v(20).
+#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/flg_reg0/regv File: I:/ECE552/Project/FLAG_Reg.sv Line: 14
+# ** Warning: (vsim-3015) [PCDPC] - Port size (1) does not match connection size (3) for port 'Q'. The port definition is at: I:/ECE552/Project/Register.v(20).
+#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/flg_reg0/regz File: I:/ECE552/Project/FLAG_Reg.sv Line: 16
+add wave -position insertpoint sim:/cpu_tb/DUT/*
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
+#           Attempting to use alternate WLF file "./wlftciv5xj".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftciv5xj
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Inst: xxxx, PC: 0000
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Inst: a151, PC: 0000
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 299:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Instruction: 000000000000b151, 0000000000000002 
+# 
+# Inst: b151, PC: 0002
+# Instruction: 000000000000a2b0, 0000000000000004 
+# 
+# Inst: a2b0, PC: 0004
+# Instruction: 000000000000b2a0, 0000000000000006 
+# 
+# Inst: b2a0, PC: 0006
+# Instruction: 0000000000000321, 0000000000000008 
+# 
+# Inst: 0321, PC: 0008
+# Instruction: 0000000000001412, 000000000000000a 
+# 
+# Inst: 1412, PC: 000a
+# Instruction: 0000000000002634, 000000000000000c 
+# 
+# Inst: 2634, PC: 000c
+# Instruction: 0000000000004756, 000000000000000e 
+# 
+# Inst: 4756, PC: 000e
+# Instruction: 0000000000005862, 0000000000000010 
+# 
+# Inst: 5862, PC: 0010
+# Instruction: 000000000000698a, 0000000000000012 
+# 
+# Inst: 698a, PC: 0012
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
+# Compile of FLAG_Reg.sv was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitReg(fast)
+# Loading work.dff(fast__3)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+# Loading work.Register(fast__2)
+# Loading work.BitCell(fast__2)
+# Loading work.dff(fast__2)
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Inst: xxxx, PC: 0000
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Inst: a151, PC: 0000
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 299:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Instruction: 000000000000b151, 0000000000000002 
+# 
+# Inst: b151, PC: 0002
+# Instruction: 000000000000a2b0, 0000000000000004 
+# 
+# Inst: a2b0, PC: 0004
+# Instruction: 000000000000b2a0, 0000000000000006 
+# 
+# Inst: b2a0, PC: 0006
+# Instruction: 0000000000000321, 0000000000000008 
+# 
+# Inst: 0321, PC: 0008
+# Instruction: 0000000000001412, 000000000000000a 
+# 
+# Inst: 1412, PC: 000a
+# Instruction: 0000000000002634, 000000000000000c 
+# 
+# Inst: 2634, PC: 000c
+# Instruction: 0000000000004756, 000000000000000e 
+# 
+# Inst: 4756, PC: 000e
+# Instruction: 0000000000005862, 0000000000000010 
+# 
+# Inst: 5862, PC: 0010
+# Instruction: 000000000000698a, 0000000000000012 
+# 
+# Inst: 698a, PC: 0012
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
+# Compile of CPU.sv was successful.
+# Compile of Register.v was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitReg(fast__2)
+# Loading work.dff(fast__2)
+# Loading work.BitCell(fast)
+# Loading work.BitReg(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.BitReg(fast__1)
+# Loading work.dff(fast__1)
+# Loading work.Register(fast__2)
+# Loading work.BitCell(fast__2)
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Inst: xxxx, PC: 0000
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Inst: a151, PC: 0000
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 299:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break key hit
+# Simulation stop requested.
+# Compile of Register.v was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# ** Error (suppressible): I:/ECE552/Project/Register.v(43): (vopt-2912) Port 'q' not found in module 'BitReg' (1st connection).
+# ** Error (suppressible): I:/ECE552/Project/Register.v(43): (vopt-2912) Port 'd' not found in module 'BitReg' (2nd connection).
+# Optimization failed
+# ** Warning: (vopt-31) Unable to unlink file "I:/ECE552/Project/work/@_opt/_lib3_0.qpg".
+# ** Warning: (vopt-31) Unable to unlink file "I:/ECE552/Project/work/@_opt/_lib3_0.qtl".
+# The process cannot access the file because it is being used by another process. (GetLastError() = 32)
+# ** Warning: (vopt-133) Unable to remove directory "I:/ECE552/Project/work/@_opt".
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=2, Warnings=3.
+# Compile of Register.v was successful.
+# Break key hit
+# Break key hit
+# Break key hit
+# Break key hit
+# Break key hit
+vsim -voptargs=+acc work.cpu_tb
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 19:46:17 on Mar 05,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Error: (vopt-7) Failed to open  file "I:/ECE552/Project/work/@_opt/_deps" in read mode.
+# File exists. (errno = EEXIST)
+# ** Warning: (vopt-56) Problem with optimized design dependency file "I:/ECE552/Project/work/@_opt/_deps" - file open failed.
+# No such file or directory. (errno = ENOENT)
+# ** Fatal: (vopt-8) Problem while reading dependency file "_deps".
+# No such file or directory. (errno = ENOENT)
+# Vopt Compiler exiting
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=4, Warnings=4.
+# Error loading design
+# End time: 19:53:53 on Mar 05,2024, Elapsed time: 0:07:36
+# Errors: 4, Warnings: 6
+vsim -voptargs=+acc work.cpu_tb
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 19:54:00 on Mar 05,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitReg(fast)
+# Loading work.dff(fast__3)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+# Loading work.Register(fast__2)
+# Loading work.BitCell(fast__2)
+# Loading work.dff(fast__2)
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
+#           Attempting to use alternate WLF file "./wlftsyh7hv".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftsyh7hv
+add wave -position insertpoint sim:/cpu_tb/DUT/*
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Inst: xxxx, PC: 0000
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Inst: a151, PC: 0000
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 299:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Instruction: 000000000000b151, 0000000000000002 
+# 
+# Inst: b151, PC: 0002
+# Instruction: 000000000000a2b0, 0000000000000004 
+# 
+# Inst: a2b0, PC: 0004
+# Instruction: 000000000000b2a0, 0000000000000006 
+# 
+# Inst: b2a0, PC: 0006
+# Instruction: 0000000000000321, 0000000000000008 
+# 
+# Inst: 0321, PC: 0008
+# Instruction: 0000000000001412, 000000000000000a 
+# 
+# Inst: 1412, PC: 000a
+# Instruction: 0000000000002634, 000000000000000c 
+# 
+# Inst: 2634, PC: 000c
+# Instruction: 0000000000004756, 000000000000000e 
+# 
+# Inst: 4756, PC: 000e
+# Instruction: 0000000000005862, 0000000000000010 
+# 
+# Inst: 5862, PC: 0010
+# Instruction: 000000000000698a, 0000000000000012 
+# 
+# Inst: 698a, PC: 0012
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
