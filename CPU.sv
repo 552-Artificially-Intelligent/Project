@@ -117,7 +117,7 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 
 
 // Flag Register
-FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[0]), 
+FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]), 
 	.flags(NVZflag), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
 
 

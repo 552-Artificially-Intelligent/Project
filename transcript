@@ -393,3 +393,512 @@ run -all
 # 
 # Break key hit
 # Break at I:/ECE552/Project/RED.sv line 43
+# Compile of CPU.sv was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break key hit
+# Break at I:/ECE552/Project/CPU.sv line 113
+# Compile of CPU.sv was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break key hit
+# Break in Module CLA_4bit at I:/ECE552/Project/CLA_4bit.sv line 36
+quit -sim
+# End time: 17:49:30 on Mar 05,2024, Elapsed time: 0:28:24
+# Errors: 0, Warnings: 1
+vsim -voptargs=+acc work.cpu_tb
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 17:52:06 on Mar 05,2024
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+add wave -position insertpoint sim:/cpu_tb/DUT/*
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
+#           Attempting to use alternate WLF file "./wlftz7cbcd".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftz7cbcd
+# Compile of CPU.sv was successful.
+run -all
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+step -over
+step -over
+step -over
+step -over
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 50 ns  Iteration: 2  Instance: /cpu_tb/DUT/pc0
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 50 ns  Iteration: 2  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+# Break key hit
+# Break key hit
+# Break key hit
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+# Break key hit
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/pc0
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -continue
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+run -continue
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
+run -all
+# ** Warning: cg: unrecognized machine instruction
+#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
+# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
+run -all
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
+run -continue
+# Break in Module PC at I:/ECE552/Project/PC.v line 33
+run -continue
+# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
+quit -sim
+# End time: 18:06:32 on Mar 05,2024, Elapsed time: 0:14:26
+# Errors: 0, Warnings: 19
+# Compile of project-phase1-testbench.v was successful.
+vsim -voptargs=+acc work.cpu_tb
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 18:08:46 on Mar 05,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Inst: xxxx, PC: 0000
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Inst: a151, PC: 0000
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Break key hit
+# Break at I:/ECE552/Project/CPU.sv line 128
