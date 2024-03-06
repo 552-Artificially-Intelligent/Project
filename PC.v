@@ -10,7 +10,7 @@ wire [15:0] internalPC1, blank1, internalPC2, blank2;
 // Register(clk, rst, D, WriteReg, ReadEnable1, ReadEnable2, Bitline1, Bitline2);
 Register reg0(
     .D(next),
-    .WriteReg(en),
+    .WriteReg(en & ~clk),
     .clk(~clk),
     .ReadEnable1(1'b1),
     .rst(~rst_n),
@@ -21,7 +21,7 @@ Register reg0(
 
 Register reg1(
     .D(internalPC1),
-    .WriteReg(en),
+    .WriteReg(en & clk),
     .clk(clk),
     .ReadEnable1(1'b1),
     .rst(~rst_n),

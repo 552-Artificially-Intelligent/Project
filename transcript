@@ -902,3 +902,88 @@ run -all
 # 
 # Break key hit
 # Break at I:/ECE552/Project/CPU.sv line 128
+# Compile of PC.v was successful.
+vsim -voptargs=+acc work.cpu_tb
+# End time: 18:26:04 on Mar 05,2024, Elapsed time: 0:17:18
+# Errors: 0, Warnings: 3
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 18:26:05 on Mar 05,2024
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# Loading work.cpu_tb(fast)
+# Loading sv_std.std
+# Loading work.cpu(fast)
+# Loading work.memory1c(fast)
+# Loading work.Branch(fast)
+# Loading work.CLA_16bit(fast)
+# Loading work.CLA_8bit(fast)
+# Loading work.CLA_4bit(fast)
+# Loading work.PC(fast)
+# Loading work.Register(fast)
+# Loading work.Register(fast__1)
+# Loading work.Control(fast)
+# Loading work.RegisterFile(fast)
+# Loading work.ReadDecoder_4_16(fast)
+# Loading work.WriteDecoder_4_16(fast)
+# Loading work.ALU(fast)
+# Loading work.SATADDSUB_16bit(fast)
+# Loading work.PADDSB(fast)
+# Loading work.RED(fast)
+# Loading work.Shifter(fast)
+# Loading work.ROR(fast)
+# Loading work.memory1d(fast)
+# Loading work.FLAG_reg(fast)
+# Loading work.BitCell(fast)
+# Loading work.dff(fast)
+# Loading work.BitCell(fast__1)
+# Loading work.dff(fast__1)
+# Loading work.Register(fast__2)
+# Loading work.dff(fast__2)
+# Loading work.BitCell(fast__2)
+add wave -position insertpoint sim:/cpu_tb/DUT/*
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
+#           Attempting to use alternate WLF file "./wlftd2zrw4".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftd2zrw4
+run -all
+# Hello world...simulation starting
+# See verilogsim.log and verilogsim.trace for output
+# Inst: xxxx, PC: 0000
+# Instruction: 000000000000xxxx, 0000000000000000 
+# 
+# Inst: a151, PC: 0000
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# Instruction: 000000000000a151, 0000000000000000 
+# 
+# 299:Instruction: 000000000000a151, 0000000000000000, 0 
+# 
+# Instruction: 000000000000b151, 0000000000000002 
+# 
+# Inst: b151, PC: 0002
+# Instruction: 000000000000a2b0, 0000000000000004 
+# 
+# Inst: a2b0, PC: 0004
+# Instruction: 000000000000b2a0, 0000000000000006 
+# 
+# Inst: b2a0, PC: 0006
+# Instruction: 0000000000000321, 0000000000000008 
+# 
+# Inst: 0321, PC: 0008
+# Instruction: 0000000000001412, 000000000000000a 
+# 
+# Inst: 1412, PC: 000a
+# Instruction: 0000000000002634, 000000000000000c 
+# 
+# Inst: 2634, PC: 000c
+# Instruction: 0000000000004756, 000000000000000e 
+# 
+# Inst: 4756, PC: 000e
+# Instruction: 0000000000005862, 0000000000000010 
+# 
+# Inst: 5862, PC: 0010
+# Instruction: 000000000000698a, 0000000000000012 
+# 
+# Inst: 698a, PC: 0012
+# Break key hit
+# Break at I:/ECE552/Project/RED.sv line 43
