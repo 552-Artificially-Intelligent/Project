@@ -57,7 +57,12 @@ assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
   
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
-assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
+wire delayTime;
+BitReg delay(.D((Hlt & ~delaytime) ? 1'b1 : 1'b0), .Q(delaytime), 
+   .wen(1'b1), .clk(clk), .rst(~rst_n));
+// assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
+assign nextPC = ~Hlt | (Hlt & delayTime) ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : 
+               programCount;
 // Input rst_n into enable since it is active low async reset
 PC pc0(.clk(clk), .en(~Hlt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
