@@ -61,13 +61,17 @@ in an overflow. Overflow must be set based on treating the arithmetic values as 
 signed integers.  
 The N flag is set if and only if the result of the ADD or SUB instruction is negative.
 */
-assign nvz_flags = (~opcode[2] & ~opcode[1]) ? {ADDSUB_result[15], (posOvfl | negOvfl), ifZero} :	// opcode = 00X
-					(~opcode[2] & ~opcode[0]) ? {1'b0, 1'b0, (^XOR_result === 1'bX ? 1'b0 : XOR_result == 16'h0000)} : // opcode = 0X0
+wire temp;
+assign temp = ^XOR_result;
+/* assign nvz_flags = (~opcode[2] & ~opcode[1]) ? {ADDSUB_result[15], (posOvfl | negOvfl), ifZero} :	// opcode = 00X
+					(~opcode[2] & ~opcode[0]) ? {1'b0, 1'b0, (^XOR_result == 1'bX ? 1'b0 : XOR_result == 16'h0000)} : // opcode = 0X0
 					(~opcode[2]) ? {1'b0, 1'b0, (RED_result == 16'h0000)} : // opcode = 0XX
 					(~opcode[1] & ~opcode[0]) ?  {1'b0, 1'b0, (SLL_result == 16'h0000)} : // opcode = X00
 					(~opcode[1]) ? {1'b0, 1'b0, (SRA_result == 16'h0000)} : // opcode = X0X
 					(~opcode[0]) ? {1'b0, 1'b0, (ROR_result == 16'h0000)} : // opcode = XX0
-					{1'b0, 1'b0, (PADDSB_result == 16'h0000)}; // last of the opcode possibilities
+					{1'b0, 1'b0, (PADDSB_result == 16'h0000)}; // last of the opcode possibilities */
+
+assign nvz_flags = { ^result === 1'bx ? 1'b0 : result[15], (posOvfl | negOvfl) === 1'bx ? 1'b0 : (posOvfl | negOvfl) , ^result === 1'bx ? 1'b0 : result == 16'h0000 };
 
 
 endmodule
