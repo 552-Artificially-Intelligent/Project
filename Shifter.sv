@@ -12,7 +12,7 @@ wire [15:0] lbit0, lbit1, lbit2, lbit3, rbit0, rbit1, rbit2, rbit3;
 assign lbit0 = Shift_Val[0] ? Shift_In << 1 : Shift_In;
 assign lbit1 = Shift_Val[1] ? lbit0 << 2 : lbit0;
 assign lbit2 = Shift_Val[2] ? lbit1 << 4 : lbit1;
-assign lbit2 = Shift_Val[3] ? lbit1 << 8 : lbit2;
+assign lbit3 = Shift_Val[3] ? lbit1 << 8 : lbit2;
 
 assign rbit0 = Shift_Val[0] ? {Shift_In[15], Shift_In[15:1]} : Shift_In[15:0];
 assign rbit1 = Shift_Val[1] ? {{2{rbit0[15]}}, rbit0[15:2]} : rbit0;

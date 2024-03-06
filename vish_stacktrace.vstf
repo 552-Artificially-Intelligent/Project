@@ -1,0 +1,35 @@
+# Current time Tue Mar  5 18:45:49 2024
+# Program = vish
+# Id = "2021.2"
+# Version = "2021.04"
+# Date = "Apr 14 2021"
+# Platform = win64
+
+Exception c0000005 has occurred at address 40285803. Traceback:
+# 0    0x40285803: 'Mtirpc_Init + 0xfd383'
+# 1    0x4027dd27: 'Mtirpc_Init + 0xf58a7'
+# 2    0x4026968b: 'Mtirpc_Init + 0xe120b'
+# 3    0x40265acf: 'Mtirpc_Init + 0xdd64f'
+# 4    0x402655e7: 'Mtirpc_Init + 0xdd167'
+# 5    0x40265481: 'Mtirpc_Init + 0xdd001'
+# 6    0x402d193a: 'Mtirpc_Init + 0x1494ba'
+# 7    0x401f4d6b: 'Mtirpc_Init + 0x6c8eb'
+# 8    0x40124370: '<unknown (@0x40124370)>'
+# 9    0x5fd460b1: 'TclCallVarTraces + 0x301'
+# 10   0x5fd4f0fd: 'Tcl_ObjSetVar2 + 0x4ad'
+# 11   0x5fcc7c58: 'Tcl_NRExprObj + 0x22c8'
+# 12   0x5fc57103: 'TclNRRunCallbacks + 0x63'
+# 13   0x5fc57103: 'TclNRRunCallbacks + 0x63'
+# 14   0x5fd42b84: 'TclServiceIdle + 0xa74'
+# 15   0x5fd4217c: 'TclServiceIdle + 0x6c'
+# 16   0x5fd0a9f3: 'Tcl_DoOneEvent + 0x193'
+# 17   0x5fadaee5: 'Tk_MainLoop + 0x25'
+# 18   0x5fb1d282: 'Tk_MainEx + 0x932'
+# 19   0x401abae2: 'Mtirpc_Init + 0x23662'
+# 20   0x401ae6c4: 'Mtirpc_Init + 0x26244'
+# 21   0x40775810: 'Tclsqlite3_Init + 0x1c000'
+# 22   0x5324257d: 'BaseThreadInitThunk + 0x1d'
+# 23   0x54dcaa58: 'RtlUserThreadStart + 0x28'
+StackWalk failed 0
+# End of Stack Trace
+

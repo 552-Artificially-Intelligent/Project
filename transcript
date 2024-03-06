@@ -25,6 +25,37 @@
 # Compile of Shifter.sv was successful.
 # Compile of Shifter_tb.sv was successful.
 # 26 compiles, 0 failed with no errors.
+# ** Error: Acs sdne.
+# 
+#        Unable to replace existing ini file (I:/ECE552/Project/Project.mpf).  File can not be renamed.
+# Compile of Shifter.sv was successful.
+vsim -voptargs=+acc work.cpu_tb
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 18:47:02 on Mar 05,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Error: I:/ECE552/Project/Register.v(20): Register is illegal in left-hand side of continuous assignment
+# ** Error: I:/ECE552/Project/Register.v(21): Register is illegal in left-hand side of continuous assignment
+# Optimization failed
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=2, Warnings=0.
+# Error loading design
+# End time: 18:47:08 on Mar 05,2024, Elapsed time: 0:00:06
+# Errors: 3, Warnings: 3
+# Compile of Register.v was successful.
+vsim -voptargs=+acc work.cpu_tb
+# vsim -voptargs="+acc" work.cpu_tb 
+# Start time: 18:47:36 on Mar 05,2024
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Error: (vopt-7) Failed to open  file "I:/ECE552/Project/work/@_opt/_deps" in read mode.
+# File exists. (errno = EEXIST)
+# ** Warning: (vopt-56) Problem with optimized design dependency file "I:/ECE552/Project/work/@_opt/_deps" - file open failed.
+# No such file or directory. (errno = ENOENT)
+# ** Fatal: (vopt-8) Problem while reading dependency file "_deps".
+# No such file or directory. (errno = ENOENT)
+# Vopt Compiler exiting
+# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=2, Warnings=1.
+# Error loading design
+# End time: 18:47:41 on Mar 05,2024, Elapsed time: 0:00:05
+# Errors: 2, Warnings: 3
 # Compile of ALU.sv was successful.
 # Compile of ALU_tb.sv was successful.
 # Compile of Branch.v was successful.
@@ -35,9 +66,26 @@
 # Compile of CLA_16bit.v was successful.
 # Compile of Control.v was successful.
 # Compile of CPU.sv was successful.
+# Compile of D-Flip-Flop.v was successful.
+# Compile of FLAG_Reg.sv was successful.
+# Compile of memory.v was successful.
+# Compile of PADDSB.sv was successful.
+# Compile of PC.v was successful.
+# Compile of project-phase1-testbench.v was successful.
+# Compile of RED.sv was successful.
+# Compile of RED_tb.sv was successful.
+# Compile of Register.v was successful.
+# Compile of RegisterFile.v was successful.
+# Compile of RegisterFile_TB.sv was successful.
+# Compile of ROR.sv was successful.
+# Compile of SATADDSUB_16bit.sv was successful.
+# Compile of SATADDSUB_16bit_tb.sv was successful.
+# Compile of Shifter.sv was successful.
+# Compile of Shifter_tb.sv was successful.
+# 26 compiles, 0 failed with no errors.
 vsim -voptargs=+acc work.cpu_tb
 # vsim -voptargs="+acc" work.cpu_tb 
-# Start time: 17:07:15 on Mar 05,2024
+# Start time: 18:49:00 on Mar 05,2024
 # ** Note: (vsim-3812) Design is being optimized...
 # Loading work.cpu_tb(fast)
 # Loading sv_std.std
@@ -66,831 +114,12 @@ vsim -voptargs=+acc work.cpu_tb
 # Loading work.dff(fast)
 # Loading work.BitCell(fast__1)
 # Loading work.dff(fast__1)
-# Compile of D-Flip-Flop.v was successful.
-# Compile of FLAG_Reg.sv was successful.
 add wave -position insertpoint sim:/cpu_tb/DUT/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
-#           Attempting to use alternate WLF file "./wlft61zihz".
+#           Attempting to use alternate WLF file "./wlft8sqxsv".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft61zihz
-# Compile of memory.v was successful.
-# Compile of PADDSB.sv was successful.
-# Compile of PC.v failed with 1 errors.
-# Compile of project-phase1-testbench.v was successful.
-# Compile of RED.sv was successful.
-# Compile of RED_tb.sv was successful.
-# Compile of Register.v was successful.
-# Compile of RegisterFile.v was successful.
-# Compile of RegisterFile_TB.sv was successful.
-# Compile of ROR.sv was successful.
-# Compile of SATADDSUB_16bit.sv was successful.
-# Compile of SATADDSUB_16bit_tb.sv was successful.
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# 201:Instruction: 000000000000a151, 0000000000000000, 0 
-# 
-# Break key hit
-# Break at I:/ECE552/Project/RED.sv line 43
-# Compile of Shifter.sv was successful.
-# Compile canceled.
-# 25 out of 26 compiles, 1 failed with 1 error.
-# Compile of ALU.sv was successful.
-# Compile of ALU_tb.sv was successful.
-# Compile of Branch.v was successful.
-# Compile of CLA_4bit.sv was successful.
-# Compile of CLA_4bit_tb.sv was successful.
-# Compile of CLA_8bit.sv was successful.
-# Compile of CLA_8bit_tb.sv was successful.
-# Compile of CLA_16bit.v was successful.
-# Compile of Control.v was successful.
-# Compile of CPU.sv was successful.
-# Compile of D-Flip-Flop.v was successful.
-# Compile of FLAG_Reg.sv was successful.
-# Compile of memory.v was successful.
-# Compile of PADDSB.sv was successful.
-# Compile of PC.v was successful.
-# Compile of project-phase1-testbench.v was successful.
-# Compile of RED.sv was successful.
-# Compile of RED_tb.sv was successful.
-# Compile of Register.v was successful.
-# Compile of RegisterFile.v was successful.
-# Compile of RegisterFile_TB.sv was successful.
-# Compile of ROR.sv was successful.
-# Compile of SATADDSUB_16bit.sv was successful.
-# Compile of SATADDSUB_16bit_tb.sv was successful.
-# Compile of Shifter.sv was successful.
-# Compile of Shifter_tb.sv was successful.
-# 26 compiles, 0 failed with no errors.
-vsim -voptargs=+acc work.cpu_tb
-# End time: 17:16:42 on Mar 05,2024, Elapsed time: 0:09:27
-# Errors: 0, Warnings: 9
-# vsim -voptargs="+acc" work.cpu_tb 
-# Start time: 17:16:42 on Mar 05,2024
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-add wave -position insertpoint sim:/cpu_tb/DUT/*
-# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
-#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
-#           Attempting to use alternate WLF file "./wlftig00mm".
-# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftig00mm
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# 201:Instruction: 000000000000a151, 0000000000000000, 0 
-# 
-# Break key hit
-# Break at I:/ECE552/Project/RED.sv line 43
-# Compile of project-phase1-testbench.v was successful.
-vsim -voptargs=+acc work.cpu_tb
-# End time: 17:18:38 on Mar 05,2024, Elapsed time: 0:01:56
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.cpu_tb 
-# Start time: 17:18:38 on Mar 05,2024
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-add wave -position insertpoint sim:/cpu_tb/DUT/*
-# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
-#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
-#           Attempting to use alternate WLF file "./wlftdjsm30".
-# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftdjsm30
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# 249:Instruction: 000000000000a151, 0000000000000000, 0 
-# 
-# Break key hit
-# Break at I:/ECE552/Project/RED.sv line 43
-# Compile of project-phase1-testbench.v was successful.
-vsim -voptargs=+acc work.cpu_tb
-# End time: 17:21:06 on Mar 05,2024, Elapsed time: 0:02:28
-# Errors: 0, Warnings: 4
-# vsim -voptargs="+acc" work.cpu_tb 
-# Start time: 17:21:06 on Mar 05,2024
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-add wave -position insertpoint sim:/cpu_tb/DUT/*
-# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
-#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
-#           Attempting to use alternate WLF file "./wlftkgnfqz".
-# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftkgnfqz
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# Break key hit
-# Break at I:/ECE552/Project/RED.sv line 43
-# Compile of ALU.sv was successful.
-# Compile of ALU_tb.sv was successful.
-# Compile of Branch.v was successful.
-# Compile of CLA_4bit.sv was successful.
-# Compile of CLA_4bit_tb.sv was successful.
-# Compile of CLA_8bit.sv was successful.
-# Compile of CLA_8bit_tb.sv was successful.
-# Compile of CLA_16bit.v was successful.
-# Compile of Control.v was successful.
-# Compile of CPU.sv was successful.
-# Compile of D-Flip-Flop.v was successful.
-# Compile of FLAG_Reg.sv was successful.
-# Compile of memory.v was successful.
-# Compile of PADDSB.sv was successful.
-# Compile of PC.v was successful.
-# Compile of project-phase1-testbench.v was successful.
-# Compile of RED.sv was successful.
-# Compile of RED_tb.sv was successful.
-# Compile of Register.v was successful.
-# Compile of RegisterFile.v was successful.
-# Compile of RegisterFile_TB.sv was successful.
-# Compile of ROR.sv was successful.
-# Compile of SATADDSUB_16bit.sv was successful.
-# Compile of SATADDSUB_16bit_tb.sv was successful.
-# Compile of Shifter.sv was successful.
-# Compile of Shifter_tb.sv was successful.
-# 26 compiles, 0 failed with no errors.
-restart
-# Closing VCD file "dump.vcd"
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-# Break key hit
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# Break key hit
-# Break at I:/ECE552/Project/CPU.sv line 113
-# Causality operation skipped due to absence of debug database file
-# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
-# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
-# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
-# Compile of CPU.sv was successful.
-# Compile of RegisterFile.v was successful.
-restart
-# Closing VCD file "dump.vcd"
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# Break key hit
-# Break at I:/ECE552/Project/RED.sv line 43
-# Compile of CPU.sv was successful.
-restart
-# Closing VCD file "dump.vcd"
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# Break key hit
-# Break at I:/ECE552/Project/CPU.sv line 113
-# Compile of CPU.sv was successful.
-restart
-# Closing VCD file "dump.vcd"
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-run -all
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# Break key hit
-# Break in Module CLA_4bit at I:/ECE552/Project/CLA_4bit.sv line 36
-quit -sim
-# End time: 17:49:30 on Mar 05,2024, Elapsed time: 0:28:24
-# Errors: 0, Warnings: 1
-vsim -voptargs=+acc work.cpu_tb
-# vsim -voptargs="+acc" work.cpu_tb 
-# Start time: 17:52:06 on Mar 05,2024
-# ** Note: (vsim-8009) Loading existing optimized design _opt
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
-add wave -position insertpoint sim:/cpu_tb/DUT/*
-# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
-#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
-#           Attempting to use alternate WLF file "./wlftz7cbcd".
-# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftz7cbcd
-# Compile of CPU.sv was successful.
-run -all
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-step -over
-step -over
-step -over
-step -over
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 0 ns  Iteration: 0  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Hello world...simulation starting
-# See verilogsim.log and verilogsim.trace for output
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Instruction: 000000000000xxxx, 0000000000000000 
-# 
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 50 ns  Iteration: 2  Instance: /cpu_tb/DUT/pc0
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 50 ns  Iteration: 2  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Instruction: 000000000000a151, 0000000000000000 
-# 
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-# Break key hit
-# Break key hit
-# Break key hit
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-# Break key hit
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 79
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 56
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/pc0
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -continue
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 100
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-run -continue
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 29
-run -all
-# ** Warning: cg: unrecognized machine instruction
-#    Time: 225 ns  Iteration: 1  Instance: /cpu_tb/DUT/rf_0
-# Break in Module RegisterFile at I:/ECE552/Project/RegisterFile.v line 28
-run -all
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 81
-run -continue
-# Break in Module PC at I:/ECE552/Project/PC.v line 33
-run -continue
-# Break in Module cpu at I:/ECE552/Project/CPU.sv line 60
-quit -sim
-# End time: 18:06:32 on Mar 05,2024, Elapsed time: 0:14:26
-# Errors: 0, Warnings: 19
-# Compile of project-phase1-testbench.v was successful.
-vsim -voptargs=+acc work.cpu_tb
-# vsim -voptargs="+acc" work.cpu_tb 
-# Start time: 18:08:46 on Mar 05,2024
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.cpu_tb(fast)
-# Loading sv_std.std
-# Loading work.cpu(fast)
-# Loading work.memory1c(fast)
-# Loading work.Branch(fast)
-# Loading work.CLA_16bit(fast)
-# Loading work.CLA_8bit(fast)
-# Loading work.CLA_4bit(fast)
-# Loading work.PC(fast)
-# Loading work.Register(fast)
-# Loading work.Register(fast__1)
-# Loading work.Control(fast)
-# Loading work.RegisterFile(fast)
-# Loading work.ReadDecoder_4_16(fast)
-# Loading work.WriteDecoder_4_16(fast)
-# Loading work.ALU(fast)
-# Loading work.SATADDSUB_16bit(fast)
-# Loading work.PADDSB(fast)
-# Loading work.RED(fast)
-# Loading work.Shifter(fast)
-# Loading work.ROR(fast)
-# Loading work.memory1d(fast)
-# Loading work.FLAG_reg(fast)
-# Loading work.BitCell(fast)
-# Loading work.dff(fast)
-# Loading work.BitCell(fast__1)
-# Loading work.dff(fast__1)
+#           Using alternate file: ./wlft8sqxsv
 run -all
 # Hello world...simulation starting
 # See verilogsim.log and verilogsim.trace for output
@@ -901,13 +130,12 @@ run -all
 # Instruction: 000000000000a151, 0000000000000000 
 # 
 # Break key hit
-# Break at I:/ECE552/Project/CPU.sv line 128
+# Break at I:/ECE552/Project/CPU.sv line 113
 # Compile of PC.v was successful.
-vsim -voptargs=+acc work.cpu_tb
-# End time: 18:26:04 on Mar 05,2024, Elapsed time: 0:17:18
-# Errors: 0, Warnings: 3
-# vsim -voptargs="+acc" work.cpu_tb 
-# Start time: 18:26:05 on Mar 05,2024
+# Compile of Register.v was successful.
+restart
+# Closing VCD file "dump.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
 # ** Note: (vsim-3813) Design is being optimized due to module recompilation...
 # Loading work.cpu_tb(fast)
 # Loading sv_std.std
@@ -939,12 +167,6 @@ vsim -voptargs=+acc work.cpu_tb
 # Loading work.Register(fast__2)
 # Loading work.dff(fast__2)
 # Loading work.BitCell(fast__2)
-add wave -position insertpoint sim:/cpu_tb/DUT/*
-# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
-#           File in use by: rushe  Hostname: RUSHEEL-THINKPA  ProcessID: 43944
-#           Attempting to use alternate WLF file "./wlftd2zrw4".
-# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftd2zrw4
 run -all
 # Hello world...simulation starting
 # See verilogsim.log and verilogsim.trace for output
