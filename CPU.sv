@@ -79,8 +79,8 @@ assign DstReg = instruction[11:8];
 assign SrcReg1 = instruction[15:13] == 3'b101 ? instruction[11:8] : instruction[7:4];
 assign SrcReg2 = instruction[3:0];
 assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ? 
-				({instruction[7:0], result[7:0]}) : 
-				({result[15:8], instruction[7:0]})) :
+				({instruction[7:0], SrcData1[7:0]}) : 
+				({SrcData1[15:8], instruction[7:0]})) :
   				MemtoReg ? data_out : result;
 ///////////////////////////////////////////////////////////////////////
 // TODO: Currently only chooses SrcReg2 as the last 4 bits of the instruction

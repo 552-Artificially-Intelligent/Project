@@ -18,7 +18,7 @@ assign PCs = opcode == 4'b1110 ? 1'b1 : 1'b0;
 assign branch_inst = opcode[3:1] == 3'b110 ? 1'b1 : 1'b0;
 assign branch_src = opcode[0];
 
-assign RegWrite = ~opcode[3] | (opcode[3] & ~|opcode[2:0]) | (opcode[3:1] == 3'b101) | (&opcode[3:1] & ~opcode[0]);
+assign RegWrite = ~opcode[3] | (opcode[3] & ~|opcode[2:0]) | (opcode == 4'b1010) | (opcode == 4'b1011) | (&opcode[3:1] & ~opcode[0]);
 assign RegDst = ~opcode[3] | opcode == 4'b1110 ? 1'b1 : 1'b0;
 assign MemRead = opcode == 4'b1000 ? 1'b1 : 1'b0;
 assign MemtoReg = opcode == 4'b1000 ? 1'b1 : 1'b0;
