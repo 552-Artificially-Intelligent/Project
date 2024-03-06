@@ -58,7 +58,7 @@ assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
 wire delayTime;
-BitReg delay(.D((Hlt & ~delaytime) ? 1'b1 : 1'b0), .Q(delaytime), 
+BitReg delay(.D(((delayTime === 1'bz) | (delayTime === 1'bx)) ? (1'b0) : ((Hlt & ~delaytime) ? 1'b1 : 1'b0)), .Q(delaytime), 
    .wen(1'b1), .clk(clk), .rst(~rst_n));
 // assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
 assign nextPC = ~Hlt | (Hlt & delayTime) ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : 
