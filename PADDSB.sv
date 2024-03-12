@@ -11,23 +11,23 @@ wire [3:0] tempHalfByte0, tempHalfByte1, tempHalfByte2, tempHalfByte3;
 wire Cout0, Cout1, Cout2, Cout3;
 
 CLA_4bit CLA4_0(.A(A[3:0]), .B(B[3:0]), .Cin(1'b0), .Sum(tempHalfByte0), .Cout(Cout0));
-CLA_4bit CLA4_1(.A(A[7:4]), .B(B[7:4]), .Cin(1'b0), .Sum(tempHalfByte1), .Cout(Cout0));
-CLA_4bit CLA4_2(.A(A[11:8]), .B(B[11:8]), .Cin(1'b0), .Sum(tempHalfByte2), .Cout(Cout0));
-CLA_4bit CLA4_3(.A(A[15:12]), .B(B[15:12]), .Cin(1'b0), .Sum(tempHalfByte3), .Cout(Cout0));
+CLA_4bit CLA4_1(.A(A[7:4]), .B(B[7:4]), .Cin(1'b0), .Sum(tempHalfByte1), .Cout(Cout1));
+CLA_4bit CLA4_2(.A(A[11:8]), .B(B[11:8]), .Cin(1'b0), .Sum(tempHalfByte2), .Cout(Cout2));
+CLA_4bit CLA4_3(.A(A[15:12]), .B(B[15:12]), .Cin(1'b0), .Sum(tempHalfByte3), .Cout(Cout3));
 
 // Figure out overflow
 wire [3:0] posOvfl, negOvfl;
-assign posOvfl[0] = (~A[3] & ~B[3] & tempHalfByte0[3]);
-assign negOvfl[0] = (A[3] & B[3] & ~tempHalfByte0[3]);
+assign posOvfl[0] = (~A[3]) & (~B[3]) & tempHalfByte0[3];
+assign negOvfl[0] = A[3] & B[3] & (~tempHalfByte0[3]);
 
-assign posOvfl[1] = (~A[7] & ~B[7] & tempHalfByte1[7]);
-assign negOvfl[1] = (A[7] & B[7] & ~tempHalfByte1[7]);
+assign posOvfl[1] = (~A[7]) & (~B[7]) & tempHalfByte1[3];
+assign negOvfl[1] = A[7] & B[7] & (~tempHalfByte1[3]);
 
-assign posOvfl[1] = (~A[11] & ~B[11] & tempHalfByte2[11]);
-assign negOvfl[1] = (A[11] & B[11] & ~tempHalfByte2[11]);
+assign posOvfl[2] = (~A[11]) & (~B[11]) & tempHalfByte2[3];
+assign negOvfl[2] = A[11] & B[11] & (~tempHalfByte2[3]);
 
-assign posOvfl[1] = (~A[15] & ~B[15] & tempHalfByte3[15]);
-assign negOvfl[1] = (A[15] & B[15] & ~tempHalfByte3[15]);
+assign posOvfl[3] = (~A[15]) & (~B[15]) & tempHalfByte3[3];
+assign negOvfl[3] = A[15] & B[15] & (~tempHalfByte3[3]);
 
 // Set if overflowe
 assign Sum[3:0] = posOvfl[0] ? 4'b0111 :
