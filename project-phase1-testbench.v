@@ -161,7 +161,7 @@ module cpu_tb();
    assign RegWrite = DUT.WriteReg;
    // Is memory being read, one bit signal (1 means yes, 0 means no)
    
-   assign WriteRegister = DUT.WriteReg;
+   assign WriteRegister = DUT.DstReg;
    // The name of the register being written to. (4 bit signal)
 
    assign WriteData = DUT.DstData;
