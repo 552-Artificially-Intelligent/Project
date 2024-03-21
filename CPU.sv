@@ -51,24 +51,59 @@ assign cond = instruction[11:9];
 Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
   
 wire unused1, unused2;
+
+//PURPOSE: increment program counter
+//RESULT: pcInc = programCount + 2
 CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1));
-  
+ 
+//branchAdd = instruction[8:0] right-shifted and sign-extended
 assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
   
+//PURPOSE: calculate value for branches
+//RESULT: pcBranch = branchAdd + pcInc
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
 wire delayTime;
+//Delay doesn't do anything (right now)
 BitReg delay(.D(((delayTime === 1'bz) | (delayTime === 1'bx)) ? (1'b0) : ((Hlt & ~delaytime) ? 1'b1 : 1'b0)), .Q(delaytime), 
    .wen(1'b1), .clk(clk), .rst(~rst_n));
+
+
 // assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
+//PURPOSE: determine next value of program counter (PC)
+//RESULT:
+// - If program is halted, currentPc
+// - Elif do_branch enabled, either SrcData1 (jump) or pc_branch (branch) depending on branch_src (1 if jump)
+// - Else, currentPc+2
 assign nextPC = ~Hlt | (Hlt & delayTime) ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : 
                programCount;
+
 // Input rst_n into enable since it is active low async reset
+//PURPOSE: program counter - resposible for actually setting the PC to the appropriate next value 
+//INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
+//OUTPUTS: current programCount (.PC)
 PC pc0(.clk(clk), .en(~Hlt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
 
 
-// TODO Control
+
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!CONTROL!!!!!!!!!!!!!!!!!!
+INPUT:
+	- .opcode: instruction[15:12]
+OUTPUT: 
+	- .ALUOp: ALU operation to be performed
+	- .ALUsrc: set to 1 if anything besides SrcReg2 is to be used as the 2nd ALU operation
+	- .MemtoReg: controls whether value to write comes from data memory (1) or ALU (0)
+	- .RegWrite: controls whether WriteReg is written to
+	- .MemRead: should control whether Memory is read; does nothing in practice (BUG???)
+	- .MemWrite: controls whether Memory is written to
+	- .branch_inst: ???
+	- .branch_src: whether to use jump value or branch value for PC
+	- .RegDst: should be used to determine which value to write to register, currently unused (BUG???)
+	- .PCs: whether PCS instruction is executed (saves PC value)
+	- .Hlt: whether to halt program (only if OPCODE = 1111)
+*/
 Control control0(.opcode(instruction[15:12]), .ALUOp(ALUop), 
                    .ALUsrc(ALUsrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
                    .MemRead(MemRead), .MemWrite(MemWrite), .branch_inst(branch_inst), 
@@ -83,6 +118,8 @@ assign WriteReg = RegWrite;
 assign DstReg = instruction[11:8];
 assign SrcReg1 = instruction[15:13] == 3'b101 ? instruction[11:8] : instruction[7:4];
 assign SrcReg2 = instruction[3:0];
+//What is this??? Look into this
+//We forgor PCS
 assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ? 
 				({instruction[7:0], SrcData1[7:0]}) : 
 				({SrcData1[15:8], instruction[7:0]})) :
@@ -101,6 +138,9 @@ RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2),
 // Opcode rd, rs, rt
 // SLL, SRA, ROR:
 // Opcode rd, rs, imm
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!ALU!!!!!!!!!!!!!!!!!!	
+*/
 assign A = SrcData1;
 assign B = ALUsrc ? ((instruction[15:13] == 3'b101) ? 16'h0000 : 
 		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
@@ -117,7 +157,7 @@ assign data_in = SrcData1;
 // instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) :
 assign addr = result;
 memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
-                     .enable(1'b1), .wr(MemWrite), .clk(clk), .rst(~rst_n));
+                     .enable(MemRead | MemWrite), .wr(MemWrite), .clk(clk), .rst(~rst_n));
 
 
 
