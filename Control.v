@@ -10,6 +10,8 @@ module Control(
     output branch_src,
     output RegDst,
     output PCs,
+    output LoadPartial,
+    output SavePC,
     output Hlt
 );
 
@@ -23,6 +25,8 @@ assign RegDst = ~opcode[3] | opcode == 4'b1110 ? 1'b1 : 1'b0;
 assign MemRead = opcode == 4'b1000 ? 1'b1 : 1'b0;
 assign MemtoReg = opcode == 4'b1000 ? 1'b1 : 1'b0;
 assign MemWrite = opcode == 4'b1001 ? 1'b1 : 1'b0;
+assign LoadPartial = opcode[3:1] == 3'b101 ? 1'b1 : 1'b0;
+assign SavePC = opcode == 4'b1110 ? 1'b1 : 1'b0;
 
 assign ALUOp = ~opcode[3] ? opcode[2:0] : 3'b000;
 

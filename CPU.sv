@@ -24,7 +24,7 @@ wire do_branch;
 
 // Control wires
 wire [2:0] ALUop;
-wire ALUsrc, MemtoReg, RegWrite, MemRead, MemWrite, branch_inst, branch_src, RegDst, PCs, Hlt;
+wire ALUsrc, MemtoReg, RegWrite, MemRead, MemWrite, branch_inst, branch_src, RegDst, PCs, LoadPartial, SavePC, Hlt;
   
 // Register wires
 wire [3:0] SrcReg1, SrcReg2, DstReg;
@@ -52,14 +52,14 @@ Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_br
 wire unused1, unused2;
 
 //PURPOSE: increment program counter
-//RESULT: pcInc = programCount + 2
+//OUTPUT: pcInc = programCount + 2
 CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1));
  
 //branchAdd = instruction[8:0] right-shifted and sign-extended
 assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
   
 //PURPOSE: calculate value for branches
-//RESULT: pcBranch = branchAdd + pcInc
+//OUTPUT: pcBranch = branchAdd + pcInc
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
 wire delayTime;
@@ -98,13 +98,15 @@ OUTPUT:
 	- .branch_src: whether to use jump value or branch value for PC
 	- .RegDst: should be used to determine which value to write to register, currently unused (BUG???)
 	- .PCs: whether PCS instruction is executed (saves PC value)
+	- .LoadPartial: set to 1 if doing LLB or LHB, set to 0 otherwise
+	- .SavePC: set to 1 if PCS instruction is being executed, set to 0 otherwise
 	- .Hlt: whether to halt program (only if OPCODE = 1111)
 */
 Control control0(.opcode(instruction[15:12]), .ALUOp(ALUop), 
                    .ALUsrc(ALUsrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
                    .MemRead(MemRead), .MemWrite(MemWrite), .branch_inst(branch_inst), 
-                   .branch_src(branch_src), .RegDst(RegDst), .PCs(PCs), .Hlt(Hlt));
-  
+                   .branch_src(branch_src), .RegDst(RegDst), .PCs(PCs), .LoadPartial(LoadPartial), 
+		   .SavePC(SavePC), .Hlt(Hlt));
   
 /*
 !!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!REGISTERFILE!!!!!!!!!!!!!!!!!!
@@ -116,7 +118,7 @@ INPUT:
 	- .DstReg: register to be written to (if applicable)
 	- .WriteReg: controls whether DstReg is written to, from Control 
 	- .DstData: data to be written into DestReg - complicated logic
-		-if instruction is LLB or LHB (101x):
+		-if instruction is LLB or LHB:
 			- if LHB, set upper 8 bits - {[SrcData1[15:8], instruction[7:0]}
 			- else (LLB), set lower 8 bits - {[SrcData1[15:8], instruction[7:0]}
 		-else:
@@ -127,14 +129,17 @@ INOUT:
 	- .SrcData2: output from when SrcReg2 is read
 */
 assign DstReg = instruction[11:8];
-assign SrcReg1 = instruction[15:13] == 3'b101 ? instruction[11:8] : instruction[7:4];
+assign SrcReg1 = LoadPartial ? instruction[11:8] : instruction[7:4];
 assign SrcReg2 = instruction[3:0];
 //What is this??? Look into this
-//We forgor PCS
-assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ? 
+//TODO TODO TODO: ADD FUNCTIONALITY FOR PCS
+assign DstData = LoadPartial ? 
+			(instruction[12] ? 
 				({instruction[7:0], SrcData1[7:0]}) : 
 				({SrcData1[15:8], instruction[7:0]})) :
-  				MemtoReg ? data_out : result;
+  			SavePC ?
+				pcInc :
+				MemtoReg ? data_out : result;
 ///////////////////////////////////////////////////////////////////////
 // TODO: Currently only chooses SrcReg2 as the last 4 bits of the instruction
 // for ALU
@@ -153,7 +158,7 @@ RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2),
 !!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!ALU!!!!!!!!!!!!!!!!!!	
 */
 assign A = SrcData1;
-assign B = ALUsrc ? ((instruction[15:13] == 3'b101) ? 16'h0000 : 
+assign B = ALUsrc ? ((LoadPartial | SavePC) ? 16'h0000 : 
 		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
 ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag));
 
