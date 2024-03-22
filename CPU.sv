@@ -29,7 +29,6 @@ wire ALUsrc, MemtoReg, RegWrite, MemRead, MemWrite, branch_inst, branch_src, Reg
 // Register wires
 wire [3:0] SrcReg1, SrcReg2, DstReg;
 wire [15:0] DstData, SrcData1, SrcData2;
-wire WriteReg;
 wire [15:0] data_out, data_in, addr;
   
 // ALU wires
@@ -84,9 +83,6 @@ assign nextPC = ~Hlt | (Hlt & delayTime) ? (do_branch ? (branch_src ? SrcData1 :
 //OUTPUTS: current programCount (.PC)
 PC pc0(.clk(clk), .en(~Hlt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
-
-
-
 /*
 !!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!CONTROL!!!!!!!!!!!!!!!!!!
 INPUT:
@@ -110,11 +106,26 @@ Control control0(.opcode(instruction[15:12]), .ALUOp(ALUop),
                    .branch_src(branch_src), .RegDst(RegDst), .PCs(PCs), .Hlt(Hlt));
   
   
-
-
-
-// Register File
-assign WriteReg = RegWrite;
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!REGISTERFILE!!!!!!!!!!!!!!!!!!
+INPUT:
+	- .clk: Clock
+	- .rst: reset 
+	- .SrcReg1: first reg to be read, currently set to bits 7-4, unless doing LLB or LHB
+	- .SrcReg2: second reg to be read, currently set to bits 3-0
+	- .DstReg: register to be written to (if applicable)
+	- .WriteReg: controls whether DstReg is written to, from Control 
+	- .DstData: data to be written into DestReg - complicated logic
+		-if instruction is LLB or LHB (101x):
+			- if LHB, set upper 8 bits - {[SrcData1[15:8], instruction[7:0]}
+			- else (LLB), set lower 8 bits - {[SrcData1[15:8], instruction[7:0]}
+		-else:
+			- if MemtoReg is enabled, set it to data_out (output of data memory?)
+			- else, set it to result (ALU result)
+INOUT: 
+	- .SrcData1: output from when SrcReg1 is read
+	- .SrcData2: output from when SrcReg2 is read
+*/
 assign DstReg = instruction[11:8];
 assign SrcReg1 = instruction[15:13] == 3'b101 ? instruction[11:8] : instruction[7:4];
 assign SrcReg2 = instruction[3:0];
@@ -130,7 +141,7 @@ assign DstData = (instruction[15:13] == 3'b101) ? (instruction[12] ?
 ///////////////////////////////////////////////////////////////////////
 // Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
 RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
-             .DstReg(DstReg), .WriteReg(WriteReg), .DstData(DstData), 
+             .DstReg(DstReg), .WriteReg(RegWrite), .DstData(DstData), 
              .SrcData1(SrcData1), .SrcData2(SrcData2));
 
 // ALU
