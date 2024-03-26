@@ -10,6 +10,8 @@ CLA_4bit iDUT(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
 
 reg [4:0] expectedSum;
 
+integer i;
+
 initial begin
 
 	A = 4'b0000;
@@ -17,7 +19,7 @@ initial begin
 	Cin = 0;
 	#5
 
-	for (int i = 0; i < 32; i++) begin
+	for (i = 0; i < 32; i++) begin
 		A = (i % 2 == 0) ? A + 1 : A;
 		B = (i % 2 == 1) ? B + 1 : B;
 		Cin = (i % 3 == 0) ? 1 : 0;

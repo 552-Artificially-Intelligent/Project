@@ -158,7 +158,7 @@ module cpu_tb();
 //   assign PC = DUT.fetch0.pcCurrent; //You won't need this because it's part of the main cpu interface
    assign Inst = DUT.instruction;
    
-   assign RegWrite = DUT.WriteReg;
+   assign RegWrite = DUT.RegWrite;
    // Is memory being read, one bit signal (1 means yes, 0 means no)
    
    assign WriteRegister = DUT.DstReg;
