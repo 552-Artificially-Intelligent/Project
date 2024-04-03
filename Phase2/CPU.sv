@@ -171,9 +171,49 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 
 
 
-// Flag Register
-FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]), 
-	.flags(NVZflag), .opcode(ALUop), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+//===============================================
+// 			Pipeline Data
+//===============================================
+// TODO Fill out:
+// PC Data
+// Instruction
+// Opcode
+// Immediate value
+// Branch Address
+// Register Addresses
+// Register Outputs
+// NVZ Flag
+// ALU In
+// ALU Out
+// Memory in/out data
+// Memory/Register Writeback data
+
+
+//===============================================
+// 			Pipeline Signal
+//===============================================
+// TODO Fill out:
+// PC Data
+// Stalls, Flushes, branchTaken signals
+// ALUsrc
+// MemtoReg
+// RegWrite
+// MemRead
+// MemWrite
+// branch_inst
+// branch_src
+// RegDst
+// PCs
+// LoadPartial
+// SavePC
+// Hlt, TODO: maybe need additional halt for halt and branch taken flush
+wire f_d_halt, d_x_halt, x_m_halt, m_w_halt;
+
+
 
 // IDEA: We have the same modules in each stage,
 // but for all the interconnects the will be instantiated in
@@ -207,7 +247,9 @@ RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2),
              .SrcData1(SrcData1), .SrcData2(SrcData2));
 
 // TODO: Split Control into everything less PC/Instruction
-// TODO: Move here NVZ flag regs
+// NVZ flag regs
+FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]), 
+	.flags(NVZflag), .opcode(ALUop), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
 // TODO: Move here Data hazard detect
 
 // TODO: Resolve ID Flushes/Stall
