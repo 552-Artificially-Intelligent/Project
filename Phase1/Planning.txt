@@ -1,0 +1,19 @@
+CENTRAL COMPONENTS TO DESIGN:
+- Cpu.v
+- 4-to-One Mux (for Shifters)
+- Pc.v (program counter)
+- Reg file
+- ALU - modify existing ALU
+- Adder
+- Control File - decode instruction into signals
+
+
+ORDER OF THINGS:
+1. PC accesses instruction
+
+
+
+CPU.v
+- ProgramCounter.v - only tracks actual program counter
+- InstructionMemory.v (GIVEN TO US) - with PC as input, output 32-bit instruction
+- Control - given an opcode, sends various signals to register file, Adder, ALU, and others in order to configure everything
