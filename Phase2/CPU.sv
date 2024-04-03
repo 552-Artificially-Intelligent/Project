@@ -210,6 +210,7 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 // PCs
 // LoadPartial
 // SavePC
+// Forwarding
 // Hlt, TODO: maybe need additional halt for halt and branch taken flush
 wire f_d_halt, d_x_halt, x_m_halt, m_w_halt;
 
