@@ -37,12 +37,14 @@ wire [15:0] A, B, result;
 // Flag wires
 wire [2:0] NVZ_out;
 
+// PC and HLT Connections
+assign pc = programCount;
+assign hlt = Hlt;
+
 // data_out, data_in, addr, enable, wr, clk, rst
 memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
 					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
   
-// TODO: PC and BRANCH stuff
-// Have a mux that chooses between current PC or branch PC
 // Branch
 
 assign cond = instruction[11:9];
@@ -140,14 +142,6 @@ assign DstData = LoadPartial ?
   			SavePC ?
 				pcInc :
 				MemtoReg ? data_out : result;
-///////////////////////////////////////////////////////////////////////
-// TODO: Currently only chooses SrcReg2 as the last 4 bits of the instruction
-// for ALU
-///////////////////////////////////////////////////////////////////////
-// Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
-RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
-             .DstReg(DstReg), .WriteReg(RegWrite), .DstData(DstData), 
-             .SrcData1(SrcData1), .SrcData2(SrcData2));
 
 // ALU
 // The assembly level syntax for ADD, PADDSB, SUB, XOR and RED is:
@@ -181,13 +175,69 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]), 
 	.flags(NVZflag), .opcode(ALUop), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
 
+// IDEA: We have the same modules in each stage,
+// but for all the interconnects the will be instantiated in
+// the flops modules before it
+//===============================================
+// 			Instruction Fetch Stage
+//===============================================
+
+// TODO: Move here Pipeline Flops
+// TODO: Move here PC regs
+// TODO: Split Control into PC/Instruction Only Control
+// TODO: Move here Instruction Memory
+
+// TODO: Resolve IF Stall
 
 
+//===============================================
+// 			Instruction Decode Stage
+//===============================================
+
+// TODO: Move here Pipeline Flops
+
+// General Register File
+///////////////////////////////////////////////////////////////////////
+// TODO: Currently only chooses SrcReg2 as the last 4 bits of the instruction
+// for ALU
+///////////////////////////////////////////////////////////////////////
+// Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
+RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
+             .DstReg(DstReg), .WriteReg(RegWrite), .DstData(DstData), 
+             .SrcData1(SrcData1), .SrcData2(SrcData2));
+
+// TODO: Split Control into everything less PC/Instruction
+// TODO: Move here NVZ flag regs
+// TODO: Move here Data hazard detect
+
+// TODO: Resolve ID Flushes/Stall
+
+//===============================================
+// 			Execute Stage
+//===============================================
+
+// TODO: Move here Pipeline Flops
+// TODO: ALU
+// TODO: Forwarding
+
+// TODO: Maybe separate wires/modules/assigns for normal vs forward inputs
 
 
-// assign programCount = ~rst_n ? 16'h0000 : programCount;
-assign pc = programCount;
-assign hlt = Hlt;
+//===============================================
+// 			Memory Stage
+//===============================================
+
+// TODO: Move here Pipeline Flops
+// TODO: Move here Data Memory
+
+
+//===============================================
+// 			Memory Writeback Stage
+//===============================================
+
+// TODO: Maybe nothing, but a single assign statement/cascaded mux saying which to writeback
+
+
   
 
   
