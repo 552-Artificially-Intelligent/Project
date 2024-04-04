@@ -18,13 +18,9 @@ output [15:0] pc;
 wire [15:0] instruction;
   
 // Branch wires
-wire [15:0] nextPC, programCount, pcInc, branchAdd, pcBranch;
+wire [15:0] nextPC, programCount, pcInc, pcBranch;
 wire [2:0] cond, NVZflag;
 wire do_branch;
-
-// Control wires
-wire [2:0] ALUop;
-wire ALUsrc, MemtoReg, RegWrite, MemRead, MemWrite, branch_inst, branch_src, RegDst, PCs, LoadPartial, SavePC, Hlt;
   
 // Register wires
 wire [3:0] SrcReg1, SrcReg2, DstReg;
@@ -96,7 +92,7 @@ OUTPUT:
 	- .RegWrite: controls whether WriteReg is written to
 	- .MemRead: should control whether Memory is read; does nothing in practice (BUG???)
 	- .MemWrite: controls whether Memory is written to
-	- .branch_inst: ???
+	- .branch_inst: whether the instruction is branch or not
 	- .branch_src: whether to use jump value or branch value for PC
 	- .RegDst: should be used to determine which value to write to register, currently unused (BUG???)
 	- .PCs: whether PCS instruction is executed (saves PC value)
@@ -133,10 +129,9 @@ INOUT:
 assign DstReg = instruction[11:8];
 assign SrcReg1 = LoadPartial ? instruction[11:8] : instruction[7:4];
 assign SrcReg2 = instruction[3:0];
-//What is this??? Look into this
-//TODO TODO TODO: ADD FUNCTIONALITY FOR PCS
+//PCs Functionality
 assign DstData = LoadPartial ? 
-			(instruction[12] ? 
+				(instruction[12] ? 
 				({instruction[7:0], SrcData1[7:0]}) : 
 				({SrcData1[15:8], instruction[7:0]})) :
   			SavePC ?
@@ -171,9 +166,9 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 //===============================================
 // 			Pipeline Data
@@ -181,14 +176,20 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 // TODO Fill out:
 // PC Data
 // Instruction
+wire [15:0] F_instruction, F_D_instruction;
 // Opcode
+wire [3:0] D_X_opcode, X_M_opcode;
+wire [2:0] D_X_ALUop;
 // Immediate value
 // Branch Address
+wire [15:0] branchAdd;
 // Register Addresses
 // Register Outputs
 // NVZ Flag
 // ALU In
+wire [15:0] aluA, aluB;
 // ALU Out
+wire [15:0] X_ALUOut, X_M_ALUOut, M_W_ALUOut;
 // Memory in/out data
 // Memory/Register Writeback data
 
@@ -199,20 +200,30 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 // TODO Fill out:
 // PC Data
 // Stalls, Flushes, branchTaken signals
-// ALUsrc
-// MemtoReg
-// RegWrite
-// MemRead
-// MemWrite
-// branch_inst
-// branch_src
-// RegDst
-// PCs
-// LoadPartial
-// SavePC
-// Forwarding
+// ALUsrc*
+wire D_ALUsrc, D_X_ALUsrc;
+// MemtoReg*
+wire D_MemtoReg, D_X_MemtoReg, X_M_MemtoReg, M_W_MemtoReg;
+// RegWrite*
+wire D_RegWrite, D_X_RegWrite, X_M_RegWrite, M_W_RegWrite;
+// MemRead*
+wire D_MemRead, D_X_MemRead, X_M_MemRead;
+// MemWrite*
+wire D_MemWrite, D_X_MemWrite, X_M_MemWrite;
+// branch_inst*, basically branch enable
+wire D_branch_inst, D_X_branch_inst;
+// branch_src*, 1 = BR or reg, and 0 = B or memory
+wire D_branch_src, D_X_branch_src;
+// RegDst*
+wire D_RegDst, D_X_RegDst;
+// LoadPartial*: set to 1 if doing LLB or LHB, set to 0 otherwise **Maybe split to L and H?
+wire LoadPartial, LoadLower, LoadUpper;
+// SavePC* (same assign as PCs but PCs isn't used so just use SavePC only)
+wire D_SavePC, D_X_SavePC, X_M_SavePC, M_W_SavePC;
+// Forwarding*
+wire X_X_A_en, M_X_A_en, X_X_B_en, M_X_B_en, M_M_B_en;
 // Hlt, TODO: maybe need additional halt for halt and branch taken flush
-wire f_d_halt, d_x_halt, x_m_halt, m_w_halt;
+wire F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 
 
 
