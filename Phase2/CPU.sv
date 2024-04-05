@@ -217,6 +217,7 @@ wire D_branch_src, D_X_branch_src;
 // RegDst*
 wire D_RegDst, D_X_RegDst;
 // LoadPartial*: set to 1 if doing LLB or LHB, set to 0 otherwise **Maybe split to L and H?
+// TODO
 wire LoadPartial, LoadLower, LoadUpper;
 // SavePC* (same assign as PCs but PCs isn't used so just use SavePC only)
 wire D_SavePC, D_X_SavePC, X_M_SavePC, M_W_SavePC;

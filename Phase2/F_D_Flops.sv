@@ -1,5 +1,7 @@
-module F_D_Flops(clk, rst, en, instr_in, oldPC_in, 
-				new_PC_in, instr_out, oldPC_out, new_PC_out);
+module F_D_Flops(
+	clk, rst, en, instruction_in, oldPC_in, new_PC_in, 
+	instr_out, oldPC_out, new_PC_out
+);
 
 // Currently have 2 different PCs an old and a new
 // so it could maybe help with stalls and flushes.
@@ -7,13 +9,13 @@ module F_D_Flops(clk, rst, en, instr_in, oldPC_in,
 // or at least that's how they would be implemented for now.
 
 input clk, rst, en;
-input [15:0] instr_in, oldpc_in, newpc_in;
-output [15:0] instr_out, oldpc_out, newpc_out;
+input [15:0] instruction_in, oldpc_in, newpc_in;
+output [15:0] instruction_out, oldpc_out, newpc_out;
 
 // Use registers for these values since requires 16 bits
-Register reg_inst(.clk(clk), .rst(rst), .WriteReg(en), .D(instr_in), 
+Register reg_inst(.clk(clk), .rst(rst), .WriteReg(en), .D(instruction_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
-	.Bitline1(instr_out), .Bitline2());
+	.Bitline1(instruction_out), .Bitline2());
 
 Register reg_oldPC(.clk(clk), .rst(rst), .WriteReg(en), .D(oldpc_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
