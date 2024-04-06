@@ -12,7 +12,7 @@ module X_M_Flops(
 
 
 	// Data
-	instruction_in, instruction_out
+	instruction_in, instruction_out, 
 	b_in, b_out, 
 	ALUresult_in, ALUresult_out, 
 	oldPC_in, oldPC_out, 
