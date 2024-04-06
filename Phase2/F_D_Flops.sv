@@ -5,8 +5,10 @@ module F_D_Flops(
 
 // Currently have 2 different PCs an old and a new
 // so it could maybe help with stalls and flushes.
-// New/Old PCs might be needed for the entirety of the pipelines
-// or at least that's how they would be implemented for now.
+// I think we maybe just need old PC and newPC for up to decode
+// assuming decode is when branching is resolved. So basically I think
+// the FLAG registers should be in the Decode stage, and it will be affected by
+// the Execute stage.
 
 input clk, rst, en;
 input [15:0] instruction_in, oldpc_in, newpc_in;

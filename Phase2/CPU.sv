@@ -166,6 +166,28 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,23 +197,30 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 //===============================================
 // TODO Fill out:
 // PC Data
-// Instruction
-wire [15:0] F_instruction, F_D_instruction;
-// Opcode
-wire [3:0] D_X_opcode, X_M_opcode;
-wire [2:0] D_X_ALUop;
+// Instruction, no need for opcode, we can just use instruction
+wire [15:0] F_instruction, F_D_instruction, D_X_instruction, X_M_instruction, M_W_instruction;
 // Immediate value
+wire [15:0] D_imm, D_X_imm;
 // Branch Address
 wire [15:0] branchAdd;
-// Register Addresses
+// Register Addresses Inputs 
+wire [3:0], reg_dest, reg_source1, reg_source2, 
+	D_X_reg_source1, D_X_reg_source2, D_X_reg_dest, X_M_reg_dest, M_W_reg_dest;
 // Register Outputs
+	// reg1 not needed in X_M since only memory goes in
+wire [15:0] D_reg1, D_reg2, D_X_reg1, D_X_reg2, X_M_reg2, reg1Forward, reg2Forward;
 // NVZ Flag
+wire [3:0] flag, cond, flagEN;
+// Register Address Forwarding // I wrote something here but Im not sure what, might delete
 // ALU In
 wire [15:0] aluA, aluB;
 // ALU Out
 wire [15:0] X_ALUOut, X_M_ALUOut, M_W_ALUOut;
 // Memory in/out data
+wire [15:0] memory_in, memory_out;
 // Memory/Register Writeback data
+// TODO: Consider if we need writeback at all if its going to be auto implemented
+// in the bitcell part
 
 
 //===============================================
@@ -216,9 +245,8 @@ wire D_branch_inst, D_X_branch_inst;
 wire D_branch_src, D_X_branch_src;
 // RegDst*
 wire D_RegDst, D_X_RegDst;
-// LoadPartial*: set to 1 if doing LLB or LHB, set to 0 otherwise **Maybe split to L and H?
-// TODO
-wire LoadPartial, LoadLower, LoadUpper;
+// LoadPartial*: set to 1 if doing LLB or LHB, set to 0 otherwise
+wire D_LoadPartial, D_X_LoadPartial;
 // SavePC* (same assign as PCs but PCs isn't used so just use SavePC only)
 wire D_SavePC, D_X_SavePC, X_M_SavePC, M_W_SavePC;
 // Forwarding*
