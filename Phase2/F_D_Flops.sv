@@ -1,6 +1,6 @@
 module F_D_Flops(
-	clk, rst, en, instruction_in, oldPC_in, new_PC_in, 
-	instr_out, oldPC_out, new_PC_out
+	clk, rst, wen, instruction_in, oldPC_in, newPC_in, 
+	instr_out, oldPC_out, newPC_out
 );
 
 // Currently have 2 different PCs an old and a new
@@ -11,21 +11,21 @@ module F_D_Flops(
 // the Execute stage.
 
 input clk, rst, en;
-input [15:0] instruction_in, oldpc_in, newpc_in;
-output [15:0] instruction_out, oldpc_out, newpc_out;
+input [15:0] instruction_in, oldPC_in, newPC_in;
+output [15:0] instruction_out, oldPC_out, newPC_out;
 
 // Use registers for these values since requires 16 bits
-Register reg_inst(.clk(clk), .rst(rst), .WriteReg(en), .D(instruction_in), 
+Register reg_inst(.clk(clk), .rst(rst), .WriteReg(wen), .D(instruction_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
 	.Bitline1(instruction_out), .Bitline2());
 
-Register reg_oldPC(.clk(clk), .rst(rst), .WriteReg(en), .D(oldpc_in), 
+Register reg_oldPC(.clk(clk), .rst(rst), .WriteReg(wen), .D(oldPC_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
-	.Bitline1(newpc_in), .Bitline2());
+	.Bitline1(oldPC_out), .Bitline2());
 
-Register reg_newPC(.clk(clk), .rst(rst), .WriteReg(en), .D(oldpc_out), 
+Register reg_newPC(.clk(clk), .rst(rst), .WriteReg(wen), .D(newPC_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
-	.Bitline1(newpc_out), .Bitline2());
+	.Bitline1(newPC_out), .Bitline2());
 
 
 endmodule
