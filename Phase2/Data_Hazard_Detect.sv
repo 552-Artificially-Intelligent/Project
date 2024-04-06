@@ -1,6 +1,11 @@
+
+////////////////////////////////////////////
+// Note: THis is not done and needs work TODO
+////////////////////////////////////////////
+
 module Data_Hazard_Detect(
-	opcode, D_X_destination_reg, D_source_reg
-	stall,
+	opcode, D_X_destination_reg, D_source_reg, 
+	stall
 );
 
 // Assuming we have X to X forwarding, the only data hazard

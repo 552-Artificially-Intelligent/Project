@@ -25,7 +25,7 @@ module D_X_Flops(
 	Source2_in, Source2_out
 );
 
-input clk, rst, en;
+input clk, rst, wen;
 
 input ALUsrc_in,
 	MemtoReg_in,
@@ -39,7 +39,7 @@ input ALUsrc_in,
 	halt_in,
 	LoadPartial_in;
 input [15:0] instruction_in, a_in, b_in, imm_in, oldPC_in, newPC_in;
-input [3:0] reg_dest_in, Source1_in, Source2_out;
+input [3:0] reg_dest_in, Source1_in, Source2_in;
 
 
 output ALUsrc_out,
@@ -74,7 +74,7 @@ dff LoadPartial_dff(.clk(clk), .rst(rst), .wen(wen), .d(LoadPartial_in), .q(Load
 // 4 Bit Data
 dff reg_dest_dff[3:0] (.clk(clk), .rst(rst), .wen(wen), .d(reg_dest_in), .q(reg_dest_out));
 dff Source1_dff[3:0] (.clk(clk), .rst(rst), .wen(wen), .d(Source1_in), .q(Source1_out));
-dff Source1_dff[3:0] (.clk(clk), .rst(rst), .wen(wen), .d(Source1_in), .q(Source1_out));
+dff Source2_dff[3:0] (.clk(clk), .rst(rst), .wen(wen), .d(Source2_in), .q(Source2_out));
 
 // 16 Bit Data
 Register instruction_reg (.clk(clk), .rst(rst), .WriteReg(wen), .D(instruction_in), 

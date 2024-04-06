@@ -19,7 +19,6 @@ wire [15:0] instruction;
   
 // Branch wires
 wire [15:0] nextPC, programCount, pcInc, pcBranch;
-wire [2:0] cond, NVZflag;
 wire do_branch;
   
 // Register wires
@@ -204,13 +203,13 @@ wire [15:0] D_imm, D_X_imm;
 // Branch Address
 wire [15:0] branchAdd;
 // Register Addresses Inputs 
-wire [3:0], reg_dest, reg_source1, reg_source2, 
-	D_X_reg_source1, D_X_reg_source2, D_X_reg_dest, X_M_reg_dest, M_W_reg_dest;
+wire [3:0] reg_dest, reg_source1, reg_source2, D_X_reg_source1, D_X_reg_source2, 
+	D_X_reg_dest, X_M_reg_dest, M_W_reg_dest;
 // Register Outputs
 	// reg1 not needed in X_M since only memory goes in
 wire [15:0] D_reg1, D_reg2, D_X_reg1, D_X_reg2, X_M_reg2, reg1Forward, reg2Forward;
 // NVZ Flag
-wire [3:0] flag, cond, flagEN;
+wire [3:0] NVZflag, cond, flagEN;
 // Register Address Forwarding // I wrote something here but Im not sure what, might delete
 // ALU In
 wire [15:0] aluA, aluB;
