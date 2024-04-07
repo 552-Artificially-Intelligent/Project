@@ -12,14 +12,6 @@ wire do_branch;
   
 Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
 
-  
-//PURPOSE: calculate value for branches
-//OUTPUT: pcBranch = branchAdd + pcInc
-
-wire delayTime;
-//Delay doesn't do anything (right now)
-BitReg delay(.D(((delayTime === 1'bz) | (delayTime === 1'bx)) ? (1'b0) : ((Hlt & ~delaytime) ? 1'b1 : 1'b0)), .Q(delaytime), 
-   .wen(1'b1), .clk(clk), .rst(~rst_n));
 
 
 /*
@@ -47,26 +39,6 @@ Control control0(.opcode(instruction[15:12]), .ALUOp(ALUop),
                    .branch_src(branch_src), .RegDst(RegDst), .PCs(PCs), .LoadPartial(LoadPartial), 
 		   .SavePC(SavePC), .Hlt(Hlt));
   
-/*
-!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!REGISTERFILE!!!!!!!!!!!!!!!!!!
-INPUT:
-	- .clk: Clock
-	- .rst: reset 
-	- .SrcReg1: first reg to be read, currently set to bits 7-4, unless doing LLB or LHB
-	- .SrcReg2: second reg to be read, currently set to bits 3-0
-	- .DstReg: register to be written to (if applicable)
-	- .WriteReg: controls whether DstReg is written to, from Control 
-	- .DstData: data to be written into DestReg - complicated logic
-		-if instruction is LLB or LHB:
-			- if LHB, set upper 8 bits - {[SrcData1[15:8], instruction[7:0]}
-			- else (LLB), set lower 8 bits - {[SrcData1[15:8], instruction[7:0]}
-		-else:
-			- if MemtoReg is enabled, set it to data_out (output of data memory?)
-			- else, set it to result (ALU result)
-INOUT: 
-	- .SrcData1: output from when SrcReg1 is read
-	- .SrcData2: output from when SrcReg2 is read
-*/
 
 
 
@@ -188,7 +160,7 @@ wire halt, F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 
 // Pipeline Flops
 F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~stall_if_id), .instruction_in(instruction), 
-	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(instruction_FBuf), 
+	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), 
 	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .stopPC(halt));
 
 // PC regs
@@ -212,11 +184,8 @@ PC pc0(.clk(clk), .en(~halt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
 					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
 
-wire[15:0] bufferedPC, bufferedIncPc;
-wire[3:0] instruction_FBuf;
 //Enable if there is a halt
 assign halt = (instruction[15:12] == 4'hF);
-
 
 // Increment the PC - pcInc = programCount + 2
 CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout()); 
@@ -276,6 +245,26 @@ assign reg_dest = D_RegDst ? F_D_instruction[11:8] : reg_source2;
 // General Register File
 ///////////////////////////////////////////////////////////////////////
 // Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!REGISTERFILE!!!!!!!!!!!!!!!!!!
+INPUT:
+	- .clk: Clock
+	- .rst: reset 
+	- .SrcReg1: first reg to be read, currently set to bits 7-4, unless doing LLB or LHB
+	- .SrcReg2: second reg to be read, currently set to bits 3-0
+	- .DstReg: register to be written to (if applicable)
+	- .WriteReg: controls whether DstReg is written to, from Control 
+	- .DstData: data to be written into DestReg - complicated logic
+		-if instruction is LLB or LHB:
+			- if LHB, set upper 8 bits - {[SrcData1[15:8], instruction[7:0]}
+			- else (LLB), set lower 8 bits - {[SrcData1[15:8], instruction[7:0]}
+		-else:
+			- if MemtoReg is enabled, set it to data_out (output of data memory?)
+			- else, set it to result (ALU result)
+INOUT: 
+	- .SrcData1: output from when SrcReg1 is read
+	- .SrcData2: output from when SrcReg2 is read
+*/
 RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(reg_source1), .SrcReg2(reg_source2), 
              .DstReg(M_W_reg_dest), .WriteReg(M_W_RegWrite), .DstData(writeback_data), 
              .SrcData1(D_reg1), .SrcData2(D_reg2));
