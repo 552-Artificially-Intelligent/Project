@@ -12,9 +12,9 @@ module F_D_Flops(
 // the Execute stage.
 
 input clk, rst;
-input[3:0] instruction_in;
+input[15:0] instruction_in;
 input [15:0] oldPC_in, newPC_in;
-output[3:0] instruction_out;
+output[15:0] instruction_out;
 output [15:0] oldPC_out, newPC_out;
 output stopPC;
 logic currentHalt, stopWrite;

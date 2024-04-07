@@ -34,10 +34,6 @@ wire [2:0] NVZ_out;
 // PC and HLT Connections
 assign pc = programCount;
 assign hlt = Hlt;
-
-// data_out, data_in, addr, enable, wr, clk, rst
-memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
-					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
   
 // Branch
 
@@ -238,12 +234,17 @@ wire[3:0] instruction_FBuf;
 //Enable if there is a halt
 wire haltFound;
 
+memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
+					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
+
 
 // Increment the PC - pcInc = programCount + 2
 CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1)); 
 
 //TODO: Add flush on branch
-F_D_Flops fdFlop(.clk(clk), .rst(~rst_n), .instruction_in(instruction[15:12], .oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(.instruction_FBuf), .oldPC_out(bufferedPC), .newPC_out(bufferedIncPc), .stopPC(haltFound));
+F_D_Flops fdFlop(.clk(clk), .rst(~rst_n), .instruction_in(instruction), 
+	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(instruction_FBuf), 
+	.oldPC_out(bufferedPC), .newPC_out(bufferedIncPc), .stopPC(haltFound));
 
 // TODO: Resolve IF Stall
 
