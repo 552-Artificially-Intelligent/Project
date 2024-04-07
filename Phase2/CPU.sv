@@ -46,10 +46,6 @@ assign cond = instruction[11:9];
 Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
   
 wire unused1, unused2;
-
-//PURPOSE: increment program counter
-//OUTPUT: pcInc = programCount + 2
-CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1));
  
 //branchAdd = instruction[8:0] right-shifted and sign-extended
 assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
@@ -124,17 +120,6 @@ INOUT:
 	- .SrcData1: output from when SrcReg1 is read
 	- .SrcData2: output from when SrcReg2 is read
 */
-assign DstReg = instruction[11:8];
-assign SrcReg1 = LoadPartial ? instruction[11:8] : instruction[7:4];
-assign SrcReg2 = instruction[3:0];
-//PCs Functionality
-assign DstData = LoadPartial ? 
-				(instruction[12] ? 
-				({instruction[7:0], SrcData1[7:0]}) : 
-				({SrcData1[15:8], instruction[7:0]})) :
-  			SavePC ?
-				pcInc :
-				MemtoReg ? data_out : result;
 
 
 
@@ -241,22 +226,44 @@ wire F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 // but for all the interconnects the will be instantiated in
 // the flops modules before it
 //===============================================
-// 			Instruction Fetch Stage
+// 			INSTRUCTION FETCH STAGE
 //===============================================
 
 // TODO: Move here Pipeline Flops
 // TODO: Move here PC regs
 // TODO: Split Control into PC/Instruction Only Control
 // TODO: Move here Instruction Memory
+wire[15:0] bufferedPC, bufferedIncPc;
+wire[3:0] instruction_FBuf;
+//Enable if there is a halt
+wire haltFound;
+
+
+// Increment the PC - pcInc = programCount + 2
+CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1)); 
+
+//TODO: Add flush on branch
+F_D_Flops fdFlop(.clk(clk), .rst(~rst_n), .instruction_in(instruction[15:12], .oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(.instruction_FBuf), .oldPC_out(bufferedPC), .newPC_out(bufferedIncPc), .stopPC(haltFound));
 
 // TODO: Resolve IF Stall
 
 
 //===============================================
-// 			Instruction Decode Stage
+// 			INSTRUCTION DECODE STAGE
 //===============================================
 
 // TODO: Move here Pipeline Flops
+assign DstReg = instruction[11:8];
+assign SrcReg1 = LoadPartial ? instruction[11:8] : instruction[7:4];
+assign SrcReg2 = instruction[3:0];
+//PCs Functionality
+assign DstData = LoadPartial ? 
+				(instruction[12] ? 
+				({instruction[7:0], SrcData1[7:0]}) : 
+				({SrcData1[15:8], instruction[7:0]})) :
+  			SavePC ?
+				pcInc :
+				MemtoReg ? data_out : result;
 
 // General Register File
 ///////////////////////////////////////////////////////////////////////
@@ -277,7 +284,7 @@ FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]),
 // TODO: Resolve ID Flushes/Stall
 
 //===============================================
-// 			Execute Stage
+// 			EXECUTE STAGE
 //===============================================
 // TODO: Move wires up
 wire [15:0] ALUresult_in, ALUresult_out, X_M_aluB;
@@ -340,7 +347,7 @@ assign reg2Forward = X_X_B_en ? X_M_ALUOut :
 					D_X_reg2;
 
 //===============================================
-// 			Memory Stage
+// 			MEMORY STAGE
 //===============================================
 
 // Pipeline Flops
@@ -370,7 +377,7 @@ memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr),
 
 
 //===============================================
-// 			Memory Writeback Stage
+// 			MEMORY WRITEBACK STAGE
 //===============================================
 
 wire [15:0] writeback_data;
