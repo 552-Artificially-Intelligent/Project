@@ -1,5 +1,5 @@
 module M_W_Flops(
-	clk, rst, en,
+	clk, rst, wen,
 
 	// Signals
 	halt_in, halt_out, 
@@ -17,7 +17,7 @@ module M_W_Flops(
 	reg_dest_in, reg_dest_out, 
 );
 
-input clk, rst, en;
+input clk, rst, wen;
 
 input halt_in, MemtoReg_in, RegWrite_in, SavePC_in;
 input [15:0] instruction_in, mem_in, ALUresult_in, oldPC_in, newPC_in;

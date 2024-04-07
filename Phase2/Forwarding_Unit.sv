@@ -12,6 +12,10 @@ module Forwarding_Unit(
 
 );
 
+input X_M_RegWrite, X_M_MemWrite, M_W_RegWrite;
+input [3:0] X_M_reg_dest, M_W_reg_dest, D_X_reg_source1, D_X_reg_source2, X_M_reg_source2;
+output EXtoEX_frwdA, EXtoEX_frwdB, MEMtoMEM_frwdB, MEMtoEX_frwdA, MEMtoEX_frwdB;
+
 // ==========================================================
 // NOTE: Double check to make sure if they select reg 0, it always connects to 0/don't forward
 // ==========================================================
