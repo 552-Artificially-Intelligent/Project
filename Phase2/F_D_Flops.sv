@@ -20,7 +20,7 @@ output stopPC;
 logic currentHalt, stopWrite;
 
 // Halt detection
-assign currentHalt = (instruction_in == 4'b1111);
+assign currentHalt = (instruction_in[15:12] == 4'b1111);
 BitReg currentlyHalted(.clk(clk), .rst(rst), .wen(wen), .D(currentHalt), .Q(stopPC));
 
 // Use registers for these values since requires 16 bits
