@@ -7,41 +7,20 @@ output [15:0] pc;
 
   
 // Branch wires
-wire [15:0] nextPC, programCount, pcInc, pcBranch;
 wire do_branch;
 
   
 Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
-  
-wire unused1, unused2;
- 
-//branchAdd = instruction[8:0] right-shifted and sign-extended
-assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
+
   
 //PURPOSE: calculate value for branches
 //OUTPUT: pcBranch = branchAdd + pcInc
-CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout(unused2));
 
 wire delayTime;
 //Delay doesn't do anything (right now)
 BitReg delay(.D(((delayTime === 1'bz) | (delayTime === 1'bx)) ? (1'b0) : ((Hlt & ~delaytime) ? 1'b1 : 1'b0)), .Q(delaytime), 
    .wen(1'b1), .clk(clk), .rst(~rst_n));
 
-
-// assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
-//PURPOSE: determine next value of program counter (PC)
-//RESULT:
-// - If program is halted, currentPc
-// - Elif do_branch enabled, either SrcData1 (jump) or pc_branch (branch) depending on branch_src (1 if jump)
-// - Else, currentPc+2
-assign nextPC = ~Hlt | (Hlt & delayTime) ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : 
-               programCount;
-
-// Input rst_n into enable since it is active low async reset
-//PURPOSE: program counter - resposible for actually setting the PC to the appropriate next value 
-//INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
-//OUTPUTS: current programCount (.PC)
-PC pc0(.clk(clk), .en(~Hlt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
 /*
 !!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!CONTROL!!!!!!!!!!!!!!!!!!
@@ -138,7 +117,8 @@ assign hlt = M_W_halt;
 // TODO Fill out:
 // PC Data
 wire [15:0] F_oldPC, F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
-			F_newPC, F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC;
+			F_newPC, F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC,
+			nextPC, programCount, pcInc, pcBranch;;
 // Instruction, no need for opcode, we can just use instruction
 wire [15:0] F_instruction, F_D_instruction, D_X_instruction, X_M_instruction, M_W_instruction;
 // Immediate value
@@ -195,7 +175,7 @@ wire D_SavePC, D_X_SavePC, X_M_SavePC, M_W_SavePC;
 // Forwarding*
 wire X_X_A_en, M_X_A_en, X_X_B_en, M_X_B_en, M_M_B_en;
 // Hlt, TODO: maybe need additional halt for halt and branch taken flush
-wire F_D_halt, D_X_halt, X_M_halt, M_W_halt;
+wire halt, F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 
 
 
@@ -206,26 +186,45 @@ wire F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 // 			INSTRUCTION FETCH STAGE
 //===============================================
 
-// TODO: Move here Pipeline Flops
-// TODO: Move here PC regs
-// TODO: Split Control into PC/Instruction Only Control
-// TODO: Move here Instruction Memory
-wire[15:0] bufferedPC, bufferedIncPc;
-wire[3:0] instruction_FBuf;
-//Enable if there is a halt
-wire haltFound;
+// Pipeline Flops
+F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~stall_if_id), .instruction_in(instruction), 
+	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(instruction_FBuf), 
+	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .stopPC(halt));
 
+// PC regs
+// assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
+//PURPOSE: determine next value of program counter (PC)
+//RESULT:
+// - If program is halted, currentPc
+// - Elif do_branch enabled, either SrcData1 (jump) or pc_branch (branch) depending on branch_src (1 if jump)
+// - Else, currentPc+2
+// assign nextPC = ~halt | (halt & delayTime) ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : 
+//                programCount;
+
+
+// Input rst_n into enable since it is active low async reset
+//PURPOSE: program counter - resposible for actually setting the PC to the appropriate next value 
+//INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
+//OUTPUTS: current programCount (.PC)
+PC pc0(.clk(clk), .en(~halt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
+
+// Instruction Memory
 memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
 					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
 
+wire[15:0] bufferedPC, bufferedIncPc;
+wire[3:0] instruction_FBuf;
+//Enable if there is a halt
+assign halt = (instruction[15:12] == 4'hF);
+
 
 // Increment the PC - pcInc = programCount + 2
-CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1)); 
+CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout()); 
+//branchAdd = instruction[8:0] right-shifted and sign-extended
+assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
+CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout());
 
 //TODO: Add flush on branch
-F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~stall_if_id), .instruction_in(instruction), 
-	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(instruction_FBuf), 
-	.oldPC_out(bufferedPC), .newPC_out(bufferedIncPc), .stopPC(haltFound));
 
 // TODO: Resolve IF Stall
 
@@ -305,7 +304,6 @@ assign D_stall = stall;
 //===============================================
 // TODO: Move wires up
 wire [15:0] ALUresult_in, ALUresult_out, X_M_aluB;
-// wire [15:0] X_ALUOut, X_M_ALUOut, M_W_ALUOut;
 // Pipeline Flops
 X_M_Flops X_M_flops0(
 	.clk(clk), .rst(~rst_n), .wen(1'b1),
