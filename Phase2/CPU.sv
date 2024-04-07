@@ -5,17 +5,6 @@ output [15:0] pc;
 
 ////////////////////////////////////////////////////
 
-// Instantiate the Instruction memory.v module
-   // output  [15:0] data_out;
-   // input [15:0]   data_in;
-   // input [ADDR_WIDTH-1 :0]   addr;
-   // input          enable;
-   // input          wr;
-   // input          clk;
-   // input          rst;
-// List of nets
-// Instruction wires
-wire [15:0] instruction;
   
 // Branch wires
 wire [15:0] nextPC, programCount, pcInc, pcBranch;
@@ -30,10 +19,6 @@ wire [15:0] A, B, result;
 
 // Flag wires
 wire [2:0] NVZ_out;
-
-// PC and HLT Connections
-assign pc = programCount;
-assign hlt = Hlt;
   
 // Branch
 
@@ -151,7 +136,12 @@ INOUT:
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
-
+//===============================================
+// CPU Outputs:
+assign pc = M_W_oldPC;
+assign hlt = M_W_halt;
+//===============================================
+//
 //===============================================
 // 			Pipeline Data
 //===============================================
@@ -191,6 +181,7 @@ wire [15:0] memory_in, memory_out;
 // TODO Fill out:
 // PC Data
 // Stalls, Flushes, branchTaken signals
+wire flush, F_stall; D_stall, stall;
 // ALUsrc*
 wire D_ALUsrc, D_X_ALUsrc;
 // MemtoReg*
@@ -242,7 +233,7 @@ memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCo
 CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout(unused1)); 
 
 //TODO: Add flush on branch
-F_D_Flops fdFlop(.clk(clk), .rst(~rst_n), .instruction_in(instruction), 
+F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~stall_if_id), .instruction_in(instruction), 
 	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(instruction_FBuf), 
 	.oldPC_out(bufferedPC), .newPC_out(bufferedIncPc), .stopPC(haltFound));
 
@@ -254,35 +245,69 @@ F_D_Flops fdFlop(.clk(clk), .rst(~rst_n), .instruction_in(instruction),
 //===============================================
 
 // TODO: Move here Pipeline Flops
-assign DstReg = instruction[11:8];
-assign SrcReg1 = LoadPartial ? instruction[11:8] : instruction[7:4];
-assign SrcReg2 = instruction[3:0];
-//PCs Functionality
-assign DstData = LoadPartial ? 
-				(instruction[12] ? 
-				({instruction[7:0], SrcData1[7:0]}) : 
-				({SrcData1[15:8], instruction[7:0]})) :
-  			SavePC ?
-				pcInc :
-				MemtoReg ? data_out : result;
+D_X_Flops D_X_flops0(
+	.clk(clk), .rst(~rst_n), .wen(~D_stall),
+	// Signals
+	.ALUsrc_in(D_ALUsrc), .ALUsrc_out(D_X_ALUsrc),
+	.MemtoReg_in(D_MemtoReg), .MemtoReg_out(D_X_MemtoReg),
+	.RegWrite_in(D_RegWrite), .RegWrite_out(D_X_RegWrite),
+	.MemRead_in(D_MemRead), .MemRead_out(D_X_MemRead),
+	.MemWrite_in(D_MemWrite), .MemWrite_out(D_X_MemWrite),
+	.branch_inst_in(D_branch_inst), .branch_inst_out(D_X_branch_inst),
+	.branch_src_in(D_branch_src), .branch_src_out(D_X_branch_src),
+	.RegDst_in(D_RegDst), .RegDst_out(D_X_RegDst),
+	.SavePC_in(D_SavePC), .SavePC_out(D_X_SavePC),
+	.halt_in(F_D_halt), .halt_out(D_X_halt),
+	.LoadPartial_in(D_LoadPartial), .LoadPartial_out(D_X_LoadPartial),
+
+	// Data
+	.instruction_in(F_D_instruction), .instruction_out(D_X_instruction),
+	.a_in(D_reg1), .a_out(D_X_reg1), 
+	.b_in(D_reg2), .b_out(D_X_reg2), 
+	.imm_in(D_imm), .imm_out(D_X_imm), 
+	.oldPC_in(F_D_oldPC), .oldPC_out(D_X_oldPC),
+	.newPC_in(F_D_newPC), .newPC_out(D_X_newPC),
+	.reg_dest_in(reg_dest), .reg_dest_out(D_X_reg_dest),
+	.Source1_in(reg_source1), .Source1_out(D_X_reg_source1),
+	.Source2_in(reg_source2), .Source2_out(D_X_reg_source2)
+);
+
+// Decoding the instruction down
+assign reg_source1 = D_LoadPartial ? F_D_instruction[11:8] : F_D_instruction[7:4];
+assign reg_source2 = (D_MemRead | D_MemWrite) ? F_D_instruction[11:8] : F_D_instruction[3:0];
+// LLB	1010
+// LHB	1011
+assign D_imm = (D_MemRead | D_MemWrite) ? {{12{1'b0}}, F_D_instruction[3:0], {1'b0}} :
+				(F_D_instruction[15:12] == 4'b1010) ? {{8{1'b0}}, F_D_instruction[7:0]} :
+				(F_D_instruction[15:12] == 4'b1011) ? {F_D_instruction[7:0], {8{1'b0}}} : 
+				{{12{1'b0}}, F_D_instruction[3:0]};
+assign reg_dest = D_RegDst ? F_D_instruction[11:8] : ;
+
 
 // General Register File
 ///////////////////////////////////////////////////////////////////////
-// TODO: Currently only chooses SrcReg2 as the last 4 bits of the instruction
-// for ALU
-///////////////////////////////////////////////////////////////////////
 // Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
-RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
-             .DstReg(DstReg), .WriteReg(M_W_RegWrite), .DstData(writeback_data), 
-             .SrcData1(SrcData1), .SrcData2(SrcData2));
+RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(reg_source1), .SrcReg2(reg_source2), 
+             .DstReg(M_W_reg_dest), .WriteReg(M_W_RegWrite), .DstData(writeback_data), 
+             .SrcData1(D_reg1), .SrcData2(D_reg2));
 
-// TODO: Split Control into everything less PC/Instruction
 // NVZ flag regs
-FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]), 
-	.flags(NVZflag), .opcode(ALUop), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
-// TODO: Move here Data hazard detect
+FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~F_D_instruction[15]), 
+	.flags(NVZflag), .opcode(F_D_instruction[14:12]), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
 
-// TODO: Resolve ID Flushes/Stall
+// Data hazard detect
+Data_Hazard_Detect hazard_detect0(
+	.opcode(F_D_instruction[15:12]), .D_X_destination_reg(D_X_reg_dest), 
+	.D_source_reg(reg_source1), .stall(stall)
+);
+
+// Resolve ID Flushes/Stall
+assign flush = /*SOME BRANCH TAKEN CONFIRMATION*/; // TODO after implementing control
+assign F_stall = stall;
+assign D_stall = stall;
+
+// TODO Rusheel: Control+Branch
+
 
 //===============================================
 // 			EXECUTE STAGE
