@@ -43,8 +43,8 @@ wire dffOut;
 dff floppy(.q(dffOut), .d(D), .wen(WriteEnable), .clk(clk), .rst(rst));
 
 //Tristate buffers
-assign Bitline1 = ReadEnable1 ? dffOut : 1'bz;
-assign Bitline2 = ReadEnable2 ? dffOut : 1'bz;
+assign Bitline1 = ReadEnable1 ? (WriteEnable ? D : dffOut) : 1'bz;
+assign Bitline2 = ReadEnable2 ? (WriteEnable ? D : dffOut) : 1'bz;
 
 endmodule
 

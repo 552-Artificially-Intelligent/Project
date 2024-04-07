@@ -9,20 +9,7 @@ output [15:0] pc;
 // Branch wires
 wire [15:0] nextPC, programCount, pcInc, pcBranch;
 wire do_branch;
-  
-// Register wires
-wire [3:0] SrcReg1, SrcReg2, DstReg;
-wire [15:0] DstData, SrcData1, SrcData2;
-  
-// ALU wires
-wire [15:0] A, B, result;
 
-// Flag wires
-wire [2:0] NVZ_out;
-  
-// Branch
-
-assign cond = instruction[11:9];
   
 Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
   
@@ -133,6 +120,9 @@ INOUT:
 
 
 
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +152,7 @@ wire [3:0] reg_dest, reg_source1, reg_source2, D_X_reg_source1, D_X_reg_source2,
 	// reg1 not needed in X_M since only memory goes in
 wire [15:0] D_reg1, D_reg2, D_X_reg1, D_X_reg2, X_M_reg2, reg1Forward, reg2Forward;
 // NVZ Flag
-wire [3:0] NVZflag, cond, flagEN;
+wire [3:0] NVZflag, cond, flagEN, NVZ_out;;
 // Register Address Forwarding // I wrote something here but Im not sure what, might delete
 // ALU In
 wire [15:0] aluA, aluB;
@@ -294,6 +284,7 @@ RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(reg_source1), .SrcReg2(reg_s
 // NVZ flag regs
 FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~F_D_instruction[15]), 
 	.flags(NVZflag), .opcode(F_D_instruction[14:12]), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
+assign cond = F_D_instruction[11:9];
 
 // Data hazard detect
 Data_Hazard_Detect hazard_detect0(
