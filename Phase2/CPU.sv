@@ -24,7 +24,6 @@ wire do_branch;
 // Register wires
 wire [3:0] SrcReg1, SrcReg2, DstReg;
 wire [15:0] DstData, SrcData1, SrcData2;
-wire [15:0] data_out, data_in, addr;
   
 // ALU wires
 wire [15:0] A, B, result;
@@ -137,31 +136,12 @@ assign DstData = LoadPartial ?
 				pcInc :
 				MemtoReg ? data_out : result;
 
-// ALU
-// The assembly level syntax for ADD, PADDSB, SUB, XOR and RED is:
-// Opcode rd, rs, rt
-// SLL, SRA, ROR:
-// Opcode rd, rs, imm
-/*
-!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!ALU!!!!!!!!!!!!!!!!!!	
-*/
-assign A = SrcData1;
-assign B = ALUsrc ? ((LoadPartial | SavePC) ? 16'h0000 : 
-		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
-ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag));
 
 
 
 
 
 
-// Data Memory second memory.sv instationation
-// LHB 1011, LLB 1010
-assign data_in = SrcData1;
-// instruction[15:13] == 3'b101 ? (instruction[12] ? ({instruction[7:0], data_out[7:0]}) : ({data_out[15:8], instruction[7:0]})) :
-assign addr = result;
-memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr), 
-                     .enable(MemRead | MemWrite), .wr(MemWrite), .clk(clk), .rst(~rst_n));
 
 
 
@@ -196,6 +176,8 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 //===============================================
 // TODO Fill out:
 // PC Data
+wire [15:0] F_oldPC, F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
+			F_newPC, F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC;
 // Instruction, no need for opcode, we can just use instruction
 wire [15:0] F_instruction, F_D_instruction, D_X_instruction, X_M_instruction, M_W_instruction;
 // Immediate value
@@ -203,7 +185,7 @@ wire [15:0] D_imm, D_X_imm;
 // Branch Address
 wire [15:0] branchAdd;
 // Register Addresses Inputs 
-wire [3:0] reg_dest, reg_source1, reg_source2, D_X_reg_source1, D_X_reg_source2, 
+wire [3:0] reg_dest, reg_source1, reg_source2, D_X_reg_source1, D_X_reg_source2, X_M_reg_source2, 
 	D_X_reg_dest, X_M_reg_dest, M_W_reg_dest;
 // Register Outputs
 	// reg1 not needed in X_M since only memory goes in
@@ -283,7 +265,7 @@ wire F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 ///////////////////////////////////////////////////////////////////////
 // Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
 RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2), 
-             .DstReg(DstReg), .WriteReg(RegWrite), .DstData(DstData), 
+             .DstReg(DstReg), .WriteReg(M_W_RegWrite), .DstData(writeback_data), 
              .SrcData1(SrcData1), .SrcData2(SrcData2));
 
 // TODO: Split Control into everything less PC/Instruction
@@ -297,29 +279,103 @@ FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]),
 //===============================================
 // 			Execute Stage
 //===============================================
+// TODO: Move wires up
+wire [15:0] ALUresult_in, ALUresult_out, X_M_aluB;
+// wire [15:0] X_ALUOut, X_M_ALUOut, M_W_ALUOut;
+// Pipeline Flops
+X_M_Flops X_M_flops0(
+	.clk(clk), .rst(~rst_n), .wen(1'b1),
+	// Signals
+	.RegWrite_in(D_X_RegWrite), .RegWrite_out(X_M_RegWrite),
+	.MemRead_in(D_X_MemRead), .MemRead_out(X_M_MemRead), 
+	.MemWrite_in(D_X_MemWrite), .MemWrite_out(X_M_MemWrite), 
+	.MemtoReg_in(D_X_MemtoReg), .MemtoReg_out(X_M_MemtoReg), 
+	.SavePC_in(D_X_SavePC), .SavePC_out(X_M_SavePC), 
+	.halt_in(D_X_halt), .halt_out(X_M_halt), 
 
-// TODO: Move here Pipeline Flops
-// TODO: ALU
-// TODO: Forwarding
+	// Data
+	.instruction_in(D_X_instruction), .instruction_out(X_M_instruction), 
+	.b_in(aluB), .b_out(X_M_aluB), 
+	.ALUresult_in(X_ALUOut), .ALUresult_out(X_M_ALUOut), 
+	.oldPC_in(D_X_oldPC), .oldPC_out(X_M_oldPC), 
+	.newPC_in(D_X_newPC), .newPC_out(D_X_newPC), 
+	.reg_dest_in(D_X_reg_dest), .reg_dest_out(X_M_reg_dest),
+	.Source2_in(D_X_reg_source2), .Source2_out(X_M_reg_source2)
+);
 
-// TODO: Maybe separate wires/modules/assigns for normal vs forward inputs
+// ALU
+// The assembly level syntax for ADD, PADDSB, SUB, XOR and RED is:
+// Opcode rd, rs, rt
+// SLL, SRA, ROR:
+// Opcode rd, rs, imm
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!ALU!!!!!!!!!!!!!!!!!!	
+*/
+// assign A = SrcData1;
+// assign B = ALUsrc ? ((LoadPartial | SavePC) ? 16'h0000 : 
+// 		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
+// Take into account the new forwarding stuff
+// LLB	1010
+// LHB	1011
+assign aluA = (D_X_LoadPartial & D_X_instruction[12]) ? (reg1_fwd & 16'hff00) :
+				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1_fwd & 16'h00ff) : 
+				reg1_fwd;
+assign aluB = (D_X_ALUsrc) ? D_X_imm : reg2Forward;
+ALU ALU0(.A(aluA), .B(aluB), .opcode(D_X_instruction[14:12]), .result(X_ALUOut), .nvz_flags(NVZflag));
 
+// Forwarding
+Forwarding_Unit frwd_unit(
+	.X_M_RegWrite(X_M_RegWrite), .X_M_MemWrite(X_M_MemWrite), .M_W_RegWrite(M_W_RegWrite), 
+	.X_M_reg_dest(X_M_reg_dest), .M_W_reg_dest(M_W_reg_dest), .D_X_reg_source1(D_X_reg_source1), 
+	.D_X_reg_source2(D_X_reg_source2), .X_M_reg_source2(X_M_reg_source2), 
+	.EXtoEX_frwdA(X_X_A_en), .EXtoEX_frwdB(X_X_B_en), .MEMtoMEM_frwdB(M_M_B_en), 
+	.MEMtoEX_frwdA(M_X_A_en), .MEMtoEX_frwdB(M_X_B_en)
+);
+
+assign reg1Forward = X_X_A_en ? X_M_ALUOut : 
+					M_X_A_en ? writeback_data : 
+					D_X_reg1;
+assign reg2Forward = X_X_B_en ? X_M_ALUOut : 
+					M_X_B_en ? writeback_data :
+					D_X_reg2;
 
 //===============================================
 // 			Memory Stage
 //===============================================
 
-// TODO: Move here Pipeline Flops
-// TODO: Move here Data Memory
+// Pipeline Flops
+M_W_Flops M_W_flops0(
+	.clk(clk), .rst(~rst_n), .wen(1'b1),
+
+	// Signals
+	.halt_in(X_M_halt), .halt_out(M_W_halt), 
+	.MemtoReg_in(X_M_MemtoReg), .MemtoReg_out(M_W_MemtoReg), 
+	.RegWrite_in(X_M_RegWrite), .RegWrite_out(M_W_RegWrite), 
+	.SavePC_in(X_M_SavePC), .SavePC_out(M_W_SavePC), 
+
+	// Data
+	.instruction_in(X_M_instruction), .instruction_out(M_W_instruction), 
+	.ALUresult_in(X_M_ALUOut), .ALUresult_out(M_W_ALUOut), 
+	.mem_in(M_mem), .mem_out(M_W_mem), 
+	.oldPC_in(X_M_oldPC), .oldPC_out(M_W_oldPC),
+	.newPC_in(X_M_newPC), .newPC_out(M_W_newPC), 
+	.reg_dest_in(X_M_reg_dest), .reg_dest_out(M_W_reg_dest)
+);
+// Data Memory
+wire [15:0] memData_In, M_mem, M_W_mem, addr;
+assign addr = X_M_ALUOut;
+assign memData_In = M_M_B_en ? writeback_data : X_M_aluB;  
+memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr), 
+                     .enable(X_M_MemRead | X_M_MemWrite), .wr(X_M_MemWrite), .clk(clk), .rst(~rst_n));
 
 
 //===============================================
 // 			Memory Writeback Stage
 //===============================================
 
-// TODO: Maybe nothing, but a single assign statement/cascaded mux saying which to writeback
-
-
+wire [15:0] writeback_data;
+// MemtoReg_ii/MemtoReg_out from flop
+assign writeback_data = (M_W_MemtoReg) ? M_W_mem : (M_W_SavePC) ? M_W_newPC : M_W_ALUOut;
   
 
   
