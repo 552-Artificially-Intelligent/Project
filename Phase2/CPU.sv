@@ -181,7 +181,7 @@ wire [15:0] memory_in, memory_out;
 // TODO Fill out:
 // PC Data
 // Stalls, Flushes, branchTaken signals
-wire flush, F_stall; D_stall, stall;
+wire flush, F_stall, D_stall, stall;
 // ALUsrc*
 wire D_ALUsrc, D_X_ALUsrc;
 // MemtoReg*
@@ -281,7 +281,7 @@ assign D_imm = (D_MemRead | D_MemWrite) ? {{12{1'b0}}, F_D_instruction[3:0], {1'
 				(F_D_instruction[15:12] == 4'b1010) ? {{8{1'b0}}, F_D_instruction[7:0]} :
 				(F_D_instruction[15:12] == 4'b1011) ? {F_D_instruction[7:0], {8{1'b0}}} : 
 				{{12{1'b0}}, F_D_instruction[3:0]};
-assign reg_dest = D_RegDst ? F_D_instruction[11:8] : ;
+assign reg_dest = D_RegDst ? F_D_instruction[11:8] : reg_source2;
 
 
 // General Register File
@@ -302,7 +302,7 @@ Data_Hazard_Detect hazard_detect0(
 );
 
 // Resolve ID Flushes/Stall
-assign flush = /*SOME BRANCH TAKEN CONFIRMATION*/; // TODO after implementing control
+assign flush = /*SOME BRANCH TAKEN CONFIRMATION*/ 1'b0; // TODO after implementing control
 assign F_stall = stall;
 assign D_stall = stall;
 
