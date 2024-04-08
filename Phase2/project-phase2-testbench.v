@@ -67,7 +67,7 @@ module cpu_ptb();
   
     always @(posedge clk) begin
       cycle_count = cycle_count + 1;
-  if (cycle_count > 10) begin
+  if (cycle_count > 50) begin
     $display("hmm....more than 100000 cycles of simulation...error?\n");
     $finish;
   end
@@ -138,13 +138,13 @@ module cpu_ptb();
    // Is processor halted (1 bit signal)
    
 
-   assign Inst = DUT.X_M_instruction;
+   assign Inst = DUT.instruction;
    //Instruction fetched in the current cycle
    
-   assign RegWrite = DUT.X_M_RegWrite;
+   assign RegWrite = DUT.M_W_RegWrite;
    // Is register file being written to in this cycle, one bit signal (1 means yes, 0 means no)
   
-   assign WriteRegister = DUT.X_M_reg_dest;
+   assign WriteRegister = DUT.M_W_reg_dest;
    // If above is true, this should hold the name of the register being written to. (4 bit signal)
    
    assign WriteData = DUT.writeback_data;

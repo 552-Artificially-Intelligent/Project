@@ -82,7 +82,7 @@ wire flagNV, flagZ;
 
 //===============================================
 // CPU Outputs:
-assign pc = M_W_oldPC;
+assign pc = programCount;
 assign hlt = M_W_halt;
 //===============================================
 
