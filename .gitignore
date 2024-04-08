@@ -1,4 +1,5 @@
-
+Phase1/*.vvp
+Phase1/*.vcd
 project.mpf
 work/_info
 RegisterFile.sv.bak
@@ -29,3 +30,5 @@ Phase1/wlftkgnfqz
 Phase1/wlftsyh7hv
 Phase1/wlftxc7yd6
 Phase1/wlftz7cbcd
+Phase2/*.vvp
+Phase2/*.vcd
