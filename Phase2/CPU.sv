@@ -290,11 +290,13 @@ X_M_Flops X_M_flops0(
 // Take into account the new forwarding stuff
 // LLB	1010
 // LHB	1011
-assign aluA = (D_X_LoadPartial & D_X_instruction[12]) ? (reg1Forward & 16'hff00) :
-				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1Forward & 16'h00ff) : 
+assign aluA = (D_X_LoadPartial & D_X_instruction[12]) ? (reg1Forward & 16'h00ff) :
+				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1Forward & 16'hff00) : 
 				reg1Forward;
 assign aluB = (D_X_ALUsrc) ? D_X_imm : reg2Forward;
-ALU ALU0(.A(aluA), .B(aluB), .opcode(D_X_instruction[14:12]), .result(X_ALUOut), 
+wire [2:0] ALUopcode;
+assign ALUopcode = (D_X_instruction[15:13] == 3'b101) ? 3'b000 : D_X_instruction[14:12];
+ALU ALU0(.A(aluA), .B(aluB), .opcode(ALUopcode), .result(X_ALUOut), 
 	.nvz_flags(NVZflag), .flagNV(flagNV), .flagZ(flagZ));
 
 // Forwarding
