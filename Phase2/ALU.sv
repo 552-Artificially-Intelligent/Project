@@ -7,16 +7,19 @@
 // 	// Maybe add a flag for a zero/ nvz flags
 // );
 
-module ALU(A, B, opcode, result, nvz_flags);
+module ALU(A, B, opcode, result, flagNV, flagZ, nvz_flags);
 input [15:0] A;
 input [15:0] B;
 input [2:0] opcode;
+input flagNV, flagZ;
 output [15:0] result;
 output [2:0] nvz_flags;
 
 // Lest of wires for the result of each module
 wire [15:0] ADDSUB_result, XOR_result, PADDSB_result, RED_result,
 			SLL_result, SRA_result, ROR_result;
+//Calculate all the NVZ flags, then only set the ones we actually should
+wire [2:0] tempNVZ;
 
 // ADD/SUB
 // Sub or add is dictated by the opcode[0]
@@ -63,17 +66,17 @@ The N flag is set if and only if the result of the ADD or SUB instruction is neg
 */
 wire temp;
 assign temp = ^XOR_result;
- assign nvz_flags = (~opcode[2] & ~opcode[1]) ? {ADDSUB_result[15], (posOvfl | negOvfl), ifZero} :	// opcode = 00X
+
+assign tempNVZ = (~opcode[2] & ~opcode[1]) ? {ADDSUB_result[15], (posOvfl | negOvfl), ifZero} :	// opcode = 00X
 					(~opcode[2] & ~opcode[0]) ? {1'b0, 1'b0, (^XOR_result == 1'bX ? 1'b0 : XOR_result == 16'h0000)} : // opcode = 0X0
 					(~opcode[2]) ? {1'b0, 1'b0, (RED_result == 16'h0000)} : // opcode = 0XX
 					(~opcode[1] & ~opcode[0]) ?  {1'b0, 1'b0, (SLL_result == 16'h0000)} : // opcode = X00
 					(~opcode[1]) ? {1'b0, 1'b0, (SRA_result == 16'h0000)} : // opcode = X0X
 					(~opcode[0]) ? {1'b0, 1'b0, (ROR_result == 16'h0000)} : // opcode = XX0
 					{1'b0, 1'b0, (PADDSB_result == 16'h0000)}; // last of the opcode possibilities 
+assign nvz_flags = flagNV ? tempNVZ : flagZ ? {nvz_flags[2:1], tempNVZ[0]} : nvz_flags;
 
-// assign nvz_flags = { ^result === 1'bx ? 1'b0 : result[15], 
-// 					(posOvfl | negOvfl) === 1'bx ? 1'b0 : (posOvfl | negOvfl) 
-// 					, ^result === 1'bx ? 1'b0 : result == 16'h0000 };
+//assign nvz_flags = { ^result === 1'bx ? 1'b0 : result[15], (posOvfl | negOvfl) === 1'bx ? 1'b0 : (posOvfl | negOvfl) , ^result === 1'bx ? 1'b0 : result == 16'h0000 };
 
 
 endmodule

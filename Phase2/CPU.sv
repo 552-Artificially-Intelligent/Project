@@ -77,6 +77,8 @@ wire D_SavePC, D_X_SavePC, X_M_SavePC, M_W_SavePC;
 wire X_X_A_en, M_X_A_en, X_X_B_en, M_X_B_en, M_M_B_en;
 // Hlt, TODO: maybe need additional halt for halt and branch taken flush
 wire halt, F_D_halt, D_X_halt, X_M_halt, M_W_halt;
+// Flag
+wire flagNV, flagZ;
 
 //===============================================
 // CPU Outputs:
@@ -245,7 +247,7 @@ Control control0(.opcode(F_D_instruction[15:12]), .ALUOp(),
                    .ALUsrc(D_ALUsrc), .MemtoReg(D_MemtoReg), .RegWrite(D_RegWrite), 
                    .MemRead(D_MemRead), .MemWrite(D_MemWrite), .branch_inst(D_branch_inst), 
                    .branch_src(D_branch_src), .RegDst(D_RegDst), .PCs(), .LoadPartial(D_LoadPartial), 
-		   .SavePC(D_SavePC), .Hlt());
+		   .SavePC(D_SavePC), .Hlt(), .flagNV(flagNV), .flagZ(flagZ));
 
 
 //===============================================
@@ -290,7 +292,8 @@ assign aluA = (D_X_LoadPartial & D_X_instruction[12]) ? (reg1Forward & 16'hff00)
 				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1Forward & 16'h00ff) : 
 				reg1Forward;
 assign aluB = (D_X_ALUsrc) ? D_X_imm : reg2Forward;
-ALU ALU0(.A(aluA), .B(aluB), .opcode(D_X_instruction[14:12]), .result(X_ALUOut), .nvz_flags(NVZflag));
+ALU ALU0(.A(aluA), .B(aluB), .opcode(D_X_instruction[14:12]), .result(X_ALUOut), 
+	.nvz_flags(NVZflag), .flagNV(flagNV), .flagZ(flagZ));
 
 // Forwarding
 Forwarding_Unit frwd_unit(
