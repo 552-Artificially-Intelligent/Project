@@ -17,7 +17,7 @@ all: $(COMPILE_FILE)
 # Rule to compile all Verilog and SystemVerilog files into a single compiled file
 # Choose either to test the main testbench or all the test benches
 $(COMPILE_FILE): $(SV_FILES) $(V_FILES)
-	iverilog -g2012 -o $@ $(filter-out %_tb.sv %_tb.v $(TB_FILE), $(SV_FILES) $(V_FILES)) $(TB_FILE)
+	iverilog -g2012 -o $@ $(filter-out %_tb.sv %_tb.v %_TB.sv %_TB.v $(TB_FILE), $(SV_FILES) $(V_FILES)) $(TB_FILE)
 # 	iverilog -g2012 -o $@ $(SV_FILES) $(V_FILES)
 
 # Rule to run the compiled file and generate VCD

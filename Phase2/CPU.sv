@@ -345,6 +345,8 @@ memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr),
 //===============================================
 // MemtoReg_ii/MemtoReg_out from flop
 assign writeback_data = (M_W_MemtoReg) ? M_W_mem : (M_W_SavePC) ? M_W_newPC : M_W_ALUOut;
+// assign writeback_data = (~rst_n) ? 16'h0000 : 
+// 						(M_W_MemtoReg) ? M_W_mem : (M_W_SavePC) ? M_W_newPC : M_W_ALUOut;
   
 
   
