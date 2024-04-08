@@ -24,7 +24,8 @@ wire [15:0] F_oldPC, F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
 			F_newPC, F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC,
 			nextPC, programCount, pcInc, pcBranch;;
 // Instruction, no need for opcode, we can just use instruction
-wire [15:0] F_instruction, F_D_instruction, D_X_instruction, X_M_instruction, M_W_instruction;
+wire [15:0]	instruction, F_instruction, F_D_instruction, D_X_instruction, 
+			X_M_instruction, M_W_instruction;
 // Immediate value
 wire [15:0] D_imm, D_X_imm;
 // Branch Address
@@ -36,7 +37,7 @@ wire [3:0] reg_dest, reg_source1, reg_source2, D_X_reg_source1, D_X_reg_source2,
 	// reg1 not needed in X_M since only memory goes in
 wire [15:0] D_reg1, D_reg2, D_X_reg1, D_X_reg2, X_M_reg2, reg1Forward, reg2Forward;
 // NVZ Flag
-wire [3:0] NVZflag, cond, flagEN, NVZ_out;;
+wire [2:0] NVZflag, cond, flagEN, NVZ_out;;
 // Register Address Forwarding // I wrote something here but Im not sure what, might delete
 // ALU In
 wire [15:0] aluA, aluB;
@@ -284,9 +285,9 @@ X_M_Flops X_M_flops0(
 // Take into account the new forwarding stuff
 // LLB	1010
 // LHB	1011
-assign aluA = (D_X_LoadPartial & D_X_instruction[12]) ? (reg1_fwd & 16'hff00) :
-				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1_fwd & 16'h00ff) : 
-				reg1_fwd;
+assign aluA = (D_X_LoadPartial & D_X_instruction[12]) ? (reg1Forward & 16'hff00) :
+				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1Forward & 16'h00ff) : 
+				reg1Forward;
 assign aluB = (D_X_ALUsrc) ? D_X_imm : reg2Forward;
 ALU ALU0(.A(aluA), .B(aluB), .opcode(D_X_instruction[14:12]), .result(X_ALUOut), .nvz_flags(NVZflag));
 
