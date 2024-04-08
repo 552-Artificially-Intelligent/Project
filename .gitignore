@@ -1,5 +1,6 @@
 Phase1/*.vvp
 Phase1/*.vcd
+Phase2/dump.vcd
 project.mpf
 work/_info
 RegisterFile.sv.bak

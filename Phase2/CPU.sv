@@ -179,7 +179,8 @@ assign D_imm = (D_MemRead | D_MemWrite) ? {{12{1'b0}}, F_D_instruction[3:0], {1'
 				(F_D_instruction[15:12] == 4'b1010) ? {{8{1'b0}}, F_D_instruction[7:0]} :
 				(F_D_instruction[15:12] == 4'b1011) ? {F_D_instruction[7:0], {8{1'b0}}} : 
 				{{12{1'b0}}, F_D_instruction[3:0]};
-assign reg_dest = D_RegDst ? F_D_instruction[11:8] : reg_source2;
+// assign reg_dest = D_RegDst ? F_D_instruction[11:8] : reg_source2;
+assign reg_dest = F_D_instruction[11:8];
 
 
 // General Register File
@@ -308,7 +309,8 @@ Forwarding_Unit frwd_unit(
 	.MEMtoEX_frwdA(M_X_A_en), .MEMtoEX_frwdB(M_X_B_en)
 );
 
-assign reg1Forward = X_X_A_en ? X_M_ALUOut : 
+//  | (D_X_LoadPartial & X_M_reg_dest == D_X_reg_source1)
+assign reg1Forward = (X_X_A_en) ? X_M_ALUOut : 
 					M_X_A_en ? writeback_data : 
 					D_X_reg1;
 assign reg2Forward = X_X_B_en ? X_M_ALUOut : 

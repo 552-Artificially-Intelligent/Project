@@ -145,6 +145,7 @@ module cpu_ptb();
    // Is register file being written to in this cycle, one bit signal (1 means yes, 0 means no)
   
    assign WriteRegister = DUT.M_W_reg_dest;
+   // assign WriteRegister = DUT.X_M_reg_dest;
    // If above is true, this should hold the name of the register being written to. (4 bit signal)
    
    assign WriteData = DUT.writeback_data;
