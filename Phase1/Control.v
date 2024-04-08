@@ -12,7 +12,9 @@ module Control(
     output PCs,
     output LoadPartial,
     output SavePC,
-    output Hlt
+    output Hlt,
+    output flagNV,
+    output flagZ
 );
 
 assign Hlt = &opcode;
@@ -27,6 +29,8 @@ assign MemtoReg = opcode == 4'b1000 ? 1'b1 : 1'b0;
 assign MemWrite = opcode == 4'b1001 ? 1'b1 : 1'b0;
 assign LoadPartial = opcode[3:1] == 3'b101 ? 1'b1 : 1'b0;
 assign SavePC = opcode == 4'b1110 ? 1'b1 : 1'b0;
+assign flagNV = opcode[3:1] == 3'b000 ? 1'b1 : 1'b0;	//Only change on add and subtract (0000 and 0001)
+assign flagZ = opcode[3] == 1'b0 & opcode[1:0] != 2'b11 ? 1'b1 : 1'b0;	//All functions beginning with "0" but RED and PADDSB can modify
 
 assign ALUOp = ~opcode[3] ? opcode[2:0] : 3'b000;
 

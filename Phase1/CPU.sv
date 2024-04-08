@@ -24,7 +24,7 @@ wire do_branch;
 
 // Control wires
 wire [2:0] ALUop;
-wire ALUsrc, MemtoReg, RegWrite, MemRead, MemWrite, branch_inst, branch_src, RegDst, PCs, LoadPartial, SavePC, Hlt;
+wire ALUsrc, MemtoReg, RegWrite, MemRead, MemWrite, branch_inst, branch_src, RegDst, PCs, LoadPartial, SavePC, Hlt, flagNV, flagZ;
   
 // Register wires
 wire [3:0] SrcReg1, SrcReg2, DstReg;
@@ -106,7 +106,7 @@ Control control0(.opcode(instruction[15:12]), .ALUOp(ALUop),
                    .ALUsrc(ALUsrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
                    .MemRead(MemRead), .MemWrite(MemWrite), .branch_inst(branch_inst), 
                    .branch_src(branch_src), .RegDst(RegDst), .PCs(PCs), .LoadPartial(LoadPartial), 
-		   .SavePC(SavePC), .Hlt(Hlt));
+		   .SavePC(SavePC), .Hlt(Hlt), .flagNV(flagNV), .flagZ(flagZ));
   
 /*
 !!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!REGISTERFILE!!!!!!!!!!!!!!!!!!
@@ -160,7 +160,7 @@ RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(SrcReg1), .SrcReg2(SrcReg2),
 assign A = SrcData1;
 assign B = ALUsrc ? ((LoadPartial | SavePC) ? 16'h0000 : 
 		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
-ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag));
+ALU ALU0(.A(A), .B(B), .opcode(ALUop), .result(result), .nvz_flags(NVZflag), .flagNV(flagNV), .flagZ(flagZ));
 
 
 
@@ -178,7 +178,7 @@ memory1d data_memory(.data_out(data_out), .data_in(data_in), .addr(addr),
 
 
 // Flag Register
-FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~instruction[15]), 
+FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(1'b1), 
 	.flags(NVZflag), .opcode(ALUop), .N_flag(NVZ_out[2]), .Z_flag(NVZ_out[0]), .V_flag(NVZ_out[1]));
 
 
