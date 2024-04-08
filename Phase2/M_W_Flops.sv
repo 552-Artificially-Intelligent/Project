@@ -14,7 +14,7 @@ module M_W_Flops(
 	mem_in, mem_out, 
 	oldPC_in, oldPC_out,
 	newPC_in, newPC_out, 
-	reg_dest_in, reg_dest_out, 
+	reg_dest_in, reg_dest_out
 );
 
 input clk, rst, wen;

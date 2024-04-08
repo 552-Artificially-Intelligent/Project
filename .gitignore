@@ -32,3 +32,7 @@ Phase1/*.vvp
 Phase1/*.vcd
 Phase2/*.vvp
 Phase2/*.vcd
+emptyMemory.img
+test1.img
+test2.img
+test3.img
