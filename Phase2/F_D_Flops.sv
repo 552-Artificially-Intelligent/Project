@@ -1,5 +1,5 @@
 module F_D_Flops(
-	clk, rst, instruction_in, oldPC_in, newPC_in, 
+	clk, rst, wen, instruction_in, oldPC_in, newPC_in, 
 	instruction_out, oldPC_out, newPC_out,
 	stopPC
 );
@@ -11,7 +11,7 @@ module F_D_Flops(
 // the FLAG registers should be in the Decode stage, and it will be affected by
 // the Execute stage.
 
-input clk, rst;
+input clk, rst, wen;
 input[15:0] instruction_in;
 input [15:0] oldPC_in, newPC_in;
 output[15:0] instruction_out;

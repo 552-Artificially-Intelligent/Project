@@ -11,8 +11,8 @@ module cpu_ptb();
    wire        MemWrite;       /* Similar as above but for memory */
    wire        MemRead;
    wire [15:0] MemAddress;
-   wire [15:0] MemDataIn;	/* Read from Memory */
-   wire [15:0] MemDataOut;	/* Written to Memory */
+   wire [15:0] MemDataIn; /* Read from Memory */
+   wire [15:0] MemDataOut;  /* Written to Memory */
 
    wire        Halt;         /* Halt executed and in Memory or writeback stage */
         
@@ -64,13 +64,13 @@ module cpu_ptb();
     always #50 begin   // delay 1/2 clock period each time thru loop
       clk = ~clk;
     end
-	
+  
     always @(posedge clk) begin
-    	cycle_count = cycle_count + 1;
-	if (cycle_count > 100000) begin
-		$display("hmm....more than 100000 cycles of simulation...error?\n");
-		$finish;
-	end
+      cycle_count = cycle_count + 1;
+  if (cycle_count > 100000) begin
+    $display("hmm....more than 100000 cycles of simulation...error?\n");
+    $finish;
+  end
     end
 
 
@@ -97,7 +97,7 @@ module cpu_ptb();
                   MemWrite,
                   MemAddress,
                   MemDataIn,
-		  MemDataOut);
+      MemDataOut);
          if (RegWrite) begin
             $fdisplay(trace_file,"REG: %d VALUE: 0x%04x",
                       WriteRegister,
@@ -119,7 +119,7 @@ module cpu_ptb();
 
             $fclose(trace_file);
             $fclose(sim_log_file);
-	    #5;
+      #5;
             $finish;
          end 
       end
@@ -138,31 +138,31 @@ module cpu_ptb();
    // Is processor halted (1 bit signal)
    
 
-   assign Inst = DUT.p0.instr;
+   assign Inst = DUT.X_M_instruction;
    //Instruction fetched in the current cycle
    
-   assign RegWrite = DUT.p0.regWrite;
+   assign RegWrite = DUT.X_M_RegWrite;
    // Is register file being written to in this cycle, one bit signal (1 means yes, 0 means no)
   
-   assign WriteRegister = DUT.p0.DstwithJmout;
+   assign WriteRegister = DUT.X_M_reg_dest;
    // If above is true, this should hold the name of the register being written to. (4 bit signal)
    
-   assign WriteData = DUT.p0.wData;
+   assign WriteData = DUT.writeback_data;
    // If above is true, this should hold the Data being written to the register. (16 bits)
    
-   assign MemRead =  (DUT.p0.memRxout & ~DUT.p0.notdonem);
+   assign MemRead = DUT.X_M_MemRead;
    // Is memory being read from, in this cycle. one bit signal (1 means yes, 0 means no)
    
-   assign MemWrite = (DUT.p0.memWxout & ~DUT.p0.notdonem);
+   assign MemWrite = DUT.X_M_MemWrite;
    // Is memory being written to, in this cycle (1 bit signal)
    
-   assign MemAddress = DUT.p0.data1out;
+   assign MemAddress = DUT.addr;
    // If there's a memory access this cycle, this should hold the address to access memory with (for both reads and writes to memory, 16 bits)
    
-   assign MemDataIn = DUT.p0.data2out;
+   assign MemDataIn = DUT.memData_In;
    // If there's a memory write in this cycle, this is the Data being written to memory (16 bits)
    
-   assign MemDataOut = DUT.p0.readData;
+   assign MemDataOut = DUT.M_mem;
    // If there's a memory read in this cycle, this is the data being read out of memory (16 bits)
 
 
