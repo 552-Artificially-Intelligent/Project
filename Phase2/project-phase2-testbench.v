@@ -138,10 +138,11 @@ module cpu_ptb();
    // Is processor halted (1 bit signal)
    
 
-   assign Inst = DUT.instruction;
+   // assign Inst = DUT.instruction;
+    assign Inst = DUT.M_W_instruction;
    //Instruction fetched in the current cycle
    
-   assign RegWrite = DUT.M_W_RegWrite;
+    assign RegWrite = DUT.M_W_RegWrite;
    // Is register file being written to in this cycle, one bit signal (1 means yes, 0 means no)
   
    assign WriteRegister = DUT.M_W_reg_dest;

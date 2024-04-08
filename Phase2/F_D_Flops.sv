@@ -1,7 +1,7 @@
 module F_D_Flops(
 	clk, rst, wen, instruction_in, oldPC_in, newPC_in, 
 	instruction_out, oldPC_out, newPC_out,
-	stopPC
+	halt_in, halt_out
 );
 
 // Currently have 2 different PCs an old and a new
@@ -11,17 +11,16 @@ module F_D_Flops(
 // the FLAG registers should be in the Decode stage, and it will be affected by
 // the Execute stage.
 
-input clk, rst, wen;
+input clk, rst, wen, halt_in;
 input[15:0] instruction_in;
 input [15:0] oldPC_in, newPC_in;
 output[15:0] instruction_out;
 output [15:0] oldPC_out, newPC_out;
-output stopPC;
+output halt_out;
 logic currentHalt, stopWrite;
 
 // Halt detection
-assign currentHalt = (instruction_in[15:12] == 4'b1111);
-BitReg currentlyHalted(.clk(clk), .rst(rst), .wen(wen), .D(currentHalt), .Q(stopPC));
+dff dff_halt(.clk(clk), .rst(rst), .wen(wen), .d(halt_in), .q(halt_out));
 
 // Use registers for these values since requires 16 bits
 Register reg_inst(.clk(clk), .rst(rst), .WriteReg(wen), .D(instruction_in), 

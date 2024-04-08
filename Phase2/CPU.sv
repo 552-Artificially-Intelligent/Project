@@ -82,7 +82,8 @@ wire flagNV, flagZ;
 
 //===============================================
 // CPU Outputs:
-assign pc = programCount;
+// assign pc = programCount;
+assign pc = M_W_oldPC;
 assign hlt = M_W_halt;
 //===============================================
 
@@ -98,7 +99,7 @@ assign hlt = M_W_halt;
 // Pipeline Flops
 F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_in(instruction), 
 	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), 
-	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .stopPC(F_D_halt));
+	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .halt_in(halt), .halt_out(F_D_halt));
 
 // PC regs
 // assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
