@@ -5,74 +5,6 @@ output [15:0] pc;
 
 ////////////////////////////////////////////////////
 
-  
-// Branch wires
-wire do_branch;
-
-  
-Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
-
-
-
-/*
-!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!CONTROL!!!!!!!!!!!!!!!!!!
-INPUT:
-	- .opcode: instruction[15:12]
-OUTPUT: 
-	- .ALUOp: ALU operation to be performed
-	- .ALUsrc: set to 1 if anything besides SrcReg2 is to be used as the 2nd ALU operation
-	- .MemtoReg: controls whether value to write comes from data memory (1) or ALU (0)
-	- .RegWrite: controls whether WriteReg is written to
-	- .MemRead: should control whether Memory is read; does nothing in practice (BUG???)
-	- .MemWrite: controls whether Memory is written to
-	- .branch_inst: whether the instruction is branch or not
-	- .branch_src: whether to use jump value or branch value for PC
-	- .RegDst: should be used to determine which value to write to register, currently unused (BUG???)
-	- .PCs: whether PCS instruction is executed (saves PC value)
-	- .LoadPartial: set to 1 if doing LLB or LHB, set to 0 otherwise
-	- .SavePC: set to 1 if PCS instruction is being executed, set to 0 otherwise
-	- .Hlt: whether to halt program (only if OPCODE = 1111)
-*/
-Control control0(.opcode(instruction[15:12]), .ALUOp(ALUop), 
-                   .ALUsrc(ALUsrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
-                   .MemRead(MemRead), .MemWrite(MemWrite), .branch_inst(branch_inst), 
-                   .branch_src(branch_src), .RegDst(RegDst), .PCs(PCs), .LoadPartial(LoadPartial), 
-		   .SavePC(SavePC), .Hlt(Hlt));
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,13 +40,14 @@ wire [3:0] NVZflag, cond, flagEN, NVZ_out;;
 // Register Address Forwarding // I wrote something here but Im not sure what, might delete
 // ALU In
 wire [15:0] aluA, aluB;
+wire [15:0] ALUresult_in, ALUresult_out, X_M_aluB;
 // ALU Out
 wire [15:0] X_ALUOut, X_M_ALUOut, M_W_ALUOut;
 // Memory in/out data
 wire [15:0] memory_in, memory_out;
 // Memory/Register Writeback data
-// TODO: Consider if we need writeback at all if its going to be auto implemented
-// in the bitcell part
+wire [15:0] memData_In, M_mem, M_W_mem, addr;
+wire [15:0] writeback_data;
 
 
 //===============================================
@@ -123,7 +56,7 @@ wire [15:0] memory_in, memory_out;
 // TODO Fill out:
 // PC Data
 // Stalls, Flushes, branchTaken signals
-wire flush, F_stall, D_stall, stall;
+wire flush, F_stall, D_stall, stall, do_branch;
 // ALUsrc*
 wire D_ALUsrc, D_X_ALUsrc;
 // MemtoReg*
@@ -178,7 +111,7 @@ F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~stall_if_id), .instructi
 //PURPOSE: program counter - resposible for actually setting the PC to the appropriate next value 
 //INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
 //OUTPUTS: current programCount (.PC)
-PC pc0(.clk(clk), .en(~halt), .next(nextPC), .PC(programCount), .rst_n(rst_n));
+PC pc0(.clk(clk), .en(~halt & ~do_branch), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 
 // Instruction Memory
 memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
@@ -193,7 +126,8 @@ CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout
 assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout());
 
-//TODO: Add flush on branch
+// Branch
+Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
 
 // TODO: Resolve IF Stall
 
@@ -281,18 +215,40 @@ Data_Hazard_Detect hazard_detect0(
 );
 
 // Resolve ID Flushes/Stall
-assign flush = /*SOME BRANCH TAKEN CONFIRMATION*/ 1'b0; // TODO after implementing control
+assign flush = do_branch;
 assign F_stall = stall;
 assign D_stall = stall;
 
-// TODO Rusheel: Control+Branch
+// Control
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!CONTROL!!!!!!!!!!!!!!!!!!
+INPUT:
+	- .opcode: instruction[15:12]
+OUTPUT: 
+	- .ALUOp: ALU operation to be performed
+	- .ALUsrc: set to 1 if anything besides SrcReg2 is to be used as the 2nd ALU operation
+	- .MemtoReg: controls whether value to write comes from data memory (1) or ALU (0)
+	- .RegWrite: controls whether WriteReg is written to
+	- .MemRead: should control whether Memory is read; does nothing in practice (BUG???)
+	- .MemWrite: controls whether Memory is written to
+	- .branch_inst: whether the instruction is branch or not
+	- .branch_src: whether to use jump value or branch value for PC
+	- .RegDst: should be used to determine which value to write to register, currently unused (BUG???)
+	- .PCs: whether PCS instruction is executed (saves PC value)
+	- .LoadPartial: set to 1 if doing LLB or LHB, set to 0 otherwise
+	- .SavePC: set to 1 if PCS instruction is being executed, set to 0 otherwise
+	- .Hlt: whether to halt program (only if OPCODE = 1111)
+*/
+Control control0(.opcode(F_D_instruction[15:12]), .ALUOp(), 
+                   .ALUsrc(D_ALUsrc), .MemtoReg(D_MemtoReg), .RegWrite(D_RegWrite), 
+                   .MemRead(D_MemRead), .MemWrite(D_MemWrite), .branch_inst(D_branch_inst), 
+                   .branch_src(D_branch_src), .RegDst(D_RegDst), .PCs(), .LoadPartial(D_LoadPartial), 
+		   .SavePC(D_SavePC), .Hlt());
 
 
 //===============================================
 // 			EXECUTE STAGE
 //===============================================
-// TODO: Move wires up
-wire [15:0] ALUresult_in, ALUresult_out, X_M_aluB;
 // Pipeline Flops
 X_M_Flops X_M_flops0(
 	.clk(clk), .rst(~rst_n), .wen(1'b1),
@@ -373,7 +329,6 @@ M_W_Flops M_W_flops0(
 	.reg_dest_in(X_M_reg_dest), .reg_dest_out(M_W_reg_dest)
 );
 // Data Memory
-wire [15:0] memData_In, M_mem, M_W_mem, addr;
 assign addr = X_M_ALUOut;
 assign memData_In = M_M_B_en ? writeback_data : X_M_aluB;  
 memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr), 
@@ -383,8 +338,6 @@ memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr),
 //===============================================
 // 			MEMORY WRITEBACK STAGE
 //===============================================
-
-wire [15:0] writeback_data;
 // MemtoReg_ii/MemtoReg_out from flop
 assign writeback_data = (M_W_MemtoReg) ? M_W_mem : (M_W_SavePC) ? M_W_newPC : M_W_ALUOut;
   
