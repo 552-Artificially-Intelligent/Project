@@ -32,7 +32,7 @@ wire [3:0] reg_dest, reg_source1, reg_source2, D_X_reg_source1, D_X_reg_source2,
 	// reg1 not needed in X_M since only memory goes in
 wire [15:0] D_reg1, D_reg2, D_X_reg1, D_X_reg2, X_M_reg2, reg1Forward, reg2Forward;
 // NVZ Flag
-wire [2:0] NVZflag, cond, flagEN, NVZ_out;;
+wire [2:0] NVZflag, cond, flagEN, NVZ_out;
 // Register Address Forwarding // I wrote something here but Im not sure what, might delete
 // ALU In
 wire [15:0] aluA, aluB;
@@ -84,6 +84,7 @@ wire flagNV, flagZ;
 // CPU Outputs:
 // assign pc = programCount;
 assign pc = M_W_oldPC;
+// assign hlt = M_W_halt;
 assign hlt = M_W_halt;
 //===============================================
 
@@ -207,9 +208,15 @@ INOUT:
 	- .SrcData1: output from when SrcReg1 is read
 	- .SrcData2: output from when SrcReg2 is read
 */
+wire [15:0] temp1, temp2;
+assign D_reg1 = (M_W_reg_dest == reg_source1 & M_W_RegWrite) ? writeback_data : temp1;
+assign D_reg2 = (M_W_reg_dest == reg_source2 & M_W_RegWrite) ? writeback_data : temp2;
 RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(reg_source1), .SrcReg2(reg_source2), 
              .DstReg(M_W_reg_dest), .WriteReg(M_W_RegWrite), .DstData(writeback_data), 
-             .SrcData1(D_reg1), .SrcData2(D_reg2));
+             .SrcData1(temp1), .SrcData2(temp2));
+// RegisterFile rf_0(.clk(clk), .rst(~rst_n), .SrcReg1(reg_source1), .SrcReg2(reg_source2), 
+//              .DstReg(M_W_reg_dest), .WriteReg(M_W_RegWrite), .DstData(writeback_data), 
+//              .SrcData1(D_reg1), .SrcData2(D_reg2));
 
 // NVZ flag regs
 FLAG_reg flg_reg0(.clk(clk), .rst_n(rst_n), .en(~F_D_instruction[15]), 
@@ -310,7 +317,6 @@ Forwarding_Unit frwd_unit(
 	.MEMtoEX_frwdA(M_X_A_en), .MEMtoEX_frwdB(M_X_B_en)
 );
 
-//  | (D_X_LoadPartial & X_M_reg_dest == D_X_reg_source1)
 assign reg1Forward = (X_X_A_en) ? X_M_ALUOut : 
 					M_X_A_en ? writeback_data : 
 					D_X_reg1;
@@ -346,14 +352,16 @@ assign memData_In = M_M_B_en ? writeback_data : X_M_aluB;
 memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr), 
                      .enable(X_M_MemRead | X_M_MemWrite), .wr(X_M_MemWrite), .clk(clk), .rst(~rst_n));
 
-
+// wire oneDelayMWHalt, twoDelayMWHalt, threeDelayMWHalt;
+// dff dffHalt1(.clk(clk), .rst(~rst_n), .wen(1'b1), .d(M_W_halt), .q(oneDelayMWHalt));
+// dff dffHalt2(.clk(clk), .rst(~rst_n), .wen(1'b1), .d(oneDelayMWHalt), .q(twoDelayMWHalt));
+// dff dffHalt3(.clk(clk), .rst(~rst_n), .wen(1'b1), .d(twoDelayMWHalt), .q(threeDelayMWHalt));
 //===============================================
 // 			MEMORY WRITEBACK STAGE
 //===============================================
 // MemtoReg_ii/MemtoReg_out from flop
 assign writeback_data = (M_W_MemtoReg) ? M_W_mem : (M_W_SavePC) ? M_W_newPC : M_W_ALUOut;
-// assign writeback_data = (~rst_n) ? 16'h0000 : 
-// 						(M_W_MemtoReg) ? M_W_mem : (M_W_SavePC) ? M_W_newPC : M_W_ALUOut;
+// assign writeback_data = (M_W_MemtoReg) ? M_W_mem : (M_W_SavePC) ? M_W_newPC : X_M_ALUOut;
   
 
   
