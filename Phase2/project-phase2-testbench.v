@@ -67,7 +67,7 @@ module cpu_ptb();
   
     always @(posedge clk) begin
       cycle_count = cycle_count + 1;
-  if (cycle_count > 100000) begin
+  if (cycle_count > 10) begin
     $display("hmm....more than 100000 cycles of simulation...error?\n");
     $finish;
   end

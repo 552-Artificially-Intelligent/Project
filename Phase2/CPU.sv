@@ -96,9 +96,9 @@ assign hlt = M_W_halt;
 //===============================================
 
 // Pipeline Flops
-F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~stall_if_id), .instruction_in(instruction), 
+F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_in(instruction), 
 	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), 
-	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .stopPC(halt));
+	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .stopPC(F_D_halt));
 
 // PC regs
 // assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
@@ -133,7 +133,7 @@ assign branchAdd =  {{6{instruction[8]}}, instruction[8:0], 1'b0};
 CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout());
 
 // Branch
-Branch branch0(.branch_inst(branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
+Branch branch0(.branch_inst(D_branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
 
 // TODO: Resolve IF Stall
 
@@ -271,7 +271,7 @@ X_M_Flops X_M_flops0(
 	.b_in(aluB), .b_out(X_M_aluB), 
 	.ALUresult_in(X_ALUOut), .ALUresult_out(X_M_ALUOut), 
 	.oldPC_in(D_X_oldPC), .oldPC_out(X_M_oldPC), 
-	.newPC_in(D_X_newPC), .newPC_out(D_X_newPC), 
+	.newPC_in(D_X_newPC), .newPC_out(X_M_newPC), 
 	.reg_dest_in(D_X_reg_dest), .reg_dest_out(X_M_reg_dest),
 	.Source2_in(D_X_reg_source2), .Source2_out(X_M_reg_source2)
 );
