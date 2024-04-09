@@ -12,7 +12,7 @@ module dff (q, d, wen, clk, rst);
     assign q = state;
 
     always @(posedge clk) begin
-      state = rst ? 0 : (wen ? d : state);
+      state = rst ? 1'b0 : (wen ? d : state);
     end
 
 endmodule
