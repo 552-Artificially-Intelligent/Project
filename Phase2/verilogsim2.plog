@@ -13,11 +13,12 @@ SIMLOG:: Cycle          14 PC:     000e I:     0523 R: 0   5     00b4 M: 0 1    
 SIMLOG:: Cycle          14 PC:     0010 I:     8450 R: 1   4     00b4 M: 0 0     0004     0004     0000
 SIMLOG:: Cycle          16 PC:     0012 I:     9452 R: 1   4     0004 M: 0 0     0004     0004     0000
 SIMLOG:: Cycle          16 PC:     0012 I:     9452 R: 0   5     0004 M: 0 0     00b4     00b0     0000
-SIMLOG:: Cycle          18 PC:     0014 I:     7542 R: 0   5     00b4 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          18 PC:     0018 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
+SIMLOG:: Cycle          18 PC:     0014 I:     7542 R: 0   5     00b4 M: 0 0     0168     00b4     0000
+SIMLOG:: Cycle          18 PC:     0016 I:     3555 R: 0   0     0168 M: 0 0     0000     0000     0000
+SIMLOG:: Cycle          20 PC:     0018 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
 SIMLOG:: Processor halted
 
-SIMLOG:: sim_cycles          18
+SIMLOG:: sim_cycles          20
 
 SIMLOG:: inst_count          15
 

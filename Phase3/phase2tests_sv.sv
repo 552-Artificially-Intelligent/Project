@@ -1,4 +1,4 @@
-module cpu_ptb();
+module cpu_sysvertb();
   
 
    wire [15:0] PC;
@@ -7,6 +7,7 @@ module cpu_ptb();
                                */
    wire        RegWrite;       /* Whether register file is being written to */
    wire [3:0]  WriteRegister;  /* What register is written */
+   wire [3:0]  Opcode;
    wire [15:0] WriteData;      /* Data */
    wire        MemWrite;       /* Similar as above but for memory */
    wire        MemRead;
@@ -25,6 +26,9 @@ module cpu_ptb();
    reg clk; /* Clock input */
    reg rst_n; /* (Active low) Reset input */
 
+   // string instNames [16] = {"ADD", "SUB", "XOR", "RED", "SLL", "SRA", "ROR", "PSB", "LW ", "SW ", "LLB", "LHB", "B  ", "BR ", "PCS", "HLT"};
+	
+   assign Opcode = Inst[15:12];
      
 
    cpu DUT(.clk(clk), .rst_n(rst_n), .pc(PC), .hlt(Halt)); /* Instantiate your processor */
@@ -90,7 +94,7 @@ module cpu_ptb();
          if (Halt || RegWrite || MemWrite) begin
             inst_count = inst_count + 1;
          end
-         $fdisplay(sim_log_file, "SIMLOG:: Cycle %d PC: %8x I: %8x R: %d %3d %8x M: %d %d %8x %8x %8x",
+         $fdisplay(sim_log_file, "SIMLOG:: Cycle %d PC: %8x I: %4x R: %d %3d %8x M: %d %d %8x %8x %8x | OP: %s DATA: %b %b %b",
                   cycle_count,
                   PC,
                   Inst,
@@ -101,7 +105,7 @@ module cpu_ptb();
                   MemWrite,
                   MemAddress,
                   MemDataIn,
-                  MemDataOut);
+      		  MemDataOut, "PLACEHOLDER", Inst[11:8], Inst[7:4], Inst[3:0]);
          if (RegWrite) begin
             $fdisplay(trace_file,"REG: %d VALUE: 0x%04x",
                       WriteRegister,
