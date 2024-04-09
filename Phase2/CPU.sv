@@ -85,7 +85,8 @@ wire flagNV, flagZ;
 // assign pc = programCount;
 assign pc = M_W_oldPC;
 // assign hlt = M_W_halt;
-assign hlt = M_W_halt;
+// assign hlt = M_W_halt;
+assign hlt = M_W_instruction[15:0] == 16'hF000;
 //===============================================
 
 
