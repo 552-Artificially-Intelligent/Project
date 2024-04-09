@@ -17,7 +17,7 @@ output [15:0] pc;
 // PC Data
 wire [15:0] F_oldPC, F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
 			F_newPC, F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC,
-			nextPC, programCount, pcInc, pcBranch;;
+			nextPC, programCount, pcInc, pcBranch, F_D_pcBranch;
 // Instruction, no need for opcode, we can just use instruction
 wire [15:0]	instruction, F_instruction, F_D_instruction, D_X_instruction, 
 			X_M_instruction, M_W_instruction;
@@ -99,9 +99,7 @@ assign hlt = M_W_instruction[15:0] == 16'hF000;
 //===============================================
 
 // Pipeline Flops
-F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_in(instruction), 
-	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), 
-	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .halt_in(halt), .halt_out(F_D_halt));
+
 
 // PC regs
 // assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
@@ -119,7 +117,7 @@ F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_i
 //INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
 //OUTPUTS: current programCount (.PC)
 PC pc0(.clk(clk), .en(~halt & ~do_branch), .next(nextPC), .PC(programCount), .rst_n(rst_n));
-assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : pcBranch) : pcInc) : 
+assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBranch) : pcInc) : 
                programCount;
 
 // Instruction Memory
@@ -138,6 +136,10 @@ CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout());
 // Branch
 Branch branch0(.branch_inst(D_branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
 
+
+F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_in(instruction), 
+	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), .pcBranch_in(pcBranch) .pcBranch_out(F_D_pcBranch),
+	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .halt_in(halt), .halt_out(F_D_halt));
 // TODO: Resolve IF Stall
 
 
