@@ -1,5 +1,5 @@
 module F_D_Flops(
-	clk, rst, wen, instruction_in, oldPC_in, newPC_in, 
+	clk, rst, wen, instruction_in, oldPC_in, newPC_in, pcBranch_in, pcBranch_out, 
 	instruction_out, oldPC_out, newPC_out,
 	halt_in, halt_out
 );
