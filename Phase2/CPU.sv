@@ -85,7 +85,8 @@ wire flagNV, flagZ;
 // assign pc = programCount;
 assign pc = M_W_oldPC;
 // assign hlt = M_W_halt;
-assign hlt = M_W_halt;
+// assign hlt = M_W_halt;
+assign hlt = M_W_instruction[15:0] == 16'hF000;
 //===============================================
 
 
@@ -126,7 +127,7 @@ memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCo
 					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
 
 //Enable if there is a halt
-assign halt = (instruction[15:12] == 4'hF);
+assign halt = (~do_branch & instruction[15:12] == 4'hF);
 
 // Increment the PC - pcInc = programCount + 2
 CLA_16bit cla_inc(.A(programCount), .B(16'h0002), .Cin(1'b0), .Sum(pcInc), .Cout()); 
@@ -157,7 +158,7 @@ D_X_Flops D_X_flops0(
 	.branch_src_in(D_branch_src), .branch_src_out(D_X_branch_src),
 	.RegDst_in(D_RegDst), .RegDst_out(D_X_RegDst),
 	.SavePC_in(D_SavePC), .SavePC_out(D_X_SavePC),
-	.halt_in(), .halt_out(D_X_halt),
+	.halt_in(F_D_halt), .halt_out(D_X_halt),
 	.LoadPartial_in(D_LoadPartial), .LoadPartial_out(D_X_LoadPartial),
 
 	// Data
@@ -177,7 +178,8 @@ assign reg_source1 = D_LoadPartial ? F_D_instruction[11:8] : F_D_instruction[7:4
 assign reg_source2 = (D_MemRead | D_MemWrite) ? F_D_instruction[11:8] : F_D_instruction[3:0];
 // LLB	1010
 // LHB	1011
-assign D_imm = (D_MemRead | D_MemWrite) ? {{12{1'b0}}, F_D_instruction[3:0], {1'b0}} :
+// addr = (Reg[ssss] & 0xFFFE) + (sign-extend(oooo) << 1).
+assign D_imm = (D_MemRead | D_MemWrite) ? {{12{F_D_instruction[3]}}, F_D_instruction[3:0], {1'b0}} :
 				(F_D_instruction[15:12] == 4'b1010) ? {{8{1'b0}}, F_D_instruction[7:0]} :
 				(F_D_instruction[15:12] == 4'b1011) ? {F_D_instruction[7:0], {8{1'b0}}} : 
 				{{12{1'b0}}, F_D_instruction[3:0]};
@@ -299,12 +301,15 @@ X_M_Flops X_M_flops0(
 // Take into account the new forwarding stuff
 // LLB	1010
 // LHB	1011
-assign aluA = (D_X_LoadPartial & D_X_instruction[12]) ? (reg1Forward & 16'h00ff) :
+// addr = (Reg[ssss] & 0xFFFE) + (sign-extend(oooo) << 1).
+assign aluA = (D_X_MemWrite | D_X_MemRead) ? reg1Forward & 16'hFFFE : 
+				(D_X_LoadPartial & D_X_instruction[12]) ? (reg1Forward & 16'h00ff) :
 				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1Forward & 16'hff00) : 
 				reg1Forward;
 assign aluB = (D_X_ALUsrc) ? D_X_imm : reg2Forward;
 wire [2:0] ALUopcode;
-assign ALUopcode = (D_X_instruction[15:13] == 3'b101) ? 3'b000 : D_X_instruction[14:12];
+assign ALUopcode = (D_X_instruction[15:13] == 3'b101 | D_X_instruction[15:13] == 3'b100) ? 
+					3'b000 : D_X_instruction[14:12];
 ALU ALU0(.A(aluA), .B(aluB), .opcode(ALUopcode), .result(X_ALUOut), 
 	.nvz_flags(NVZflag), .flagNV(flagNV), .flagZ(flagZ));
 
