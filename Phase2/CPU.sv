@@ -119,7 +119,7 @@ F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_i
 //INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
 //OUTPUTS: current programCount (.PC)
 PC pc0(.clk(clk), .en(~halt & ~do_branch), .next(nextPC), .PC(programCount), .rst_n(rst_n));
-assign nextPC = ~halt ? (do_branch ? (D_branch_src ? D_reg1 : pcBranch) : pcInc) : 
+assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : pcBranch) : pcInc) : 
                programCount;
 
 // Instruction Memory
