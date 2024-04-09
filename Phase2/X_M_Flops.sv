@@ -45,19 +45,19 @@ dff reg_dest_dff[3:0] (.clk(clk), .rst(rst), .wen(wen), .d(reg_dest_in), .q(reg_
 dff Source2_dff[3:0] (.clk(clk), .rst(rst), .wen(wen), .d(Source2_in), .q(Source2_out));
 
 // 16 Bit Data
-Register instruction_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(instruction_in), 
+Register2 instruction_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(instruction_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
 	.Bitline1(instruction_out), .Bitline2());
-Register b_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(b_in), 
+Register2 b_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(b_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
 	.Bitline1(b_out), .Bitline2());
-Register ALUresult_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(ALUresult_in), 
+Register2 ALUresult_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(ALUresult_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
 	.Bitline1(ALUresult_out), .Bitline2());
-Register oldPC_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(oldPC_in), 
+Register2 oldPC_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(oldPC_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
 	.Bitline1(oldPC_out), .Bitline2());
-Register newPC_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(newPC_in), 
+Register2 newPC_reg(.clk(clk), .rst(rst), .WriteReg(wen), .D(newPC_in), 
 	.ReadEnable1(1'b1), .ReadEnable2(1'b0), 
 	.Bitline1(newPC_out), .Bitline2());
 

@@ -43,6 +43,28 @@ wire dffOut;
 dff floppy(.q(dffOut), .d(D), .wen(WriteEnable), .clk(clk), .rst(rst));
 
 //Tristate buffers
+// assign Bitline1 = ReadEnable1 ? dffOut : 1'bz;
+// assign Bitline2 = ReadEnable2 ? dffOut : 1'bz;
+assign Bitline1 = ReadEnable1 ? (WriteEnable ? D : dffOut) : 1'bz;
+assign Bitline2 = ReadEnable2 ? (WriteEnable ? D : dffOut) : 1'bz;
+
+endmodule
+
+module BitCell2(clk, rst, D, WriteEnable, ReadEnable1, ReadEnable2, Bitline1, Bitline2);
+input clk;		//Goes in D
+input rst;		//Goes in D
+input D;		//Goes in D
+input WriteEnable;	//"wen" in D
+input ReadEnable1;	//I think these select which Bitline to use?
+input ReadEnable2;	//??
+inout Bitline1;		//Used to send out output (I think)
+inout Bitline2;		//??
+
+//Initialize D flip flop
+wire dffOut;
+dff floppy(.q(dffOut), .d(D), .wen(WriteEnable), .clk(clk), .rst(rst));
+
+//Tristate buffers
 assign Bitline1 = ReadEnable1 ? dffOut : 1'bz;
 assign Bitline2 = ReadEnable2 ? dffOut : 1'bz;
 // assign Bitline1 = ReadEnable1 ? (WriteEnable ? D : dffOut) : 1'bz;
@@ -98,6 +120,25 @@ output [15:0] Wordline;
 endmodule
 
 module Register(clk, rst, D, WriteReg, ReadEnable1, ReadEnable2, Bitline1, Bitline2);
+
+input clk;
+input rst;
+input [15:0] D;		//Data to write to register
+input WriteReg;
+input ReadEnable1;
+input ReadEnable2;
+inout [15:0] Bitline1;
+inout [15:0] Bitline2;
+
+//Create 15 BitCells
+//clk, rst, D, WriteEnable, ReadEnable1, ReadEnable2, Bitline1, Bitline2); 
+//Dff (.q(whatever_output_is), .d(Bitline1), .wen(WriteReg), .clk(clk), .rst(rst))
+//Get D's output (D.d)
+BitCell bitArray[15:0] (.clk(clk), .rst(rst), .D(D), .WriteEnable(WriteReg), .ReadEnable1(ReadEnable1), .ReadEnable2(ReadEnable2), .Bitline1(Bitline1), .Bitline2(Bitline2));
+
+endmodule
+
+module Register2(clk, rst, D, WriteReg, ReadEnable1, ReadEnable2, Bitline1, Bitline2);
 
 input clk;
 input rst;
