@@ -138,7 +138,7 @@ Branch branch0(.branch_inst(D_branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_
 
 
 F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_in(instruction), 
-	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), .pcBranch_in(pcBranch) .pcBranch_out(F_D_pcBranch),
+	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), .pcBranch_in(pcBranch), .pcBranch_out(F_D_pcBranch),
 	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .halt_in(halt), .halt_out(F_D_halt));
 // TODO: Resolve IF Stall
 
