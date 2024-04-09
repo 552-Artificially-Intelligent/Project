@@ -23,8 +23,8 @@ output Q;
 
 wire interQ;
 
-dff flop0(.q(interQ), .clk(~clk), .d(D), .wen(wen), .rst(rst));
-dff flop1(.d(interQ), .clk(~clk), .q(Q), .wen(wen), .rst(rst));
+dff flop0(.q(interQ), .clk(clk), .d(D), .wen(wen), .rst(rst));
+dff flop1(.d(interQ), .clk(clk), .q(Q), .wen(wen), .rst(rst));
 
 endmodule
 
