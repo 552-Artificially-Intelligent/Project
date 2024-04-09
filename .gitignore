@@ -59,3 +59,6 @@ Phase1/memory.v
 Phase1/verilogsim.log
 Phase1/verilogsim.trace
 Phase1/work/_opt__lock
+*/*.vcd
+**/*.vcd
+*/*.vvp
