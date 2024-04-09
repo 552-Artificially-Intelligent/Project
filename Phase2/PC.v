@@ -6,10 +6,13 @@ module PC(
     output [15:0] PC
 );
 
-wire [15:0] internalPC1, blank1, internalPC2, blank2;
+wire [15:0] internalPC1, blank1, internalPC2, blank2, next_in;
 // Register(clk, rst, D, WriteReg, ReadEnable1, ReadEnable2, Bitline1, Bitline2);
+
+assign next_in = &internalPC2 ? 16'hFFFF : next;
+
 Register reg0(
-    .D(next),
+    .D(next_in),
     .WriteReg(en & ~clk),
     .clk(~clk),
     .ReadEnable1(1'b1),
@@ -30,6 +33,6 @@ Register reg1(
     .Bitline2(blank2)
 );
 
-assign PC = ~rst_n ? 16'h0000 : (&internalPC2 ? 16'hFFFF : internalPC2);
+assign PC = ~rst_n ? 16'h0000 : internalPC2;
 // clk, rst, D, WriteReg, ReadEnable1, ReadEnable2, Bitline1
 endmodule
