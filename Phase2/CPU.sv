@@ -157,7 +157,7 @@ D_X_Flops D_X_flops0(
 	.branch_src_in(D_branch_src), .branch_src_out(D_X_branch_src),
 	.RegDst_in(D_RegDst), .RegDst_out(D_X_RegDst),
 	.SavePC_in(D_SavePC), .SavePC_out(D_X_SavePC),
-	.halt_in(F_D_halt), .halt_out(D_X_halt),
+	.halt_in(), .halt_out(D_X_halt),
 	.LoadPartial_in(D_LoadPartial), .LoadPartial_out(D_X_LoadPartial),
 
 	// Data
@@ -225,7 +225,7 @@ assign cond = F_D_instruction[11:9];
 
 // Data hazard detect
 Data_Hazard_Detect hazard_detect0(
-	.opcode(F_D_instruction[15:12]), .D_X_destination_reg(D_X_reg_dest), 
+	.opcode(X_M_instruction[15:12]), .D_X_destination_reg(X_M_reg_dest), 
 	.D_source_reg(reg_source1), .stall(stall)
 );
 
