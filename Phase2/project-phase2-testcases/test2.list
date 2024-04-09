@@ -1,13 +1,13 @@
-	LLB R1, 0x51
-	LHB R1, 0x51
-	LLB R2, 0xB0
-	LHB R2, 0x00
-	LLB R3, 0x04
-	LHB R3, 0x00
-	SW R1, R2, 2
-	ADD R5, R2, R3
-	LW R4, R5, 0
-	SW R4, R5, 2
-	PADDSB R5, R4, R2
-	RED R5, R5, R5
+	LLB R1, 0x51		# R1 = 0051
+	LHB R1, 0x51		# R1 = 5151
+	LLB R2, 0xB0		# R2 = 00B0
+	LHB R2, 0x00		# R2 = 00B0
+	LLB R3, 0x04		# R3 = 0004
+	LHB R3, 0x00		# R3 = 0004
+	SW R1, R2, 2		# M[R2 + 2<<1 = 00B4] = R1 = 5151 
+	ADD R5, R2, R3		# R5 = 00B4
+	LW R4, R5, 0		# R4 = M[R5 = 00B4] = 5151
+	SW R4, R5, 2		# M[R5 + 2<<1 = 00B8] = R4 = 5151
+	PADDSB R5, R4, R2	# R5 = 5201
+	RED R5, R5, R5		# R5 = (52 + 01) + (52 + 01) = 00A6
 	HLT

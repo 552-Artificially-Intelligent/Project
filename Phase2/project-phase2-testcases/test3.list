@@ -1,15 +1,15 @@
-	LLB R1, 0X02
-	LHB R1, 0X00
-	LLB R2, 0X01
-	LHB R2, 0X00
-	LLB R6, 0x04
-	LHB R6, 0x00
-	SUB R1, R1, R2
-	PCS R5
-	B 001, b1
-	BR 111, R6
-	HLT
-b1:	ADD R4, R6, R2
-	HLT
+	LLB R1, 0X02		# R1 = 0002 
+	LHB R1, 0X00		# R1 = 0002
+	LLB R2, 0X01		# R2 = 0001
+	LHB R2, 0X00		# R2 = 0001
+	LLB R6, 0x04		# R6 = 0004
+	LHB R6, 0x00		# R6 = 0004
+	SUB R1, R1, R2		# R1 = 0001
+	PCS R5			# R5 = 0010
+	B 001, b1		# Branch Taken
+	BR 111, R6		# flush
+	HLT			# flush
+b1:	ADD R4, R6, R2		# R4 = 0005
+	HLT			
 	SUB R4, R6, R2
 	HLT
