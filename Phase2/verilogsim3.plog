@@ -15,35 +15,9 @@ SIMLOG:: Cycle          16 PC:     0000 I:     0000 R: 1   0     0000 M: 0 0    
 SIMLOG:: Cycle          16 PC:     0012 I:     de60 R: 0   0     000c M: 0 0     0000     0000     0000
 SIMLOG:: Cycle          18 PC:     0000 I:     0000 R: 0   0     0000 M: 0 0     0000     0000     0000
 SIMLOG:: Cycle          18 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          20 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          20 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          22 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          22 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          24 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          24 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          26 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          26 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          28 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          28 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          30 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          30 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          32 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          32 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          34 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          34 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          36 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          36 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          38 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          38 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          40 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          40 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          42 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          42 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          44 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          44 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          46 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          46 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          48 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          48 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          50 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
-SIMLOG:: Cycle          50 PC:     0014 I:     f000 R: 0   0     0000 M: 0 0     0000     0000     0000
+SIMLOG:: Processor halted
+
+SIMLOG:: sim_cycles          18
+
+SIMLOG:: inst_count          15
+

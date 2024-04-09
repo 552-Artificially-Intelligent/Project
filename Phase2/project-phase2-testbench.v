@@ -101,7 +101,7 @@ module cpu_ptb();
                   MemWrite,
                   MemAddress,
                   MemDataIn,
-      MemDataOut);
+                  MemDataOut);
          if (RegWrite) begin
             $fdisplay(trace_file,"REG: %d VALUE: 0x%04x",
                       WriteRegister,
