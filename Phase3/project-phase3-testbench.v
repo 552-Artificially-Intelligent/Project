@@ -11,8 +11,12 @@ module cpu_ptb();
    wire        MemWrite;       /* Similar as above but for memory */
    wire        MemRead;
    wire [15:0] MemAddress;
-   wire [15:0] MemDataIn; /* Read from Memory */
-   wire [15:0] MemDataOut;  /* Written to Memory */
+   wire [15:0] MemDataIn;	/* Read from Memory */
+   wire [15:0] MemDataOut;	/* Written to Memory */
+   wire        DCacheHit;
+   wire        ICacheHit;
+   wire        DCacheReq;
+   wire        ICacheReq;
 
    wire        Halt;         /* Halt executed and in Memory or writeback stage */
         
@@ -21,6 +25,13 @@ module cpu_ptb();
 
    integer     trace_file;
    integer     sim_log_file;
+
+
+   integer     DCacheHit_count;
+   integer     ICacheHit_count;
+   integer     DCacheReq_count;
+   integer     ICacheReq_count;
+
 
    reg clk; /* Clock input */
    reg rst_n; /* (Active low) Reset input */
@@ -40,12 +51,13 @@ module cpu_ptb();
       $display("Hello world...simulation starting");
       $display("See verilogsim.plog and verilogsim.ptrace for output");
       inst_count = 0;
-      // trace_file = $fopen("verilogsim1.ptrace");
-      // sim_log_file = $fopen("verilogsim1.plog");
-      // trace_file = $fopen("verilogsim2.ptrace");
-      // sim_log_file = $fopen("verilogsim2.plog");
-      trace_file = $fopen("verilogsim3.ptrace");
-      sim_log_file = $fopen("verilogsim3.plog");
+      DCacheHit_count = 0;
+      ICacheHit_count = 0;
+      DCacheReq_count = 0;
+      ICacheReq_count = 0;
+
+      trace_file = $fopen("verilogsim.ptrace");
+      sim_log_file = $fopen("verilogsim.plog");
       
    end
 
@@ -68,13 +80,13 @@ module cpu_ptb();
     always #50 begin   // delay 1/2 clock period each time thru loop
       clk = ~clk;
     end
-  
+	
     always @(posedge clk) begin
-      cycle_count = cycle_count + 1;
-  if (cycle_count > 50) begin
-    $display("hmm....more than 100000 cycles of simulation...error?\n");
-    $finish;
-  end
+    	cycle_count = cycle_count + 1;
+	if (cycle_count > 100000) begin
+		$display("hmm....more than 100000 cycles of simulation...error?\n");
+		$finish;
+	end
     end
 
 
@@ -90,6 +102,19 @@ module cpu_ptb();
          if (Halt || RegWrite || MemWrite) begin
             inst_count = inst_count + 1;
          end
+	 if (DCacheHit) begin
+            DCacheHit_count = DCacheHit_count + 1;	 	
+         end	
+	 if (ICacheHit) begin
+            ICacheHit_count = ICacheHit_count + 1;	 	
+	 end    
+	 if (DCacheReq) begin
+            DCacheReq_count = DCacheReq_count + 1;	 	
+         end	
+	 if (ICacheReq) begin
+            ICacheReq_count = ICacheReq_count + 1;	 	
+	 end 
+
          $fdisplay(sim_log_file, "SIMLOG:: Cycle %d PC: %8x I: %8x R: %d %3d %8x M: %d %d %8x %8x %8x",
                   cycle_count,
                   PC,
@@ -101,7 +126,7 @@ module cpu_ptb();
                   MemWrite,
                   MemAddress,
                   MemDataIn,
-                  MemDataOut);
+		  MemDataOut);
          if (RegWrite) begin
             $fdisplay(trace_file,"REG: %d VALUE: 0x%04x",
                       WriteRegister,
@@ -120,10 +145,15 @@ module cpu_ptb();
             $fdisplay(sim_log_file, "SIMLOG:: Processor halted\n");
             $fdisplay(sim_log_file, "SIMLOG:: sim_cycles %d\n", cycle_count);
             $fdisplay(sim_log_file, "SIMLOG:: inst_count %d\n", inst_count);
+            $fdisplay(sim_log_file, "SIMLOG:: dcachehit_count %d\n", DCacheHit_count);
+            $fdisplay(sim_log_file, "SIMLOG:: icachehit_count %d\n", ICacheHit_count);
+            $fdisplay(sim_log_file, "SIMLOG:: dcachereq_count %d\n", DCacheReq_count);
+            $fdisplay(sim_log_file, "SIMLOG:: icachereq_count %d\n", ICacheReq_count);
+
 
             $fclose(trace_file);
             $fclose(sim_log_file);
-      #5;
+	    #5;
             $finish;
          end 
       end
@@ -142,35 +172,44 @@ module cpu_ptb();
    // Is processor halted (1 bit signal)
    
 
-   // assign Inst = DUT.instruction;
-    assign Inst = DUT.M_W_instruction;
+   assign Inst = DUT.p0.instr;
    //Instruction fetched in the current cycle
    
-    assign RegWrite = DUT.M_W_RegWrite;
+   assign RegWrite = DUT.p0.regWrite;
    // Is register file being written to in this cycle, one bit signal (1 means yes, 0 means no)
   
-   assign WriteRegister = DUT.M_W_reg_dest;
-   // assign WriteRegister = DUT.X_M_reg_dest;
+   assign WriteRegister = DUT.p0.DstwithJmout;
    // If above is true, this should hold the name of the register being written to. (4 bit signal)
    
-   assign WriteData = DUT.writeback_data;
+   assign WriteData = DUT.p0.wData;
    // If above is true, this should hold the Data being written to the register. (16 bits)
    
-   assign MemRead = DUT.X_M_MemRead;
+   assign MemRead =  (DUT.p0.memRxout & ~DUT.p0.notdonem);
    // Is memory being read from, in this cycle. one bit signal (1 means yes, 0 means no)
    
-   assign MemWrite = DUT.X_M_MemWrite;
+   assign MemWrite = (DUT.p0.memWxout & ~DUT.p0.notdonem);
    // Is memory being written to, in this cycle (1 bit signal)
    
-   assign MemAddress = DUT.addr;
+   assign MemAddress = DUT.p0.data1out;
    // If there's a memory access this cycle, this should hold the address to access memory with (for both reads and writes to memory, 16 bits)
    
-   assign MemDataIn = DUT.memData_In;
+   assign MemDataIn = DUT.p0.data2out;
    // If there's a memory write in this cycle, this is the Data being written to memory (16 bits)
    
-   assign MemDataOut = DUT.M_mem;
+   assign MemDataOut = DUT.p0.readData;
    // If there's a memory read in this cycle, this is the data being read out of memory (16 bits)
 
+   assign ICacheReq = DUT.p0.icr;
+   // Signal indicating a valid instruction read request to cache
+   
+   assign ICacheHit = DUT.p0.ich;
+   // Signal indicating a valid instruction cache hit
+
+   assign DCacheReq = DUT.p0.dcr;
+   // Signal indicating a valid instruction data read or write request to cache
+   
+   assign DCacheHit = DUT.p0.dch;
+   // Signal indicating a valid data cache hit
 
 
    /* Add anything else you want here */
