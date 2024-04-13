@@ -3,4 +3,4 @@
 16 bit WISC-S24 ISA \
 **Phase1:** peepee \
 **Phase2:** poopoo \
-**Phase3:** peepeepoopoo \
+**Phase3:** peepeepoopoo 
