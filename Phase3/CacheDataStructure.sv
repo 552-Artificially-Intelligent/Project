@@ -3,25 +3,29 @@
 // Total Cache Capacity is 2KB or 2^11, so it can contain 2^(11 - 4) = 2^7 words or 128 words
 // or 16 blocks, we can subdivide it to 4 sets with 4 blocks in each set (for now until we figure
 // how we want to store the addresses) 
-module CacheData(clk, rst, D, WriteEnable, OutEnable, SetSelect, Q);
+module CacheData(clk, rst, D, WriteEnable, OutEnable, SetSelect, BlockSelect, Q);
 
 input clk, rst;
 input [15:0] D;
-input [2:0] WriteEnable, OutEnable;
+input [2:0] WriteEnable, OutEnable, BlockSelect;
 input [1:0] SetSelect;
 output [15:0] Q;
+
+// This is not a good measure to implement BlockSelect without decoding,
+// however because we will need to make space for addresses and other, 
+// Im having it like this for now.
 
 wire [3:0] setNum;
 Decoder_2_4 Dec_2_4_0(.addr(SetSelect), .Word(setNum));
 
-CacheBlock CB_0(.clk(clk), .rst(rst), .D(D), .WriteEnable(WriteEnable & setNum[0]), 
-				.OutEnable(OutEnable & setNum[0]), .Q(Q));
-CacheBlock CB_1(.clk(clk), .rst(rst), .D(D), .WriteEnable(WriteEnable & setNum[1]), 
-				.OutEnable(OutEnable & setNum[1]), .Q(Q));
-CacheBlock CB_2(.clk(clk), .rst(rst), .D(D), .WriteEnable(WriteEnable & setNum[2]), 
-				.OutEnable(OutEnable & setNum[2]), .Q(Q));
-CacheBlock CB_3(.clk(clk), .rst(rst), .D(D), .WriteEnable(WriteEnable & setNum[3]), 
-				.OutEnable(OutEnable & setNum[3]), .Q(Q));
+CacheBlock CB_0[3:0](.clk(clk), .rst(rst), .D(D), .WriteEnable(BlockSelect & WriteEnable & setNum[0]), 
+				.OutEnable(BlockSelect & OutEnable & setNum[0]), .Q(Q));
+CacheBlock CB_1(.clk(clk), .rst(rst), .D(D), .WriteEnable(BlockSelect & WriteEnable & setNum[1]), 
+				.OutEnable(BlockSelect & OutEnable & setNum[1]), .Q(Q));
+CacheBlock CB_2(.clk(clk), .rst(rst), .D(D), .WriteEnable(BlockSelect & WriteEnable & setNum[2]), 
+				.OutEnable(BlockSelect & OutEnable & setNum[2]), .Q(Q));
+CacheBlock CB_3(.clk(clk), .rst(rst), .D(D), .WriteEnable(BlockSelect & WriteEnable & setNum[3]), 
+				.OutEnable(BlockSelect & OutEnable & setNum[3]), .Q(Q));
 
 endmodule
 
