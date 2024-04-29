@@ -1,6 +1,6 @@
 module CacheModule(clk, rst, readInstruction, writeInstruction, readData, writeData, 
 					instr_addr, data_addr, cacheInputData, F_stall, M_stall, 
-					instr_hit, data_hit, instr_cache_data, memory_cache_data);
+					instr_miss, data_miss, instr_cache_data, memory_cache_data);
 
 input clk, rst;
 input readInstruction, writeInstruction, readData, writeData;
@@ -10,7 +10,8 @@ input [15:0] cacheInputData;
 
 // Stall fetch or memory stage
 output F_stall, M_stall;
-output instr_hit, data_hit;
+// output instr_hit, data_hit;
+output instr_miss, data_miss;
 output [15:0] instr_cache_data, memory_cache_data;
 
 // Signals
@@ -127,13 +128,11 @@ memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(
 
 
 // Hit or Miss Detection
-wire instr_miss, data_miss;
-// TODO
 assign instr_miss = enableCacheInstr & ~(instr_write0 | instr_write1);
 assign data_miss = enableCacheData & ~(data_write0 | data_write1);
 // Hits signals are outputted
-assign instr_hit = enableCacheInstr & ~instr_miss;
-assign data_hit = enableCacheData & ~data_miss;
+// assign instr_hit = enableCacheInstr & ~instr_miss;
+// assign data_hit = enableCacheData & ~data_miss;
 
 
 // Set outputs
