@@ -59,7 +59,7 @@ assign instr_write1 = (instr_addr[15:10] == instr_tag_out1[7:2])
 						& instr_tag_out1[0] & ~FSM_write_tagArray;
 assign data_write0 = (data_addr[15:0] == data_tag_out0[7:2])
 						& data_tag_out0[0] & ~FSM_write_tagArray;
-assign data_write1 = (data_addr[15:0] == data_tag_out1[7:2]);
+assign data_write1 = (data_addr[15:0] == data_tag_out1[7:2])
 						& data_tag_out1[0] & ~FSM_write_tagArray;
 /////////////////////////////////////////////////////////////////////
 // First check if the cache block is valid, and then check if it's the LRU
@@ -73,7 +73,7 @@ Cache instrCache0(.clk(clk), .rst(rst),
 	.dataWE(writeInstruction), 
 	.metaWE(FSM_write_tagArray), 
 	.WordEnable(instr_word), 
-	.tag({instr_addr[15:0], readInstruction, writeInstruction}), 
+	.tag({instr_addr[15:10], readInstruction, writeInstruction}), 
 	.data(instr_CacheData), 
 	.blockSelect(instr_block), 
 	.write0(instr_write0 | instr_writeLRU0), 
@@ -81,14 +81,14 @@ Cache instrCache0(.clk(clk), .rst(rst),
 	.tagOut0(instr_tag_out0),
 	.tagOut1(instr_tag_out1), 
 	.dataOut0(instr_data_out0), 
-	.dataOut1(instr_data_out1);
+	.dataOut1(instr_data_out1));
 
 // Data Cache
 Cache dataCache0(.clk(clk), .rst(rst), 
 	.dataWE(writeData), 
 	.metaWE(FSM_write_tagArray), 
 	.WordEnable(data_word), 
-	.tag({data_addr[15:0], readData, writeData}), 
+	.tag({data_addr[15:10], readData, writeData}), 
 	.data(data_CacheData), 
 	.blockSelect(data_block), 
 	.write0(data_write0 | data_writeLRU0), 
@@ -96,7 +96,7 @@ Cache dataCache0(.clk(clk), .rst(rst),
 	.tagOut0(data_tag_out0),
 	.tagOut1(data_tag_out1), 
 	.dataOut0(memory_data_out0), 
-	.dataOut1(memory_data_out1);
+	.dataOut1(memory_data_out1));
 
 // Cache FSM
 // Make sure to pass in rst, looks like the dff used in the FSM uses rst instead of rst_n
@@ -120,7 +120,7 @@ cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst),
 // Note: We have to make sure that there is only one 4 cycle memory instance going on so that
 // we can properly implement the cache retrieving the instruction or the memory
 // (data_out, data_in, addr, enable, wr, clk, rst, data_valid);
-wire [15:0] memory_data_out, memory_address, ;
+wire [15:0] memory_data_out;
 memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(memory_address), 
 	.enable(instr_miss | data_miss), .wr(writeData & ~FSM_busy), 
 	.clk(clk), .rst(rst), .data_valid(FSM_memory_valid));

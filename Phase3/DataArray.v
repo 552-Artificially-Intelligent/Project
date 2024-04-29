@@ -9,9 +9,9 @@ module DataArray(input clk, input rst, input [15:0] DataIn, input WriteEN0, inpu
 	// Modification: We will split the 128 blocks into 64 and 64 pairs for a 2 way set associative
 	// TODO: If we want to a 4 way set associative for extra credit, then mabe split into 4 sets of 32
 		// Note to also change the module inputs if we do change to 4 way
-	Block blk[63:0]( .clk(clk), .rst(rst), .Din(DataIn), .WriteEnable(WriteEN0), 
+	Block blk0[63:0]( .clk(clk), .rst(rst), .Din(DataIn), .WriteEnable(WriteEN0), 
 		.Enable(BlockEnable), .WordEnable(WordEnable), .Dout(DataOut0));
-	Block blk[63:0]( .clk(clk), .rst(rst), .Din(DataIn), .WriteEnable(WriteEN1), 
+	Block blk1[63:0]( .clk(clk), .rst(rst), .Din(DataIn), .WriteEnable(WriteEN1), 
 		.Enable(BlockEnable), .WordEnable(WordEnable), .Dout(DataOut1));
 endmodule
 

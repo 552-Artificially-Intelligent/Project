@@ -18,16 +18,16 @@ module MetaDataArray(input clk, input rst, input [7:0] DataIn, input Write0, inp
 
 	wire valid, LRU;
 	assign valid = Write0 | Write1;
-	assign LRUChange = valid & (DataIn[1] | DataIn[0])
+	assign LRUChange = valid & (DataIn[1] | DataIn[0]);
 	wire [7:0] storedTag;
 	assign storedTag = {DataIn[7:2], LRUChange, valid};
 
 
-	MBlock Mblk[63:0]( .clk(clk), .rst(rst), .Din(storedTag), 
-		.WriteEnable(Write0), .Enable(BlockEnable), .Dout(DataOut));
+	MBlock Mblk0[63:0]( .clk(clk), .rst(rst), .Din(storedTag), 
+		.WriteEnable(Write0), .Enable(BlockEnable), .Dout(DataOut0));
 
-	MBlock Mblk[63:0]( .clk(clk), .rst(rst), .Din(storedTag), 
-		.WriteEnable(Write1), .Enable(BlockEnable), .Dout(DataOut));
+	MBlock Mblk1[63:0]( .clk(clk), .rst(rst), .Din(storedTag), 
+		.WriteEnable(Write1), .Enable(BlockEnable), .Dout(DataOut1));
 
 endmodule
 
