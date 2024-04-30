@@ -1,12 +1,17 @@
-// module ALU(
-// 	input [15:0] A,
-// 	input [15:0] B,
-// 	// Ignore the MSB of opcode since all ALU instructions are 0 MSB
-// 	input [2:0] opcode,
-// 	output [15:0] result,
-// 	// Maybe add a flag for a zero/ nvz flags
-// );
-
+// The assembly level syntax for ADD, PADDSB, SUB, XOR and RED is:
+// Opcode rd, rs, rt
+// SLL, SRA, ROR:
+// Opcode rd, rs, imm
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!ALU!!!!!!!!!!!!!!!!!!	
+*/
+// assign A = SrcData1;
+// assign B = ALUsrc ? ((LoadPartial | SavePC) ? 16'h0000 : 
+// 		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
+// Take into account the new forwarding stuff
+// LLB	1010
+// LHB	1011
+// addr = (Reg[ssss] & 0xFFFE) + (sign-extend(oooo) << 1).
 module ALU(A, B, opcode, result, flagNV, flagZ, nvz_flags);
 input [15:0] A;
 input [15:0] B;

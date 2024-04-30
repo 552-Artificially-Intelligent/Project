@@ -13,7 +13,6 @@ output [15:0] pc;
 //===============================================
 // 			Pipeline Data
 //===============================================
-// TODO Fill out:
 // PC Data
 wire [15:0] F_oldPC, F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
 			F_newPC, F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC,
@@ -49,10 +48,10 @@ wire [15:0] writeback_data;
 //===============================================
 // 			Pipeline Signal
 //===============================================
-// TODO Fill out:
 // PC Data
 // Stalls, Flushes, branchTaken signals
-wire flush, F_stall, D_stall, stall, do_branch;
+wire flush, F_stall, D_stall, stall, do_branch, 
+	cache_F_stall, cache_M_stall;
 // ALUsrc*
 wire D_ALUsrc, D_X_ALUsrc;
 // MemtoReg*
@@ -75,10 +74,12 @@ wire D_LoadPartial, D_X_LoadPartial;
 wire D_SavePC, D_X_SavePC, X_M_SavePC, M_W_SavePC;
 // Forwarding*
 wire X_X_A_en, M_X_A_en, X_X_B_en, M_X_B_en, M_M_B_en;
-// Hlt, TODO: maybe need additional halt for halt and branch taken flush
+// Hlt,
 wire halt, F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 // Flag
 wire flagNV, flagZ;
+// Cache Miss Signals
+wire cacheInstrMiss, cacheDataMiss;
 
 //===============================================
 // CPU Outputs:
@@ -87,6 +88,11 @@ assign pc = M_W_oldPC;
 // assign hlt = M_W_halt;
 // assign hlt = M_W_halt;
 assign hlt = M_W_instruction[15:0] == 16'hF000;
+wire instr_miss, data_miss, instr_hit, data_hit, instr_req, data_req;
+assign instr_req = ~halt;
+assign data_req = X_M_MemRead | X_M_MemWrite;
+assign instr_hit = ~instr_miss;
+assign data_hit = ~data_miss;
 //===============================================
 
 
@@ -99,30 +105,50 @@ assign hlt = M_W_instruction[15:0] == 16'hF000;
 //===============================================
 
 // Pipeline Flops
-
+F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), 
+	.wen(~eitherCacheStall), .instruction_in(instruction), 
+	.oldPC_in(programCount), .newPC_in(pcInc), 
+	.instruction_out(F_D_instruction), .pcBranch_in(pcBranch), 
+	.pcBranch_out(F_D_pcBranch),
+	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), 
+	.halt_in(halt), .halt_out(F_D_halt));
 
 // PC regs
-// assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
-//PURPOSE: determine next value of program counter (PC)
-//RESULT:
-// - If program is halted, currentPc
-// - Elif do_branch enabled, either SrcData1 (jump) or pc_branch (branch) depending on branch_src (1 if jump)
-// - Else, currentPc+2
-// assign nextPC = ~halt | (halt & delayTime) ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : 
-//                programCount;
-
-
-// Input rst_n into enable since it is active low async reset
-//PURPOSE: program counter - resposible for actually setting the PC to the appropriate next value 
-//INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
-//OUTPUTS: current programCount (.PC)
-PC pc0(.clk(clk), .en(~halt & ~do_branch), .next(nextPC), .PC(programCount), .rst_n(rst_n));
+PC pc0(.clk(clk), .en(~halt & ~eitherCacheStall), .next(nextPC), .PC(programCount), .rst_n(rst_n));
 assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBranch) : pcInc) : 
                programCount;
 
-// Instruction Memory
-memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
-					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
+
+// memory1c inst_memory(.data_out(instruction), .data_in(16'hXXXX), .addr(programCount), 
+// 					.rst(1'b1), .enable(1'b1), .wr(1'b0), .clk(clk));
+// memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr), 
+//                      .enable(X_M_MemRead | X_M_MemWrite), .wr(X_M_MemWrite), 
+// 						.clk(clk), .rst(~rst_n));
+// Instruction and Data Memory
+wire eitherCacheStall;
+assign eitherCacheStall = cache_F_stall | cache_M_stall;
+CacheModule cacheInstructionData(.clk(clk), .rst(~rst_n), 
+	// Either always high (because we are always reading), or maybe ~halt
+	// TODO: Using ~halt for now, but if it conflicts with branch, then do always high
+	.readInstruction(~halt), 
+	.writeInstruction(1'b0), 
+	.readData(X_M_MemRead), 
+	.writeData(X_M_MemWrite), 
+	.instr_addr(programCount), 
+	.data_addr(addr), 
+	.cacheInputData(memData_In), 
+	// In regards to stall, I think everything before the M stage will need to stall if either
+	// F or M is stalling, and M and after stages just need to stall if only M stalls
+	// Im not sure actually
+	// TODO
+	.F_stall(cache_F_stall), 
+	.M_stall(cache_M_stall), 
+	// Removed the miss outputs because its enough to tell the CPU to stall
+	// UPDATE: nvm we need to the miss to signal on the testbench
+	.instr_miss(instr_miss), .data_miss(data_miss),
+	.instr_cache_data(instruction), 
+	.memory_cache_data(M_mem)
+);
 
 //Enable if there is a halt
 assign halt = (~do_branch & instruction[15:12] == 4'hF);
@@ -137,19 +163,13 @@ CLA_16bit cla_br(.A(pcInc), .B(branchAdd), .Cin(1'b0), .Sum(pcBranch), .Cout());
 Branch branch0(.branch_inst(D_branch_inst), .cond(cond), .NVZflag(NVZ_out), .do_branch(do_branch));
 
 
-F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush), .wen(~F_stall), .instruction_in(instruction), 
-	.oldPC_in(programCount), .newPC_in(pcInc), .instruction_out(F_D_instruction), .pcBranch_in(pcBranch), .pcBranch_out(F_D_pcBranch),
-	.oldPC_out(F_D_oldPC), .newPC_out(F_D_newPC), .halt_in(halt), .halt_out(F_D_halt));
-// TODO: Resolve IF Stall
-
-
 //===============================================
 // 			INSTRUCTION DECODE STAGE
 //===============================================
 
-// TODO: Move here Pipeline Flops
+// Pipeline Flops
 D_X_Flops D_X_flops0(
-	.clk(clk), .rst(~rst_n), .wen(~D_stall),
+	.clk(clk), .rst(~rst_n), .wen(~D_stall | ~eitherCacheStall),
 	// Signals
 	.ALUsrc_in(D_ALUsrc), .ALUsrc_out(D_X_ALUsrc),
 	.MemtoReg_in(D_MemtoReg), .MemtoReg_out(D_X_MemtoReg),
@@ -190,28 +210,6 @@ assign reg_dest = F_D_instruction[11:8];
 
 
 // General Register File
-///////////////////////////////////////////////////////////////////////
-// Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
-/*
-!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!REGISTERFILE!!!!!!!!!!!!!!!!!!
-INPUT:
-	- .clk: Clock
-	- .rst: reset 
-	- .SrcReg1: first reg to be read, currently set to bits 7-4, unless doing LLB or LHB
-	- .SrcReg2: second reg to be read, currently set to bits 3-0
-	- .DstReg: register to be written to (if applicable)
-	- .WriteReg: controls whether DstReg is written to, from Control 
-	- .DstData: data to be written into DestReg - complicated logic
-		-if instruction is LLB or LHB:
-			- if LHB, set upper 8 bits - {[SrcData1[15:8], instruction[7:0]}
-			- else (LLB), set lower 8 bits - {[SrcData1[15:8], instruction[7:0]}
-		-else:
-			- if MemtoReg is enabled, set it to data_out (output of data memory?)
-			- else, set it to result (ALU result)
-INOUT: 
-	- .SrcData1: output from when SrcReg1 is read
-	- .SrcData2: output from when SrcReg2 is read
-*/
 wire [15:0] temp1, temp2;
 assign D_reg1 = (M_W_reg_dest == reg_source1 & M_W_RegWrite) ? writeback_data : temp1;
 assign D_reg2 = (M_W_reg_dest == reg_source2 & M_W_RegWrite) ? writeback_data : temp2;
@@ -239,25 +237,6 @@ assign F_stall = stall;
 assign D_stall = stall;
 
 // Control
-/*
-!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!CONTROL!!!!!!!!!!!!!!!!!!
-INPUT:
-	- .opcode: instruction[15:12]
-OUTPUT: 
-	- .ALUOp: ALU operation to be performed
-	- .ALUsrc: set to 1 if anything besides SrcReg2 is to be used as the 2nd ALU operation
-	- .MemtoReg: controls whether value to write comes from data memory (1) or ALU (0)
-	- .RegWrite: controls whether WriteReg is written to
-	- .MemRead: should control whether Memory is read; does nothing in practice (BUG???)
-	- .MemWrite: controls whether Memory is written to
-	- .branch_inst: whether the instruction is branch or not
-	- .branch_src: whether to use jump value or branch value for PC
-	- .RegDst: should be used to determine which value to write to register, currently unused (BUG???)
-	- .PCs: whether PCS instruction is executed (saves PC value)
-	- .LoadPartial: set to 1 if doing LLB or LHB, set to 0 otherwise
-	- .SavePC: set to 1 if PCS instruction is being executed, set to 0 otherwise
-	- .Hlt: whether to halt program (only if OPCODE = 1111)
-*/
 Control control0(.opcode(F_D_instruction[15:12]), .ALUOp(), 
                    .ALUsrc(D_ALUsrc), .MemtoReg(D_MemtoReg), .RegWrite(D_RegWrite), 
                    .MemRead(D_MemRead), .MemWrite(D_MemWrite), .branch_inst(D_branch_inst), 
@@ -270,7 +249,7 @@ Control control0(.opcode(F_D_instruction[15:12]), .ALUOp(),
 //===============================================
 // Pipeline Flops
 X_M_Flops X_M_flops0(
-	.clk(clk), .rst(~rst_n), .wen(1'b1),
+	.clk(clk), .rst(~rst_n), .wen(~eitherCacheStall),
 	// Signals
 	.RegWrite_in(D_X_RegWrite), .RegWrite_out(X_M_RegWrite),
 	.MemRead_in(D_X_MemRead), .MemRead_out(X_M_MemRead), 
@@ -290,20 +269,6 @@ X_M_Flops X_M_flops0(
 );
 
 // ALU
-// The assembly level syntax for ADD, PADDSB, SUB, XOR and RED is:
-// Opcode rd, rs, rt
-// SLL, SRA, ROR:
-// Opcode rd, rs, imm
-/*
-!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!ALU!!!!!!!!!!!!!!!!!!	
-*/
-// assign A = SrcData1;
-// assign B = ALUsrc ? ((LoadPartial | SavePC) ? 16'h0000 : 
-// 		{{12{instruction[3]}}, instruction[3:0]}) : SrcData2;
-// Take into account the new forwarding stuff
-// LLB	1010
-// LHB	1011
-// addr = (Reg[ssss] & 0xFFFE) + (sign-extend(oooo) << 1).
 assign aluA = (D_X_MemWrite | D_X_MemRead) ? reg1Forward & 16'hFFFE : 
 				(D_X_LoadPartial & D_X_instruction[12]) ? (reg1Forward & 16'h00ff) :
 				(D_X_LoadPartial & ~D_X_instruction[12]) ? (reg1Forward & 16'hff00) : 
@@ -337,7 +302,7 @@ assign reg2Forward = X_X_B_en ? X_M_ALUOut :
 
 // Pipeline Flops
 M_W_Flops M_W_flops0(
-	.clk(clk), .rst(~rst_n), .wen(1'b1),
+	.clk(clk), .rst(~rst_n), .wen(~eitherCacheStall),
 
 	// Signals
 	.halt_in(X_M_halt), .halt_out(M_W_halt), 
@@ -356,8 +321,8 @@ M_W_Flops M_W_flops0(
 // Data Memory
 assign addr = X_M_ALUOut;
 assign memData_In = M_M_B_en ? writeback_data : X_M_aluB;  
-memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr), 
-                     .enable(X_M_MemRead | X_M_MemWrite), .wr(X_M_MemWrite), .clk(clk), .rst(~rst_n));
+// memory1d data_memory(.data_out(M_mem), .data_in(memData_In), .addr(addr), 
+//                      .enable(X_M_MemRead | X_M_MemWrite), .wr(X_M_MemWrite), .clk(clk), .rst(~rst_n));
 
 // wire oneDelayMWHalt, twoDelayMWHalt, threeDelayMWHalt;
 // dff dffHalt1(.clk(clk), .rst(~rst_n), .wen(1'b1), .d(M_W_halt), .q(oneDelayMWHalt));

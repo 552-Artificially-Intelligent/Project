@@ -1,3 +1,25 @@
+///////////////////////////////////////////////////////////////////////
+// Treat the last 4 bits as rt for ADD, PADDSB, SUB, XOR, RED
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!REGISTERFILE!!!!!!!!!!!!!!!!!!
+INPUT:
+	- .clk: Clock
+	- .rst: reset 
+	- .SrcReg1: first reg to be read, currently set to bits 7-4, unless doing LLB or LHB
+	- .SrcReg2: second reg to be read, currently set to bits 3-0
+	- .DstReg: register to be written to (if applicable)
+	- .WriteReg: controls whether DstReg is written to, from Control 
+	- .DstData: data to be written into DestReg - complicated logic
+		-if instruction is LLB or LHB:
+			- if LHB, set upper 8 bits - {[SrcData1[15:8], instruction[7:0]}
+			- else (LLB), set lower 8 bits - {[SrcData1[15:8], instruction[7:0]}
+		-else:
+			- if MemtoReg is enabled, set it to data_out (output of data memory?)
+			- else, set it to result (ALU result)
+INOUT: 
+	- .SrcData1: output from when SrcReg1 is read
+	- .SrcData2: output from when SrcReg2 is read
+*/
 module RegisterFile(clk, rst, SrcReg1, SrcReg2, DstReg, WriteReg, DstData, SrcData1, SrcData2);
 input clk;		//Clock
 input rst;		

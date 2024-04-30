@@ -1,3 +1,16 @@
+// assign nextPC = ~Hlt ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : programCount;
+//PURPOSE: determine next value of program counter (PC)
+//RESULT:
+// - If program is halted, currentPc
+// - Elif do_branch enabled, either SrcData1 (jump) or pc_branch (branch) depending on branch_src (1 if jump)
+// - Else, currentPc+2
+// assign nextPC = ~halt | (halt & delayTime) ? (do_branch ? (branch_src ? SrcData1 : pcBranch) : pcInc) : 
+//                programCount;
+
+// Input rst_n into enable since it is active low async reset
+//PURPOSE: program counter - resposible for actually setting the PC to the appropriate next value 
+//INPUTS: clk (clock), en(!haltEnabled), next(next programCount), rst_n (reset)
+//OUTPUTS: current programCount (.PC)
 module PC(
     input [15:0] next,
     input en,

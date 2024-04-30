@@ -1,3 +1,22 @@
+/*
+!!!!!!!!!!!!!!!!!!!IMPORTANT!!!!!!!!!!!!!!!!!!!CONTROL!!!!!!!!!!!!!!!!!!
+INPUT:
+    - .opcode: instruction[15:12]
+OUTPUT: 
+    - .ALUOp: ALU operation to be performed
+    - .ALUsrc: set to 1 if anything besides SrcReg2 is to be used as the 2nd ALU operation
+    - .MemtoReg: controls whether value to write comes from data memory (1) or ALU (0)
+    - .RegWrite: controls whether WriteReg is written to
+    - .MemRead: should control whether Memory is read; does nothing in practice (BUG???)
+    - .MemWrite: controls whether Memory is written to
+    - .branch_inst: whether the instruction is branch or not
+    - .branch_src: whether to use jump value or branch value for PC
+    - .RegDst: should be used to determine which value to write to register, currently unused (BUG???)
+    - .PCs: whether PCS instruction is executed (saves PC value)
+    - .LoadPartial: set to 1 if doing LLB or LHB, set to 0 otherwise
+    - .SavePC: set to 1 if PCS instruction is being executed, set to 0 otherwise
+    - .Hlt: whether to halt program (only if OPCODE = 1111)
+*/
 module Control(
     input [3:0] opcode, 
     output [2:0] ALUOp,
