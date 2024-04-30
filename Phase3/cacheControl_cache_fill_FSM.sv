@@ -41,16 +41,16 @@ assign enableCyc = fsm_busy & (currentMissInput == 3'b111 | memory_data_valid);
 BitReg cycleStore[2:0] (.Q(cyclesLeft), .D(currentMissInput), .wen(enableCyc), .clk(clk), .rst(rst_n));
 
 /*Output 16-bit address
-XXXX-XXXX-X000-0000	#111
-XXXX-XXXX-X001-0000  	#110
-XXXX-XXXX-X010-0000	#101
-XXXX-XXXX-X011-0000	#100
-XXXX-XXXX-X100-0000
-XXXX-XXXX-X101-0000
-XXXX-XXXX-X110-0000
-XXXX-XXXX-X111-0000
+XXXX-XXXX-XXXX-0000	#111
+XXXX-XXXX-XXXX-0010  	#110
+XXXX-XXXX-XXXX-0100	#101
+XXXX-XXXX-XXXX-0110	#100
+XXXX-XXXX-XXXX-1000	#011
+XXXX-XXXX-XXXX-1010	#010
+XXXX-XXXX-XXXX-1100	#001
+XXXX-XXXX-XXXX-1110	#000
 */
-assign currentAddr = {miss_address[15:7], ~cyclesLeft, 4'b00000};
-assign memory_address = currentAddr;
+assign currentAddr = {miss_address[15:4], ~cyclesLeft, 1'b0};
+assign memory_address = miss_detected ? currentAddr : {16{1'bx}};
 
 endmodule
