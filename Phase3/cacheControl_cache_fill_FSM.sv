@@ -1,10 +1,8 @@
-module cache_fill_FSM(clk, rst_n, miss_detected, miss_address, fsm_busy,
-write_tag_array,memory_address, memory_data_valid);
+module cache_fill_FSM(clk, rst_n, miss_detected, miss_address, fsm_busy, memory_address, memory_data_valid);
 input clk, rst_n;
 input miss_detected; // active high when tag match logic detects a miss
 input [15:0] miss_address; // address that missed the cache
 output fsm_busy; // asserted while FSM is busy handling the miss (can be used as pipeline stall signal)
-output write_tag_array; // write enable to cache tag array to signal when all words are filled in to data array
 output [15:0] memory_address; // address to read from memory
 input memory_data_valid; // active high indicates valid data returning on memory bus
 
@@ -22,6 +20,9 @@ assign enableCur = ~busy | (fsm_busy & cyclesLeft == 3'b000) | miss_detected;
 BitReg currentMiss(.Q(busy), .D(miss_detected), .wen(enableCur), .clk(clk), .rst(rst_n));
 assign fsm_busy = busy;
 
+//Track whether or not a chunk was successfully read on the last cycle
+//logic lastValid;
+//BitReg currentMiss(.Q(lastValid), .D(~lastValid), .wen(memory_data_valid | lastValid), .clk(clk), .rst(rst_n));
 
 
 /*
@@ -51,7 +52,5 @@ XXXX-XXXX-1110-0000
 */
 assign currentAddr = {miss_address[15:8], ~cyclesLeft, 5'b00000};
 assign memory_address = currentAddr;
-
-assign write_tag_array = cyclesLeft;
 
 endmodule
