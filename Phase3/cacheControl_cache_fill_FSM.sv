@@ -29,7 +29,8 @@ assign fsm_busy = busy;
 If not currently handling a miss, 0 chunks are left to read
 Otherwise subtract 1 from the value
 */
-assign currentMissInput = (busy | miss_detected) ? cyclesLeft[2] == 1'b1 ?
+assign currentMissInput = (rst_n) ? 3'b000 :
+	(busy | miss_detected) ? cyclesLeft[2] == 1'b1 ?
 	cyclesLeft[1] == 1'b1 ?
 		cyclesLeft[0] == 1'b1 ? 3'b110 : 3'b101 :	// 111, 110
 		cyclesLeft[0] == 1'b1 ? 3'b100 : 3'b011		// 101, 100
@@ -51,6 +52,41 @@ XXXX-XXXX-XXXX-1100	#001
 XXXX-XXXX-XXXX-1110	#000
 */
 assign currentAddr = {miss_address[15:4], ~cyclesLeft, 1'b0};
-assign memory_address = miss_detected ? currentAddr : {16{1'bx}};
+assign memory_address = miss_detected ? currentAddr : 16'h0000;
+
+
+/////////////////////////////////////////////////////////
+// Currently it looks like currAddr instatly goes to 000E, instead
+// of incrementing every 4 cycles, so ill see if I can rewrite it. Joe usually
+// has a night shift wednesdas so Ill try recreating it.
+/////////////////////////////////////////////////////////
+
+// Count up to 8: 0, 2, 4, 6, 8, 10, 12, 14
+// Count up to 4 cycles, then "increment" add 4
+
+// Theres 2 ways we can try this, 
+// 1. we can either have 2 counter, one for the word
+// and the other to count the 4 cycles
+// 2. Or we can have a counter count up for 32 (8 * 4) cycles and then >> right shift
+// by 2 or divide by 2 to get (or for the final result we >> 4, then << 2, to remove the last bit)
+wire [15:0] address;
+// We can just add up to 0111 and then shift by 1 to be multiples of 2
+wire [3:0] block;
+
+// 0 = idle, 1 = wait
+wire state;
+wire next_state;
+
+// 
+assign address = rst ? 16'b0 : {miss_address[15:4], block << 1};
+
+CLA_4bit cla0(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
+CLA_4bit cla1(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
+
+
+
+
+
+
 
 endmodule

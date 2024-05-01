@@ -62,30 +62,52 @@ assign instr_CacheData = memory_data_out;
 assign data_CacheData = data_miss ? memory_data_out : cacheInputData;
 wire [15:0] instr_data_out0, instr_data_out1, memory_data_out0, memory_data_out1;
 wire [7:0] instr_tag_out0, instr_tag_out1, data_tag_out0, data_tag_out1;
+wire [7:0] instr_delay_out0, instr_delay_out1, data_delay_out0, data_delay_out1;
 // Determine which of the 2 blocks to replace
 wire instr_write0, instr_write1, data_write0, data_write1;
 wire instr_writeLRU0, instr_writeLRU1, data_writeLRU0, data_writeLRU1; 
 // Compare to bit 1 of metadata tag
 // LRU bit is at bit 1
 // Cache miss
-assign instr_write0 = (instr_addr[9:4] == instr_tag_out0[7:2]) 
-						& instr_tag_out0[0];
-assign instr_write1 = (instr_addr[9:4] == instr_tag_out1[7:2]) 
-						& instr_tag_out1[0];
-assign data_write0 = (data_addr[9:4] == data_tag_out0[7:2])
-						& data_tag_out0[0];
-assign data_write1 = (data_addr[9:4] == data_tag_out1[7:2])
-						& data_tag_out1[0];
+// assign instr_write0 = (instr_addr[9:4] == instr_tag_out0[7:2]) 
+// 						& instr_tag_out0[0];
+// assign instr_write1 = (instr_addr[9:4] == instr_tag_out1[7:2]) 
+// 						& instr_tag_out1[0];
+// assign data_write0 = (data_addr[9:4] == data_tag_out0[7:2])
+// 						& data_tag_out0[0];
+// assign data_write1 = (data_addr[9:4] == data_tag_out1[7:2])
+// 						& data_tag_out1[0];
+assign instr_write0 = (instr_addr[9:4] == instr_delay_out0[7:2]) 
+						& instr_delay_out0[0];
+assign instr_write1 = (instr_addr[9:4] == instr_delay_out1[7:2]) 
+						& instr_delay_out1[0];
+assign data_write0 = (data_addr[9:4] == data_delay_out0[7:2])
+						& data_delay_out0[0];
+assign data_write1 = (data_addr[9:4] == data_delay_out1[7:2])
+						& data_delay_out1[0];
 /////////////////////////////////////////////////////////////////////
 // First check if the cache block is valid, and then check if it's the LRU
 	// If its, not valid, then just write at block0 first
 	// It is important for the second write not to turn on if first one is on
-assign instr_writeLRU0 = instr_tag_out0[0] == 0 ? 1'b1 : instr_tag_out0[1];
-assign instr_writeLRU1 = ~instr_writeLRU0 & (instr_tag_out1[0] == 0 ? 1'b1 : instr_tag_out1[1]);
-assign data_writeLRU0 = data_tag_out0[0] == 0 ? 1'b1 : data_tag_out0[1];
-assign data_writeLRU1 = ~data_tag_out1 & (data_tag_out1[0] == 0 ? 1'b1 : data_tag_out1[1]);
+dff delay0[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(instr_tag_out0), .q(instr_delay_out0));
+dff delay1[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(instr_tag_out1), .q(instr_delay_out1));
+dff delay2[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(data_tag_out0), .q(data_delay_out0));
+dff delay3[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(data_tag_out1), .q(data_delay_out1));
+// assign instr_writeLRU0 = instr_tag_out0[0] == 0 ? 1'b1 : instr_tag_out0[1];
+// assign instr_writeLRU1 = ~instr_writeLRU0 & (instr_tag_out1[0] == 0 ? 1'b1 : instr_tag_out1[1]);
+// assign data_writeLRU0 = data_tag_out0[0] == 0 ? 1'b1 : data_tag_out0[1];
+// assign data_writeLRU1 = ~data_writeLRU0 & (data_tag_out1[0] == 0 ? 1'b1 : data_tag_out1[1]);
+assign instr_writeLRU0 = instr_delay_out0[0] == 0 ? 1'b1 : instr_delay_out0[1];
+assign instr_writeLRU1 = ~instr_writeLRU0 & (instr_delay_out1[0] == 0 ? 1'b1 : instr_delay_out1[1]);
+assign data_writeLRU0 = data_delay_out0[0] == 0 ? 1'b1 : data_delay_out0[1];
+assign data_writeLRU1 = ~data_writeLRU0 & (data_delay_out1[0] == 0 ? 1'b1 : data_delay_out1[1]);
 // Since we are prioritizing instruction cache first, then we should have the enables on the miss
 // as instr_miss, and the dataCache as ~instr_miss & data_miss 
+// Need some flops to delay signal
+	// At the very beginiing there is an cycle, in which miss detection uses the metadata
+	// then the miss detection is sent to FSM, which then turns on the metadata to come out
+	// Which means if one part of it becomes indeterminant, everything become indeterminant
+	// And so we need some flops to delay it
 Cache instrCache0(.clk(clk), .rst(rst), 
 	.dataWE(writeInstruction | instr_miss), 
 	.metaWE(writeInstruction | instr_miss), 
@@ -93,8 +115,8 @@ Cache instrCache0(.clk(clk), .rst(rst),
 	.tag({instr_addr[15:10], readInstruction, writeInstruction}), 
 	.data(instr_CacheData), 
 	.blockSelect(instr_block), 
-	.write0(instr_write0 | instr_writeLRU0), 
-	.write1(instr_write1 | instr_writeLRU1), 
+	.write0(~rst & (instr_write0 | instr_writeLRU0)), 
+	.write1(~rst & (instr_write1 | instr_writeLRU1)), 
 	.tagOut0(instr_tag_out0),
 	.tagOut1(instr_tag_out1), 
 	.dataOut0(instr_data_out0), 
@@ -108,8 +130,8 @@ Cache dataCache0(.clk(clk), .rst(rst),
 	.tag({data_addr[15:10], readData, writeData}), 
 	.data(data_CacheData), 
 	.blockSelect(data_block), 
-	.write0(data_write0 | data_writeLRU0), 
-	.write1(data_write1 | data_writeLRU1), 
+	.write0(~rst & (data_write0 | data_writeLRU0)), 
+	.write1(~rst & (data_write1 | data_writeLRU1)), 
 	.tagOut0(data_tag_out0),
 	.tagOut1(data_tag_out1), 
 	.dataOut0(memory_data_out0), 
@@ -159,7 +181,7 @@ Talk about sleep deprived high lol
 // instructions need to be fetched, but not all instructions are memory instructions.
 assign miss_address = instr_miss ? instr_addr : data_addr;
 cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst), 
-	.miss_detected((instr_miss | data_miss) & enableCache), 
+	.miss_detected(~rst & ((instr_miss | data_miss) & enableCache)), 
 	.miss_address(miss_address), .fsm_busy(FSM_busy),
 	.memory_address(memory_address), 
 	.memory_data_valid(FSM_memory_valid));

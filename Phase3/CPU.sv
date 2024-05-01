@@ -14,8 +14,8 @@ output [15:0] pc;
 // 			Pipeline Data
 //===============================================
 // PC Data
-wire [15:0] F_oldPC, F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
-			F_newPC, F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC,
+wire [15:0] F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
+			F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC,
 			nextPC, programCount, pcInc, pcBranch, F_D_pcBranch;
 // Instruction, no need for opcode, we can just use instruction
 wire [15:0]	instruction, F_instruction, F_D_instruction, D_X_instruction, 
@@ -89,7 +89,7 @@ assign pc = M_W_oldPC;
 // assign hlt = M_W_halt;
 assign hlt = M_W_instruction[15:0] == 16'hF000;
 wire instr_miss, data_miss, instr_hit, data_hit, instr_req, data_req;
-assign instr_req = ~halt;
+assign instr_req = 1'b1;
 assign data_req = X_M_MemRead | X_M_MemWrite;
 assign instr_hit = ~instr_miss;
 assign data_hit = ~data_miss;
@@ -115,7 +115,9 @@ F_D_Flops fdFlop(.clk(clk), .rst(~rst_n | flush),
 
 // PC regs
 PC pc0(.clk(clk), .en(~halt & ~eitherCacheStall), .next(nextPC), .PC(programCount), .rst_n(rst_n));
-assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBranch) : pcInc) : 
+// assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBranch) : pcInc) : 
+//                programCount;
+assign nextPC = ~(halt) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBranch) : pcInc) : 
                programCount;
 
 
@@ -128,8 +130,9 @@ assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBr
 assign eitherCacheStall = cache_F_stall | cache_M_stall;
 CacheModule cacheInstructionData(.clk(clk), .rst(~rst_n), 
 	// Either always high (because we are always reading), or maybe ~halt
-	// TODO: Using ~halt for now, but if it conflicts with branch, then do always high
-	.readInstruction(~halt), 
+	// We cannot do ~halt, because it needs to read the instruction to be able to get the signal halt
+	// .readInstruction(~halt), 
+	.readInstruction(1'b1), 
 	.writeInstruction(1'b0), 
 	.readData(X_M_MemRead), 
 	.writeData(X_M_MemWrite), 
