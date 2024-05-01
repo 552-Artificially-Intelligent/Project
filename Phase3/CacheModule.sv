@@ -76,8 +76,8 @@ assign data_writeLRU1 = ~data_tag_out1 & (data_tag_out1[0] == 0 ? 1'b1 : data_ta
 // Since we are prioritizing instruction cache first, then we should have the enables on the miss
 // as instr_miss, and the dataCache as ~instr_miss & data_miss 
 Cache instrCache0(.clk(clk), .rst(rst), 
-	.dataWE(writeInstruction), 
-	.metaWE(writeInstruction), 
+	.dataWE(writeInstruction | instr_miss), 
+	.metaWE(writeInstruction | instr_miss), 
 	.WordEnable(instr_word), 
 	.tag({instr_addr[15:10], readInstruction, writeInstruction}), 
 	.data(instr_CacheData), 
@@ -91,8 +91,8 @@ Cache instrCache0(.clk(clk), .rst(rst),
 
 // Data Cache
 Cache dataCache0(.clk(clk), .rst(rst), 
-	.dataWE(writeData), 
-	.metaWE(writeData), 
+	.dataWE(writeData | data_miss), 
+	.metaWE(writeData | data_miss), 
 	.WordEnable(data_word), 
 	.tag({data_addr[15:10], readData, writeData}), 
 	.data(data_CacheData), 
