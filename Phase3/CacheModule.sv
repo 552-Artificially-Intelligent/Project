@@ -18,9 +18,20 @@ output [15:0] instr_cache_data, memory_cache_data;
 // It looks like the FSM only enables if a miss is detected so maybe, if its reading/writing
 // then it needs to enable through the miss detected
 
-// 
+// FSM Data and Signals
+wire enableCacheInstr, enableCacheData, enableCache, FSM_busy, FSM_memory_valid;
+wire [15:0] miss_address, memory_address;
 
-// Data
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+// VERY IMPORTANT NOTE: I've just realized that I made the
+// memory output called: memory_data_out, but I also made
+// data cache outputs memory_data_out0, memory_data_out1
+// Note this differences, I know I fucked the names but be
+// careful when editing/debugging
+wire [15:0] memory_data_out;
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 // Format: 
 // [15:10] (6 bits) Tag (Remember in MetaData.sv 2 bits for LRU choosing)
@@ -106,8 +117,6 @@ Cache dataCache0(.clk(clk), .rst(rst),
 
 // Cache FSM
 // Make sure to pass in rst, looks like the dff used in the FSM uses rst instead of rst_n
-wire enableCacheInstr, enableCacheData, enableCache, FSM_busy, FSM_memory_valid;
-wire [15:0] miss_address, memory_address;
 assign enableCacheInstr = readInstruction | writeInstruction;
 assign enableCacheData = readData | writeData;
 assign enableCache = enableCacheInstr | enableCacheData;
@@ -159,7 +168,6 @@ cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst),
 // Note: We have to make sure that there is only one 4 cycle memory instance going on so that
 // we can properly implement the cache retrieving the instruction or the memory
 // (data_out, data_in, addr, enable, wr, clk, rst, data_valid);
-wire [15:0] memory_data_out;
 memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(memory_address), 
 	.enable(instr_miss | data_miss), .wr(writeData & ~FSM_busy), 
 	.clk(clk), .rst(rst), .data_valid(FSM_memory_valid));

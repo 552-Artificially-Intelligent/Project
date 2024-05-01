@@ -51,7 +51,7 @@ wire [15:0] writeback_data;
 // PC Data
 // Stalls, Flushes, branchTaken signals
 wire flush, F_stall, D_stall, stall, do_branch, 
-	cache_F_stall, cache_M_stall;
+	cache_F_stall, cache_M_stall, eitherCacheStall;
 // ALUsrc*
 wire D_ALUsrc, D_X_ALUsrc;
 // MemtoReg*
@@ -125,7 +125,6 @@ assign nextPC = ~(halt | stall) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBr
 //                      .enable(X_M_MemRead | X_M_MemWrite), .wr(X_M_MemWrite), 
 // 						.clk(clk), .rst(~rst_n));
 // Instruction and Data Memory
-wire eitherCacheStall;
 assign eitherCacheStall = cache_F_stall | cache_M_stall;
 CacheModule cacheInstructionData(.clk(clk), .rst(~rst_n), 
 	// Either always high (because we are always reading), or maybe ~halt
