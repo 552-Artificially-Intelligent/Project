@@ -74,7 +74,7 @@ module cpu_ptb();
       cycle_count = 0;
       rst_n = 0; /* Intial reset state */
       clk = 1;
-      #201 rst_n = 1; // delay until slightly after two clock periods
+      #401 rst_n = 1; // delay until slightly after two clock periods
     end
 
     always #50 begin   // delay 1/2 clock period each time thru loop

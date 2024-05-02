@@ -29,7 +29,7 @@ assign fsm_busy = busy;
 If not currently handling a miss, 0 chunks are left to read
 Otherwise subtract 1 from the value
 */
-assign currentMissInput = (rst_n) ? 3'b000 :
+assign currentMissInput = (rst_n) ? 3'b111 :
 	(busy | miss_detected) ? cyclesLeft[2] == 1'b1 ?
 	cyclesLeft[1] == 1'b1 ?
 		cyclesLeft[0] == 1'b1 ? 3'b110 : 3'b101 :	// 111, 110
@@ -39,7 +39,11 @@ assign currentMissInput = (rst_n) ? 3'b000 :
 		cyclesLeft[0] == 1'b1 ? 3'b000 : 3'b111		// 001, 000
 	: 3'b000;
 assign enableCyc = fsm_busy & (currentMissInput == 3'b111 | memory_data_valid);
-BitReg cycleStore[2:0] (.Q(cyclesLeft), .D(currentMissInput), .wen(enableCyc), .clk(clk), .rst(rst_n));
+wire [2:0] dff_input;
+// assign dff_input = rst_n ? 3'b111 : currentMissInput;
+// BitReg cycleStore[2:0] (.Q(cyclesLeft), .D(dff_input), .wen(enableCyc), .clk(clk), .rst(1'b0));
+dff cycleStore[2:0](.clk(clk), .rst(1'b0), .wen(enableCyc), .d(currentMissInput), .q(dff_input));
+assign cyclesLeft = rst_n ? 3'b111 : dff_input;
 
 /*Output 16-bit address
 XXXX-XXXX-XXXX-0000	#111
@@ -69,6 +73,7 @@ assign memory_address = miss_detected ? currentAddr : 16'h0000;
 // and the other to count the 4 cycles
 // 2. Or we can have a counter count up for 32 (8 * 4) cycles and then >> right shift
 // by 2 or divide by 2 to get (or for the final result we >> 2, then << 1, to remove the last bit)
+//////////////////////////////////////////////////////////////////////
 // wire [15:0] address;
 // // We can just add up to 0111 and then shift by 1 to be multiples of 2
 // wire [3:0] block;
