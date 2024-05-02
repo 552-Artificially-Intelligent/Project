@@ -1,9 +1,11 @@
-module cache_fill_FSM(clk, rst_n, miss_detected, miss_address, fsm_busy, memory_address, memory_data_valid);
+module cache_fill_FSM(clk, rst_n, miss_detected, miss_address, 
+	fsm_busy, memory_address, memory_data_valid, write_tag_array);
 input clk, rst_n;
 input miss_detected; // active high when tag match logic detects a miss
 input [15:0] miss_address; // address that missed the cache
 output fsm_busy; // asserted while FSM is busy handling the miss (can be used as pipeline stall signal)
 output [15:0] memory_address; // address to read from memory
+output write_tag_array; // write enable to cachetag array to signal when all words are filled in to data array
 input memory_data_valid; // active high indicates valid data returning on memory bus
 
 //How many chunks do we have left to read?
@@ -11,7 +13,7 @@ wire[2:0] cyclesLeft;
 logic[2:0] currentMissInput;
 logic[15:0] currentAddr;
 logic enableCyc;
-wire busy;
+// wire busy;
 
 //BitReg to track when miss is detected
 //Should only be possible to write to when a miss is detected AND when it's not already handling a miss
@@ -54,6 +56,7 @@ XXXX-XXXX-XXXX-1110	#000
 */
 assign currentAddr = {miss_address[15:4], cyclesLeft, 1'b0};
 assign memory_address = miss_detected ? currentAddr : 16'h0000;
+assign write_tag_array = enableCyc & (cyclesLeft == 3'b111);
 
 
 /////////////////////////////////////////////////////////
@@ -72,21 +75,33 @@ assign memory_address = miss_detected ? currentAddr : 16'h0000;
 // by 2 or divide by 2 to get (or for the final result we >> 2, then << 1, to remove the last bit)
 // wire [15:0] address;
 // // We can just add up to 0111 and then shift by 1 to be multiples of 2
+//////////////////////////////////////////////////////////////////////
+// wire [15:0] address;
+// // We can just add up to 0111 and then shift by 1 to be multiples of 2
 // wire [3:0] block;
-// wire [6:0] counter, counterShft;
+// wire [5:0] counter, counterShft;
+// wire [7:0] sum;
 
 // // 0 = idle, 1 = wait
-// wire state;
-// wire next_state;
+// wire state, next_state;
+// wire words_left;
+// dff cycleStore[2:0](.clk(clk), .rst(rst_n), .wen(1'b1), .d(next_state), .q(state));
+// assign next_state = state ? words_left : miss_detected;
+// assign words_left = (state & (counter != 6'b10_0000));
 
+// // output fsm_busy; // asserted while FSM is busy handling the miss (can be used as pipeline stall signal)
+// // output [15:0] memory_address; // address to read from memory
+// assign fsm_busy = state;
+
+// // Address determinator
 // assign counterShft = counter >> 2;
 // assign block = counterShft[3:0];
 // assign address = rst ? 16'b0 : {miss_address[15:4], block << 1};
 // assign memory_address = address;
 
-// dff
-// CLA_4bit cla0(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
-// CLA_4bit cla1(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
+// dff cycleStore[5:0](.clk(clk), .rst(rst_n | (~state)), 
+// 	.wen(1'b1), .d(sum[5:0]), .q(counter));
+// CLA_8bit cla1(.A({2'b0, counter}), .B(1'b1), .Cin(1'b0), .Sum(sum), .Cout());
 
 
 

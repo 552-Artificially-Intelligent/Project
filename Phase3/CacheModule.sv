@@ -19,7 +19,7 @@ output [15:0] instr_cache_data, memory_cache_data;
 // then it needs to enable through the miss detected
 
 // FSM Data and Signals
-wire enableCacheInstr, enableCacheData, enableCache, FSM_busy, FSM_memory_valid;
+wire enableCacheInstr, enableCacheData, enableCache, FSM_busy, FSM_memory_valid, FSM_write_tag_array;
 wire [15:0] miss_address, memory_address;
 
 //////////////////////////////////////////////////////////
@@ -179,12 +179,23 @@ Talk about sleep deprived high lol
 // is both instruction and data miss. By checking instr_miss first, it prioritizes instruction
 // fetches over data fetching. The reason why I choose instruction over data is because all 
 // instructions need to be fetched, but not all instructions are memory instructions.
+wire missHold, missDetect;
+wire [15:0] miss_AddrHold;
 assign miss_address = instr_miss ? instr_addr : data_addr;
+assign missDetect = ~rst & ((instr_miss | data_miss) & enableCache);
+// Doing  | ~missDetect at the wen should allow it to only hold the value if there was a miss
+// If there wasn't a miss, it will not hold and easily allow it to transition to miss
+dff missHoledrAddr[15:0](.clk(clk), .rst(rst), .wen(FSM_write_tag_array), 
+	.d(miss_address), .q(miss_AddrHold));
+dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
+	.d(missDetect), .q(missHold));
 cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst), 
-	.miss_detected(~rst & ((instr_miss | data_miss) & enableCache)), 
-	.miss_address(miss_address), .fsm_busy(FSM_busy),
+	.miss_detected(missHold), 
+	.miss_address(miss_AddrHold), .fsm_busy(FSM_busy),
 	.memory_address(memory_address), 
-	.memory_data_valid(FSM_memory_valid));
+	.memory_data_valid(FSM_memory_valid), 
+	.write_tag_array(FSM_write_tag_array)
+);
 
 // 4 Cycle Memory
 // Note: We have to make sure that there is only one 4 cycle memory instance going on so that
