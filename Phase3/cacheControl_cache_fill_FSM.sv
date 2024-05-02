@@ -68,20 +68,24 @@ assign memory_address = miss_detected ? currentAddr : 16'h0000;
 // 1. we can either have 2 counter, one for the word
 // and the other to count the 4 cycles
 // 2. Or we can have a counter count up for 32 (8 * 4) cycles and then >> right shift
-// by 2 or divide by 2 to get (or for the final result we >> 4, then << 2, to remove the last bit)
-wire [15:0] address;
-// We can just add up to 0111 and then shift by 1 to be multiples of 2
-wire [3:0] block;
+// by 2 or divide by 2 to get (or for the final result we >> 2, then << 1, to remove the last bit)
+// wire [15:0] address;
+// // We can just add up to 0111 and then shift by 1 to be multiples of 2
+// wire [3:0] block;
+// wire [6:0] counter, counterShft;
 
-// 0 = idle, 1 = wait
-wire state;
-wire next_state;
+// // 0 = idle, 1 = wait
+// wire state;
+// wire next_state;
 
-// 
-assign address = rst ? 16'b0 : {miss_address[15:4], block << 1};
+// assign counterShft = counter >> 2;
+// assign block = counterShft[3:0];
+// assign address = rst ? 16'b0 : {miss_address[15:4], block << 1};
+// assign memory_address = address;
 
-CLA_4bit cla0(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
-CLA_4bit cla1(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
+// dff
+// CLA_4bit cla0(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
+// CLA_4bit cla1(.A(A), .B(B), .Cin(Cin), .Sum(Sum), .Cout(Cout));
 
 
 
