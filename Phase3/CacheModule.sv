@@ -110,7 +110,7 @@ assign data_writeLRU1 = ~data_writeLRU0 & (data_delay_out1[0] == 0 ? 1'b1 : data
 	// And so we need some flops to delay it
 Cache instrCache0(.clk(clk), .rst(rst), 
 	.dataWE(writeInstruction | instr_miss), 
-	.metaWE(writeInstruction | instr_miss), 
+	.metaWE(FSM_write_tag_array), 
 	.WordEnable(instr_word), 
 	.tag({instr_addr[15:10], readInstruction, writeInstruction}), 
 	.data(instr_CacheData), 
@@ -125,7 +125,7 @@ Cache instrCache0(.clk(clk), .rst(rst),
 // Data Cache
 Cache dataCache0(.clk(clk), .rst(rst), 
 	.dataWE(writeData | data_miss), 
-	.metaWE(writeData | data_miss), 
+	.metaWE(FSM_write_tag_array), 
 	.WordEnable(data_word), 
 	.tag({data_addr[15:10], readData, writeData}), 
 	.data(data_CacheData), 
@@ -201,6 +201,14 @@ cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst),
 // Note: We have to make sure that there is only one 4 cycle memory instance going on so that
 // we can properly implement the cache retrieving the instruction or the memory
 // (data_out, data_in, addr, enable, wr, clk, rst, data_valid);
+/////////////////////////////////////////////////////////
+// wire memoryMissHoldD, memoryMissHoldQ;
+// assign memoryMissHoldD = instr_miss | data_miss;
+// dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
+// 	.d(memoryMissHoldD), .q(memoryMissHoldQ));
+// memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(memory_address), 
+// 	.enable(memoryMissHoldQ), .wr(writeData & ~FSM_busy), 
+// 	.clk(clk), .rst(rst), .data_valid(FSM_memory_valid));
 memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(memory_address), 
 	.enable(instr_miss | data_miss), .wr(writeData & ~FSM_busy), 
 	.clk(clk), .rst(rst), .data_valid(FSM_memory_valid));
