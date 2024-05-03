@@ -42,7 +42,7 @@ wire [15:0] memory_data_out;
 
 // Data for the decoder
 wire [63:0] instr_block, data_block;
-wire [7:0] instr_word, data_word;
+wire [7:0] miss_word, memory_word;
 // Decoder for the Block Index
 Decoder6_64 instBlock0(.addr(miss_address[15:10]), .block(instr_block));
 Decoder6_64 dataBlock0(.addr(miss_address[15:10]), .block(data_block));
@@ -50,8 +50,8 @@ Decoder6_64 dataBlock0(.addr(miss_address[15:10]), .block(data_block));
 // Decoder for the Word Index
 // memory_address comes from the FSM, so that the it flips through
 // 0, 2, 4, 6, 8, 10, 12, 14
-Decoder_3_8 instWord0(.addr(memory_address[3:1]), .word(instr_word));
-Decoder_3_8 dataWord0(.addr(memory_address[3:1]), .word(data_word));
+Decoder_3_8 instWord0(.addr(miss_address[3:1]), .word(miss_word));
+Decoder_3_8 dataWord0(.addr(memory_address[3:1]), .word(memory_word));
 
 // NOTE: storedTag = {DataIn[7:2], LRUChange, valid}; in metadata
 // Instruction Cache
@@ -108,10 +108,11 @@ assign data_writeLRU1 = ~data_writeLRU0 & (data_delay_out1[0] == 0 ? 1'b1 : data
 	// then the miss detection is sent to FSM, which then turns on the metadata to come out
 	// Which means if one part of it becomes indeterminant, everything become indeterminant
 	// And so we need some flops to delay it
+// Do something with the word Enable but using the miss flops logic
 Cache instrCache0(.clk(clk), .rst(rst), 
 	.dataWE(writeInstruction | instr_miss), 
 	.metaWE(FSM_write_tag_array), 
-	.WordEnable(instr_word), 
+	.WordEnable(miss_word), 
 	.tag({instr_addr[15:10], readInstruction, writeInstruction}), 
 	.data(instr_CacheData), 
 	.blockSelect(instr_block), 
@@ -127,7 +128,7 @@ Cache instrCache0(.clk(clk), .rst(rst),
 Cache dataCache0(.clk(clk), .rst(rst), 
 	.dataWE(writeData | data_miss), 
 	.metaWE(FSM_write_tag_array), 
-	.WordEnable(data_word), 
+	.WordEnable(miss_word), 
 	.tag({data_addr[15:10], readData, writeData}), 
 	.data(data_CacheData), 
 	.blockSelect(data_block), 
@@ -196,7 +197,7 @@ dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold),
 	.d(missDetect), .q(missHold));
 
 // Delay write_tag_array from updating everything
-wire delayTag1, delayTag2, delayTag3, delayTag4;
+wire delayTag1, delayTag2, delayTag3; // delayTag4
 //DELAY TAG 1 IS FUCKING BROKEN!!!!!!!!!!
 dff delayTagWrite1(.clk(clk), .rst(rst), .wen(1'b1), 
 	.d(delayTag), .q(delayTag1));
@@ -282,7 +283,6 @@ module Decoder6_64(addr, block);
 
 	assign block = shift5;
 endmodule
-
 
 
 
