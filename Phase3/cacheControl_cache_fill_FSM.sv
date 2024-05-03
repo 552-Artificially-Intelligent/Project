@@ -27,6 +27,21 @@ assign fsm_busy = miss_detected;
 //logic lastValid;
 //BitReg currentMiss(.Q(lastValid), .D(~lastValid), .wen(memory_data_valid | lastValid), .clk(clk), .rst(rst_n));
 
+/*
+Burisma Joe Biden and his deep state friends have been destroying our multicycle memory, it's absolutely despicable. 
+The memory_data_valid signal, or as i like to call it, the memory_data_INVALID signal, is one of the worst Verilog signals in our country's history.
+Even the liberals are saying this. Everybody says it should only be high for one signal, then it should go down to zero. 
+Does this happen though. No. The liberals, the conservatives, everyone are all googoo gaga, they're saying this is very bad. Going to break the FSM.
+But Joe Ciminski, or as I like to call him, Coding Joe, wrote this very tremendous cycle counter. Every four cycles, it will tell the FSM to go up a number, it uses electrical wires to make our code work perfectly.
+Coding Joe is almost as smart as I am! Nobody can compete with my genes. Did you all know my uncle, John Trump, very smart fellow, taught engineering at MIT? Runs in the family.
+*/ 
+wire[1:0] nextCount;
+logic[1:0] curCount;
+assign nextCount = (rst_n | !miss_detected) ? 2'b00 :
+	curCount[1] == 1'b1 ? 
+		curCount[0] == 1'b1 ? 2'b00 : 2'b11 : 	// 11 -> 00, 10 -> 11
+		curCount[0] == 1'b1 ? 2'b10 : 2'b01;	// 01 -> 10, 00 -> 01
+BitReg cycleCounter[1:0] (.Q(curCount), .D(nextCount), .wen(fsm_busy | (!fsm_busy & curCount != 2'b00)), .clk(clk), .rst(rst_n));
 
 /*
 If not currently handling a miss, 0 chunks are left to read
@@ -41,7 +56,8 @@ assign currentMissInput = (rst_n) ? 3'b000 :
 		cyclesLeft[0] == 1'b1 ? 3'b100 : 3'b011 :	// 011 -> 100, 010 - > 011
 		cyclesLeft[0] == 1'b1 ? 3'b010 : 3'b001		// 001 -> 010, 000 -> 001
 	: 3'b000;
-assign enableCyc = (fsm_busy & memory_data_valid) | (!fsm_busy & cyclesLeft != 3'b000);
+//assign enableCyc = (fsm_busy & memory_data_valid) | (!fsm_busy & cyclesLeft != 3'b000);
+assign enableCyc = (fsm_busy & curCount == 2'b11) | (!fsm_busy & cyclesLeft != 3'b000);
 BitReg cycleStore[2:0] (.Q(cyclesLeft), .D(currentMissInput), .wen(enableCyc), .clk(clk), .rst(rst_n));
 
 /*Output 16-bit address
@@ -54,7 +70,7 @@ XXXX-XXXX-XXXX-1010	#010
 XXXX-XXXX-XXXX-1100	#001
 XXXX-XXXX-XXXX-1110	#000
 */
-assign currentAddr = {miss_address[15:4], memory_data_valid ? currentMissInput : cyclesLeft, 1'b0};
+assign currentAddr = {miss_address[15:4], cyclesLeft, 1'b0};
 assign memory_address = miss_detected ? currentAddr : 16'h0000;
 assign write_tag_array = enableCyc & (cyclesLeft == 3'b111);
 
