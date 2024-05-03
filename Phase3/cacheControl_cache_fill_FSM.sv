@@ -72,7 +72,8 @@ XXXX-XXXX-XXXX-1110	#000
 */
 assign currentAddr = {miss_address[15:4], cyclesLeft, 1'b0};
 assign memory_address = miss_detected ? currentAddr : 16'h0000;
-assign write_tag_array = enableCyc & (cyclesLeft == 3'b111);
+//THIS LINE CONTROLS 
+assign write_tag_array = curCount == 2'b11 & cyclesLeft == 3'b111;
 
 
 /////////////////////////////////////////////////////////
