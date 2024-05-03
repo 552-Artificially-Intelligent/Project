@@ -89,10 +89,11 @@ assign data_write1 = (data_addr[9:4] == data_delay_out1[7:2])
 // First check if the cache block is valid, and then check if it's the LRU
 	// If its, not valid, then just write at block0 first
 	// It is important for the second write not to turn on if first one is on
-dff delay0[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(instr_tag_out0), .q(instr_delay_out0));
-dff delay1[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(instr_tag_out1), .q(instr_delay_out1));
-dff delay2[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(data_tag_out0), .q(data_delay_out0));
-dff delay3[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(data_tag_out1), .q(data_delay_out1));
+wire i_tagSel0, i_tagSel1, d_tagSel0, d_tagSel1;
+dff delay0[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel0), .q(instr_delay_out0));
+dff delay1[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel1), .q(instr_delay_out1));
+dff delay2[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(d_tagSel0), .q(data_delay_out0));
+dff delay3[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel1), .q(data_delay_out1));
 // assign instr_writeLRU0 = instr_tag_out0[0] == 0 ? 1'b1 : instr_tag_out0[1];
 // assign instr_writeLRU1 = ~instr_writeLRU0 & (instr_tag_out1[0] == 0 ? 1'b1 : instr_tag_out1[1]);
 // assign data_writeLRU0 = data_tag_out0[0] == 0 ? 1'b1 : data_tag_out0[1];
@@ -139,6 +140,11 @@ Cache dataCache0(.clk(clk), .rst(rst),
 	.dataOut0(memory_data_out0), 
 	.dataOut1(memory_data_out1)
 );
+assign i_tagSel0 = FSM_write_tag_array ? 8'h00 : instr_tag_out0;
+assign i_tagSel1 = FSM_write_tag_array ? 8'h00 : instr_tag_out1;
+assign d_tagSel0 = FSM_write_tag_array ? 8'h00 : data_tag_out0;
+assign d_tagSel1 = FSM_write_tag_array ? 8'h00 : data_tag_out1;
+
 
 
 // Cache FSM
