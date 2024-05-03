@@ -129,7 +129,6 @@ assign nextPC = ~(halt) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBranch) : 
 // Instruction and Data Memory
 assign eitherCacheStall = cache_F_stall | cache_M_stall;
 wire [15:0] insr_cache_out;
-dff instr_data_hold[]
 CacheModule cacheInstructionData(.clk(clk), .rst(~rst_n), 
 	// Either always high (because we are always reading), or maybe ~halt
 	// We cannot do ~halt, because it needs to read the instruction to be able to get the signal halt
