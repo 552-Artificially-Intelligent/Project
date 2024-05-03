@@ -197,6 +197,7 @@ dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold),
 
 // Delay write_tag_array from updating everything
 wire delayTag1, delayTag2, delayTag3, delayTag4;
+//DELAY TAG 1 IS FUCKING BROKEN!!!!!!!!!!
 dff delayTagWrite1(.clk(clk), .rst(rst), .wen(1'b1), 
 	.d(delayTag1), .q(delayTag2));
 dff delayTagWrite2(.clk(clk), .rst(rst), .wen(1'b1), 
