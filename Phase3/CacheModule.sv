@@ -120,7 +120,8 @@ Cache instrCache0(.clk(clk), .rst(rst),
 	.tagOut0(instr_tag_out0),
 	.tagOut1(instr_tag_out1), 
 	.dataOut0(instr_data_out0), 
-	.dataOut1(instr_data_out1));
+	.dataOut1(instr_data_out1)
+);
 
 // Data Cache
 Cache dataCache0(.clk(clk), .rst(rst), 
@@ -135,7 +136,9 @@ Cache dataCache0(.clk(clk), .rst(rst),
 	.tagOut0(data_tag_out0),
 	.tagOut1(data_tag_out1), 
 	.dataOut0(memory_data_out0), 
-	.dataOut1(memory_data_out1));
+	.dataOut1(memory_data_out1)
+);
+
 
 // Cache FSM
 // Make sure to pass in rst, looks like the dff used in the FSM uses rst instead of rst_n
@@ -179,9 +182,11 @@ Talk about sleep deprived high lol
 // is both instruction and data miss. By checking instr_miss first, it prioritizes instruction
 // fetches over data fetching. The reason why I choose instruction over data is because all 
 // instructions need to be fetched, but not all instructions are memory instructions.
-wire missHold, missDetect;
+wire missHold, missDetect, instrMissHold;
 wire [15:0] miss_AddrHold;
-assign miss_address = instr_miss ? instr_addr : data_addr;
+dff addressHelper(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
+	.d(instr_miss), .q(instrMissHold));
+assign miss_address = instrMissHold ? instr_addr : data_addr;
 assign missDetect = ~rst & ((instr_miss | data_miss) & enableCache);
 // Doing  | ~missDetect at the wen should allow it to only hold the value if there was a miss
 // If there wasn't a miss, it will not hold and easily allow it to transition to miss
@@ -189,12 +194,24 @@ dff missHoledrAddr[15:0](.clk(clk), .rst(rst), .wen(FSM_write_tag_array),
 	.d(miss_address), .q(miss_AddrHold));
 dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
 	.d(missDetect), .q(missHold));
+
+// Delay write_tag_array from updating everything
+wire delayTag1, delayTag2, delayTag3, delayTag4;
+dff delayTagWrite1(.clk(clk), .rst(rst), .wen(1'b1), 
+	.d(delayTag1), .q(delayTag2));
+dff delayTagWrite2(.clk(clk), .rst(rst), .wen(1'b1), 
+	.d(delayTag2), .q(delayTag3));
+dff delayTagWrite3(.clk(clk), .rst(rst), .wen(1'b1), 
+	.d(delayTag3), .q(delayTag4));
+dff delayTagWrite4(.clk(clk), .rst(rst), .wen(1'b1), 
+	.d(delayTag4), .q(FSM_write_tag_array));
+
 cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst), 
 	.miss_detected(missHold), 
 	.miss_address(miss_AddrHold), .fsm_busy(FSM_busy),
 	.memory_address(memory_address), 
 	.memory_data_valid(FSM_memory_valid), 
-	.write_tag_array(FSM_write_tag_array)
+	.write_tag_array(delayTag)
 );
 
 // 4 Cycle Memory
@@ -216,16 +233,16 @@ memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(
 
 // Set outputs
 // FSM_busy
-assign F_stall = FSM_busy & enableCacheInstr;
-assign M_stall = FSM_busy & enableCacheData;
+assign F_stall = (FSM_busy & enableCacheInstr) | missHold;
+assign M_stall = (FSM_busy & enableCacheData) | missHold;
 
 // So if stall is high, it should always return 0s (well technically we can make it
 // return the random stuff, but we would have to trust that if it is stalling, then it is
 // not using the gibberish in the CPU) 
-assign instr_cache_data = FSM_busy ? 16'h0000 : 
+assign instr_cache_data = FSM_busy | ~FSM_memory_valid ? 16'h0000 : 
 							(instr_write0 | instr_writeLRU0) ? instr_data_out0
 							: instr_data_out1;
-assign memory_cache_data = FSM_busy ? 16'h0000 : 
+assign memory_cache_data = FSM_busy | ~FSM_memory_valid ? 16'h0000 : 
 							(data_write0 | data_writeLRU0) ? memory_data_out0
 							: memory_data_out1;
 
