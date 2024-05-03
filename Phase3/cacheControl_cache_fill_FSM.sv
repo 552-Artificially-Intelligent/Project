@@ -15,6 +15,9 @@ logic[15:0] currentAddr;
 logic enableCyc;
 // wire busy;
 
+wire wtaOut;
+dff wtaTriggered (.q(wtaOut), .d(miss_detected ? (write_tag_array | wtaOut) : 1'b0), .wen(1'b1), .clk(clk), .rst(rst_n));
+
 //BitReg to track when miss is detected
 //Should only be possible to write to when a miss is detected AND when it's not already handling a miss
 //Alternatively, when it is handling a miss and no cycles are left
@@ -73,7 +76,7 @@ XXXX-XXXX-XXXX-1110	#000
 assign currentAddr = {miss_address[15:4], cyclesLeft, 1'b0};
 assign memory_address = miss_detected ? currentAddr : 16'h0000;
 //THIS LINE CONTROLS 
-assign write_tag_array = (curCount == 2'b11 | curCount == 2'b10) & cyclesLeft == 3'b111;
+assign write_tag_array = curCount == 2'b11 & cyclesLeft == 3'b111 & ~wtaOut;
 
 
 /////////////////////////////////////////////////////////
