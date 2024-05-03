@@ -54,7 +54,7 @@ XXXX-XXXX-XXXX-1010	#010
 XXXX-XXXX-XXXX-1100	#001
 XXXX-XXXX-XXXX-1110	#000
 */
-assign currentAddr = {miss_address[15:4], cyclesLeft, 1'b0};
+assign currentAddr = {miss_address[15:4], memory_data_valid ? currentMissInput : cyclesLeft, 1'b0};
 assign memory_address = miss_detected ? currentAddr : 16'h0000;
 assign write_tag_array = enableCyc & (cyclesLeft == 3'b111);
 
