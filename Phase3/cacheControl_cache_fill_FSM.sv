@@ -57,7 +57,8 @@ assign currentMissInput = (rst_n) ? 3'b000 :
 		cyclesLeft[0] == 1'b1 ? 3'b010 : 3'b001		// 001 -> 010, 000 -> 001
 	: 3'b000;
 //assign enableCyc = (fsm_busy & memory_data_valid) | (!fsm_busy & cyclesLeft != 3'b000);
-assign enableCyc = (fsm_busy & curCount == 2'b11) | (!fsm_busy & cyclesLeft != 3'b000);
+//assign enableCyc = (fsm_busy & curCount == 2'b11) | (!fsm_busy & cyclesLeft != 3'b000);
+assign enableCyc = fsm_busy | cyclesLeft != 3'b000;
 BitReg cycleStore[2:0] (.Q(cyclesLeft), .D(currentMissInput), .wen(enableCyc), .clk(clk), .rst(rst_n));
 
 /*Output 16-bit address
