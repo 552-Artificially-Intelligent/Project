@@ -20,7 +20,8 @@ logic enableCyc;
 //Alternatively, when it is handling a miss and no cycles are left
 //logic enableCur;
 //assign enableCur = ~busy | (fsm_busy & !miss_detected) | miss_detected;
-//BitReg currentMiss(.Q(busy), .D(miss_detected), .wen(enableCur), .clk(clk), .rst(rst_n));
+logic lastBusy;
+BitReg currentMiss(.Q(lastBusy), .D(miss_detected), .wen(1), .clk(clk), .rst(rst_n));
 assign fsm_busy = miss_detected;
 
 //Track whether or not a chunk was successfully read on the last cycle
@@ -41,7 +42,7 @@ assign nextCount = (rst_n | !miss_detected) ? 2'b00 :
 	curCount[1] == 1'b1 ? 
 		curCount[0] == 1'b1 ? 2'b00 : 2'b11 : 	// 11 -> 00, 10 -> 11
 		curCount[0] == 1'b1 ? 2'b10 : 2'b01;	// 01 -> 10, 00 -> 01
-BitReg cycleCounter[1:0] (.Q(curCount), .D(nextCount), .wen(fsm_busy | (!fsm_busy & curCount != 2'b00)), .clk(clk), .rst(rst_n));
+dff cycleCounter[1:0] (.q(curCount), .d(nextCount), .wen(fsm_busy | (!fsm_busy & curCount != 2'b00)), .clk(clk), .rst(rst_n));
 
 /*
 If not currently handling a miss, 0 chunks are left to read
@@ -57,9 +58,9 @@ assign currentMissInput = (rst_n) ? 3'b000 :
 		cyclesLeft[0] == 1'b1 ? 3'b010 : 3'b001		// 001 -> 010, 000 -> 001
 	: 3'b000;
 //assign enableCyc = (fsm_busy & memory_data_valid) | (!fsm_busy & cyclesLeft != 3'b000);
-//assign enableCyc = (fsm_busy & curCount == 2'b11) | (!fsm_busy & cyclesLeft != 3'b000);
-assign enableCyc = fsm_busy | cyclesLeft != 3'b000;
-BitReg cycleStore[2:0] (.Q(cyclesLeft), .D(currentMissInput), .wen(enableCyc), .clk(clk), .rst(rst_n));
+assign enableCyc = (fsm_busy & curCount == 2'b11 & lastBusy) | (!fsm_busy & cyclesLeft != 3'b000);
+//assign enableCyc = fsm_busy | cyclesLeft != 3'b000;
+dff cycleStore[2:0] (.q(cyclesLeft), .d(currentMissInput), .wen(enableCyc), .clk(clk), .rst(rst_n));
 
 /*Output 16-bit address
 XXXX-XXXX-XXXX-0000	#111
