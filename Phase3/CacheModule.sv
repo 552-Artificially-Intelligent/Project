@@ -199,13 +199,13 @@ dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold),
 wire delayTag1, delayTag2, delayTag3, delayTag4;
 //DELAY TAG 1 IS FUCKING BROKEN!!!!!!!!!!
 dff delayTagWrite1(.clk(clk), .rst(rst), .wen(1'b1), 
-	.d(delayTag1), .q(delayTag2));
+	.d(delayTag), .q(delayTag1));
 dff delayTagWrite2(.clk(clk), .rst(rst), .wen(1'b1), 
-	.d(delayTag2), .q(delayTag3));
+	.d(delayTag1), .q(delayTag2));
 dff delayTagWrite3(.clk(clk), .rst(rst), .wen(1'b1), 
-	.d(delayTag3), .q(delayTag4));
+	.d(delayTag2), .q(delayTag3));
 dff delayTagWrite4(.clk(clk), .rst(rst), .wen(1'b1), 
-	.d(delayTag4), .q(FSM_write_tag_array));
+	.d(delayTag3), .q(FSM_write_tag_array));
 
 cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst), 
 	.miss_detected(missHold), 
