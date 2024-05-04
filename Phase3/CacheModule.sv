@@ -100,7 +100,7 @@ assign d_tagSel1 = FSM_write_tag_array ? 8'h00 : data_tag_out1;
 dff delay0[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel0), .q(instr_delay_out0));
 dff delay1[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel1), .q(instr_delay_out1));
 dff delay2[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(d_tagSel0), .q(data_delay_out0));
-dff delay3[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel1), .q(data_delay_out1));
+dff delay3[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(d_tagSel1), .q(data_delay_out1));
 
 // THis one under here dont use ever
 // assign instr_delay_out0 = i_tagSel0;
@@ -211,6 +211,7 @@ wire delayTag1, delayTag2, delayTag3, FSM_write_tag_array1C; // delayTag4
 // assign miss_address = instrMissHold ? instr_addr : data_addr;
 assign instrMissHold = instr_miss;
 assign miss_address = instrMissHold ? instr_addr : data_addr;
+/* IMPORTANT!  */
 assign missDetect = ~rst & ((instr_miss | data_miss) & enableCache);
 // Doing  | ~missDetect at the wen should allow it to only hold the value if there was a miss
 // If there wasn't a miss, it will not hold and easily allow it to transition to miss
