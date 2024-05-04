@@ -80,7 +80,7 @@ report_timing -delay min
 report_area > area.txt
 report_timing > timing.txt
 
-write -format verilog CPU -output CPU.vg
+# write -format verilog CPU -output CPU.vg
 
 
 

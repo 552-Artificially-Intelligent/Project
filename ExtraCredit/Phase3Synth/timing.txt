@@ -1,0 +1,63 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : ALU
+Version: U-2022.12-SP4
+Date   : Fri May  3 20:50:14 2024
+****************************************
+
+Operating Conditions: tt0p85v25c   Library: saed32lvt_tt0p85v25c
+Wire Load Model Mode: enclosed
+
+  Startpoint: opcode[0] (input port)
+  Endpoint: nvz_flags[0]
+            (output port)
+  Path Group: (none)
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  ALU                16000                 saed32lvt_tt0p85v25c
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  input external delay                     0.00       0.00 f
+  opcode[0] (in)                           0.02       0.02 f
+  U1937/Y (INVX4_LVT)                      0.15       0.18 r
+  U2469/Y (MUX21X1_LVT)                    0.15       0.32 f
+  U2468/Y (AO21X1_LVT)                     0.04       0.37 f
+  U2463/Y (AO21X1_LVT)                     0.06       0.42 f
+  U2459/Y (AO22X1_LVT)                     0.06       0.48 f
+  U2456/Y (AO21X1_LVT)                     0.06       0.54 f
+  U2451/Y (AO21X1_LVT)                     0.06       0.60 f
+  U2446/Y (AO21X1_LVT)                     0.06       0.66 f
+  U2441/Y (AO21X1_LVT)                     0.06       0.71 f
+  U2436/Y (AO21X1_LVT)                     0.06       0.77 f
+  U2431/Y (AO21X1_LVT)                     0.06       0.83 f
+  U2428/Y (AO21X1_LVT)                     0.06       0.89 f
+  U2423/Y (AO21X1_LVT)                     0.06       0.94 f
+  U2418/Y (AO21X1_LVT)                     0.06       1.00 f
+  U2409/Y (AO21X1_LVT)                     0.06       1.06 f
+  U2396/Y (AOI21X1_LVT)                    0.07       1.13 r
+  U2393/Y (XNOR3X1_LVT)                    0.14       1.27 r
+  U2392/Y (INVX0_LVT)                      0.03       1.30 f
+  U2391/Y (AND3X1_LVT)                     0.06       1.35 f
+  U2390/Y (AO21X1_LVT)                     0.04       1.40 f
+  U2389/Y (INVX0_LVT)                      0.03       1.43 r
+  U1943/Y (NAND2X1_LVT)                    0.08       1.51 f
+  U2384/Y (INVX0_LVT)                      0.06       1.57 r
+  U2380/Y (NAND4X0_LVT)                    0.04       1.61 f
+  U2370/Y (OR4X1_LVT)                      0.09       1.70 f
+  U2314/Y (AO21X1_LVT)                     0.05       1.75 f
+  U2059/Y (NAND4X0_LVT)                    0.04       1.78 r
+  U55/Y (AO22X1_LVT)                       0.26       2.04 r
+  nvz_flags[0] (out)                       1.11       3.15 r
+  data arrival time                                   3.15
+  -----------------------------------------------------------
+  (Path is unconstrained)
+
+
+1
