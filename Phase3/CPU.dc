@@ -2,19 +2,15 @@
 
 ##########################################Read in file##############################################
 ####################################################################################################
-read_file -format sverilog {ALU.sv, Forwarding_Unit.sv X_M_Flops.sv, Branch.sv, M_W_Flops.sv, 
-						cacheControl_cache_fill_FSM.sv, CLA_16bit.sv, CLA_4bit.sv, MetaDataArray.sv, 
-						CLA_4bit_tb.sv, PADDSB.sv, CLA_8bit.sv, PC.sv, multicycle_memory.sv, CLA_8bit_tb.sv 		
-						CPU.sv, RED.sv, Cache.sv, RED_tb.sv, CacheModule.sv, ROR.sv, Control.sv, Register.sv, 
-						RegisterFile.sv, D_X_Flops.sv, DataArray.sv, SATADDSUB_16bit.sv, Data_Hazard_Detect.sv, 
-						SATADDSUB_16bit_tb.sv, FLAG_Reg.sv, Shifter.sv}
+read_file -format sverilog {ALU.sv, Forwarding_Unit.sv X_M_Flops.sv, Branch.sv, M_W_Flops.sv, cacheControl_cache_fill_FSM.sv, CLA_16bit.sv, CLA_4bit.sv, MetaDataArray.sv, CLA_4bit_tb.sv, PADDSB.sv, CLA_8bit.sv, PC.sv, multicycle_memory.sv, CLA_8bit_tb.sv, CPU.sv, RED.sv, Cache.sv, RED_tb.sv, CacheModule.sv, ROR.sv, Control.sv, Register.sv, RegisterFile.sv, D_X_Flops.sv, DataArray.sv, SATADDSUB_16bit.sv, Data_Hazard_Detect.sv, SATADDSUB_16bit_tb.sv, FLAG_Reg.sv, Shifter.sv}
 
 
 #################################Set current design, create clock###################################
 ####################################################################################################
 set current_design CPU
 
-create_clock -name "clk" -period 2.5 -waveform {0 1} {clk}
+# create_clock -name "clk" -period 2.5 -waveform {0 1} {clk}
+create_clock -name "clk" -period 50 -waveform {0 1} {clk}
 
 # set don't touch on clock network
 set_dont_touch_network [find port clk]
@@ -84,7 +80,7 @@ report_timing -delay min
 report_area > area.txt
 report_timing > timing.txt
 
-write -format verilog Segway -output Segway.vg
+write -format verilog CPU -output CPU.vg
 
 
 
