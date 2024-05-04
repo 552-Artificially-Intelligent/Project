@@ -66,9 +66,12 @@ wire [7:0] instr_delay_out0, instr_delay_out1, data_delay_out0, data_delay_out1;
 // Determine which of the 2 blocks to replace
 wire instr_write0, instr_write1, data_write0, data_write1;
 wire instr_writeLRU0, instr_writeLRU1, data_writeLRU0, data_writeLRU1; 
-// Compare to bit 1 of metadata tag
+// Compare to bit 0 of metadata tag
 // LRU bit is at bit 1
 // Cache miss
+// Bit 7:2 (6 bits) tag bits
+// bit 1 LRU (so data in we pass in read/write)
+// Bit 0 Valid Bit (if there's anything inside or not) 
 // assign instr_write0 = (instr_addr[9:4] == instr_tag_out0[7:2]) 
 // 						& instr_tag_out0[0];
 // assign instr_write1 = (instr_addr[9:4] == instr_tag_out1[7:2]) 
@@ -89,11 +92,22 @@ assign data_write1 = (data_addr[9:4] == data_delay_out1[7:2])
 // First check if the cache block is valid, and then check if it's the LRU
 	// If its, not valid, then just write at block0 first
 	// It is important for the second write not to turn on if first one is on
-wire i_tagSel0, i_tagSel1, d_tagSel0, d_tagSel1;
+wire [7:0] i_tagSel0, i_tagSel1, d_tagSel0, d_tagSel1;
+assign i_tagSel0 = FSM_write_tag_array ? 8'h00 : instr_tag_out0;
+assign i_tagSel1 = FSM_write_tag_array ? 8'h00 : instr_tag_out1;
+assign d_tagSel0 = FSM_write_tag_array ? 8'h00 : data_tag_out0;
+assign d_tagSel1 = FSM_write_tag_array ? 8'h00 : data_tag_out1;
 dff delay0[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel0), .q(instr_delay_out0));
 dff delay1[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel1), .q(instr_delay_out1));
 dff delay2[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(d_tagSel0), .q(data_delay_out0));
 dff delay3[7:0](.clk(clk), .rst(rst), .wen(1'b1), .d(i_tagSel1), .q(data_delay_out1));
+
+// THis one under here dont use ever
+// assign instr_delay_out0 = i_tagSel0;
+// assign instr_delay_out1 = i_tagSel1;
+// assign data_delay_out0 = d_tagSel0;
+// assign data_delay_out1 = i_tagSel1;
+
 // assign instr_writeLRU0 = instr_tag_out0[0] == 0 ? 1'b1 : instr_tag_out0[1];
 // assign instr_writeLRU1 = ~instr_writeLRU0 & (instr_tag_out1[0] == 0 ? 1'b1 : instr_tag_out1[1]);
 // assign data_writeLRU0 = data_tag_out0[0] == 0 ? 1'b1 : data_tag_out0[1];
@@ -122,7 +136,8 @@ Cache instrCache0(.clk(clk), .rst(rst),
 	.tagOut0(instr_tag_out0),
 	.tagOut1(instr_tag_out1), 
 	.dataOut0(instr_data_out0), 
-	.dataOut1(instr_data_out1)
+	.dataOut1(instr_data_out1), 
+	.miss(instr_miss)
 );
 
 // Data Cache
@@ -138,12 +153,11 @@ Cache dataCache0(.clk(clk), .rst(rst),
 	.tagOut0(data_tag_out0),
 	.tagOut1(data_tag_out1), 
 	.dataOut0(memory_data_out0), 
-	.dataOut1(memory_data_out1)
+	.dataOut1(memory_data_out1), 
+	.miss(data_miss)
 );
-assign i_tagSel0 = FSM_write_tag_array ? 8'h00 : instr_tag_out0;
-assign i_tagSel1 = FSM_write_tag_array ? 8'h00 : instr_tag_out1;
-assign d_tagSel0 = FSM_write_tag_array ? 8'h00 : data_tag_out0;
-assign d_tagSel1 = FSM_write_tag_array ? 8'h00 : data_tag_out1;
+
+
 
 
 
@@ -191,20 +205,22 @@ Talk about sleep deprived high lol
 // instructions need to be fetched, but not all instructions are memory instructions.
 wire missHold, missDetect, instrMissHold;
 wire [15:0] miss_AddrHold;
-dff addressHelper(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
-	.d(instr_miss), .q(instrMissHold));
+wire delayTag1, delayTag2, delayTag3, FSM_write_tag_array1C; // delayTag4
+// dff addressHelper(.clk(clk), .rst(rst), .wen(FSM_write_tag_array1C | ~missHold), 
+// 	.d(instr_miss), .q(instrMissHold));
+// assign miss_address = instrMissHold ? instr_addr : data_addr;
+assign instrMissHold = instr_miss;
 assign miss_address = instrMissHold ? instr_addr : data_addr;
 assign missDetect = ~rst & ((instr_miss | data_miss) & enableCache);
 // Doing  | ~missDetect at the wen should allow it to only hold the value if there was a miss
 // If there wasn't a miss, it will not hold and easily allow it to transition to miss
 dff missHoledrAddr[15:0](.clk(clk), .rst(rst), .wen(FSM_write_tag_array), 
 	.d(miss_address), .q(miss_AddrHold));
-dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
-	.d(missDetect), .q(missHold));
+// dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
+// 	.d(missDetect), .q(missHold));
+assign missHold = missDetect;
 
 // Delay write_tag_array from updating everything
-wire delayTag1, delayTag2, delayTag3; // delayTag4
-//DELAY TAG 1 IS FUCKING BROKEN!!!!!!!!!!
 dff delayTagWrite1(.clk(clk), .rst(rst), .wen(1'b1), 
 	.d(delayTag), .q(delayTag1));
 dff delayTagWrite2(.clk(clk), .rst(rst), .wen(1'b1), 
@@ -213,6 +229,8 @@ dff delayTagWrite3(.clk(clk), .rst(rst), .wen(1'b1),
 	.d(delayTag2), .q(delayTag3));
 dff delayTagWrite4(.clk(clk), .rst(rst), .wen(1'b1), 
 	.d(delayTag3), .q(FSM_write_tag_array));
+dff delayTagWrite5(.clk(clk), .rst(rst), .wen(1'b1), 
+	.d(FSM_write_tag_array), .q(FSM_write_tag_array1C));
 
 cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst), 
 	.miss_detected(missHold), 
@@ -227,13 +245,6 @@ cache_fill_FSM cache_FSM(.clk(clk), .rst_n(rst),
 // we can properly implement the cache retrieving the instruction or the memory
 // (data_out, data_in, addr, enable, wr, clk, rst, data_valid);
 /////////////////////////////////////////////////////////
-// wire memoryMissHoldD, memoryMissHoldQ;
-// assign memoryMissHoldD = instr_miss | data_miss;
-// dff missHoledrSig(.clk(clk), .rst(rst), .wen(FSM_write_tag_array | ~missHold), 
-// 	.d(memoryMissHoldD), .q(memoryMissHoldQ));
-// memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(memory_address), 
-// 	.enable(memoryMissHoldQ), .wr(writeData & ~FSM_busy), 
-// 	.clk(clk), .rst(rst), .data_valid(FSM_memory_valid));
 memory4c mainMemory(.data_out(memory_data_out), .data_in(cacheInputData), .addr(memory_address), 
 	.enable(instr_miss | data_miss), .wr(writeData & ~FSM_busy), 
 	.clk(clk), .rst(rst), .data_valid(FSM_memory_valid));

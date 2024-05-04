@@ -78,8 +78,6 @@ wire X_X_A_en, M_X_A_en, X_X_B_en, M_X_B_en, M_M_B_en;
 wire halt, F_D_halt, D_X_halt, X_M_halt, M_W_halt;
 // Flag
 wire flagNV, flagZ;
-// Cache Miss Signals
-wire cacheInstrMiss, cacheDataMiss;
 
 //===============================================
 // CPU Outputs:

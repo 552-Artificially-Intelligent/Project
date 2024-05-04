@@ -1,6 +1,6 @@
 module Cache(clk, rst, dataWE, metaWE, WordEnable, tag,
 					data, blockSelect, write0, write1, tagOut0,
-					tagOut1, dataOut0, dataOut1);
+					tagOut1, dataOut0, dataOut1, miss);
 
 input clk, rst;
 // write enable for data and meta
@@ -14,14 +14,20 @@ input [15:0] data;
 input [63:0] blockSelect;
 // Here selects which of the set to choose
 input write0, write1;
+// Wehther it is a miss operation or not
+input miss;
 
 // Data and Tag outputs
 output [15:0] dataOut0, dataOut1;
 output [7:0] tagOut0, tagOut1;
 
 // Data portion of Cache
+wire [15:0] dataO0, dataO1;
+// Allow data to bypass if it is a miss so it can collect it
+assign dataOut0 = miss & write0 & dataWE ? data : dataO0;
+assign dataOut1 = miss & write1 & dataWE ? data : dataO1;
 DataArray cache(.clk(clk), .rst(rst), .DataIn(data), .WriteEN0(write0 & dataWE), .WriteEN1(write1 & dataWE),  
-	.BlockEnable(blockSelect), .WordEnable(WordEnable), .DataOut0(dataOut0), .DataOut1(dataOut1));
+	.BlockEnable(blockSelect), .WordEnable(WordEnable), .DataOut0(dataO0), .DataOut1(dataO1));
 
 // Metadata for storing tags etc
 MetaDataArray metadata(.clk(clk), .rst(rst), .DataIn(tag), .Write0(write0 & metaWE), .Write1(write1 & metaWE),  
