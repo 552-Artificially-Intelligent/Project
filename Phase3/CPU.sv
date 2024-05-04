@@ -18,7 +18,7 @@ wire [15:0] F_D_oldPC, D_X_oldPC, X_M_oldPC, M_W_oldPC,
 			F_D_newPC, D_X_newPC, X_M_newPC, M_W_newPC,
 			nextPC, programCount, pcInc, pcBranch, F_D_pcBranch;
 // Instruction, no need for opcode, we can just use instruction
-wire [15:0]	instruction, F_instruction, F_D_instruction, D_X_instruction, 
+wire [15:0]	instruction, F_D_instruction, D_X_instruction, 
 			X_M_instruction, M_W_instruction;
 // Immediate value
 wire [15:0] D_imm, D_X_imm;
@@ -29,17 +29,15 @@ wire [3:0] reg_dest, reg_source1, reg_source2, D_X_reg_source1, D_X_reg_source2,
 	D_X_reg_dest, X_M_reg_dest, M_W_reg_dest;
 // Register Outputs
 	// reg1 not needed in X_M since only memory goes in
-wire [15:0] D_reg1, D_reg2, D_X_reg1, D_X_reg2, X_M_reg2, reg1Forward, reg2Forward;
+wire [15:0] D_reg1, D_reg2, D_X_reg1, D_X_reg2, reg1Forward, reg2Forward;
 // NVZ Flag
-wire [2:0] NVZflag, cond, flagEN, NVZ_out;
+wire [2:0] NVZflag, cond, NVZ_out;
 // Register Address Forwarding // I wrote something here but Im not sure what, might delete
 // ALU In
 wire [15:0] aluA, aluB;
-wire [15:0] ALUresult_in, ALUresult_out, X_M_aluB;
+wire [15:0] X_M_aluB;
 // ALU Out
 wire [15:0] X_ALUOut, X_M_ALUOut, M_W_ALUOut;
-// Memory in/out data
-wire [15:0] memory_in, memory_out;
 // Memory/Register Writeback data
 wire [15:0] memData_In, M_mem, M_W_mem, addr;
 wire [15:0] writeback_data;
@@ -126,7 +124,6 @@ assign nextPC = ~(halt) ? (do_branch ? (D_branch_src ? D_reg1 : F_D_pcBranch) : 
 // 						.clk(clk), .rst(~rst_n));
 // Instruction and Data Memory
 assign eitherCacheStall = cache_F_stall | cache_M_stall;
-wire [15:0] insr_cache_out;
 CacheModule cacheInstructionData(.clk(clk), .rst(~rst_n), 
 	// Either always high (because we are always reading), or maybe ~halt
 	// We cannot do ~halt, because it needs to read the instruction to be able to get the signal halt
